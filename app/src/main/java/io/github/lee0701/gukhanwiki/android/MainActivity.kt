@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
 import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteAdapter
+import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val adapter = SearchAutocompleteAdapter { _, item -> viewModel.updateTitle(title = item.title) }
+    private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.title.observe(this) { title ->
-            this.title = title
+            this.supportActionBar?.title = title
         }
 
         viewModel.autocompleteResult.observe(this) { list ->
@@ -97,6 +98,19 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem) {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val args = Bundle().apply {
+            putString("title", item.title)
+        }
+        if(navController.currentDestination?.id == R.id.PageViewFragment) {
+            navController.navigate(R.id.action_PageViewFragment_self, args)
+        } else if(navController.currentDestination?.id == R.id.StartFragment) {
+            navController.navigate(R.id.action_StartFragment_to_PageViewFragment, args)
+        }
+        setSearchWindowVisibility(false)
     }
 
     private fun setSearchWindowVisibility(visibility: Boolean) {

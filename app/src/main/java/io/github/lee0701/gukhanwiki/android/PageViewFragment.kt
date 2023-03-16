@@ -25,6 +25,12 @@ class PageViewFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val argTitle = arguments?.getString("title")
+        if(argTitle != null) viewModel.loadPage(argTitle)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,8 +53,6 @@ class PageViewFragment : Fragment() {
                 is PageContent.Error -> {}
             }
         }
-
-        viewModel.loadPage("國漢大百科:大門")
     }
 
     override fun onDestroyView() {

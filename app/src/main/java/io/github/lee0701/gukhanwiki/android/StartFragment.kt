@@ -31,7 +31,10 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_StartFragment_to_PageViewFragment)
+            val args = Bundle().apply {
+                putString("title", "國漢大百科:大門")
+            }
+            findNavController().navigate(R.id.action_StartFragment_to_PageViewFragment, args)
         }
     }
 
