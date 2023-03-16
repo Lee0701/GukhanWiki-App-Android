@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel: ViewModel() {
+    private var autocompleteJob: Job? = null
+
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
@@ -19,9 +24,12 @@ class MainViewModel: ViewModel() {
     }
 
     fun autocompleteSearch(text: String) {
-        viewModelScope.launch {
-            val result = GukhanWikiApi.service.autocompletePageTitle(text, 10)
-            _autocompleteResult.postValue(result.pages.map { it.toAutocompleteItem() })
+        autocompleteJob?.cancel()
+        autocompleteJob = viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = GukhanWikiApi.service.autocompletePageTitle(text, 10)
+                _autocompleteResult.postValue(result.pages.map { it.toAutocompleteItem() })
+            }
         }
     }
 }
