@@ -8,11 +8,16 @@
     android:layout_height="match_parent"
     tools:context=".PageViewFragment">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/content_view"
-        android:orientation="vertical"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/content_view"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.core.widget.NestedScrollView>
 
 <!--
     <WebView
