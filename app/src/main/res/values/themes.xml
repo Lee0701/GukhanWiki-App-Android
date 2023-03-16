@@ -22,4 +22,9 @@
     <style name="Theme.GukhanWikiAppAndroid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.GukhanWikiAppAndroid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.GukhanWikiAppAndroid.WikiPage">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size</item>
+    </style>
 </resources>
