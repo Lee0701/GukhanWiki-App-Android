@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/StartFragment">
+
+    <fragment
+        android:id="@+id/PageViewFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.PageViewFragment"
+        tools:layout="@layout/fragment_page_view">
+
+        <action
+            android:id="@+id/action_PageViewFragment_to_StartFragment"
+            app:destination="@id/StartFragment" />
+        <action
+            android:id="@+id/action_PageViewFragment_self"
+            app:destination="@id/PageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/StartFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.StartFragment"
+        android:label="@string/start_fragment_label"
+        tools:layout="@layout/fragment_start">
+
+        <action
+            android:id="@+id/action_StartFragment_to_PageViewFragment"
+            app:destination="@id/PageViewFragment" />
+    </fragment>
+</navigation>
