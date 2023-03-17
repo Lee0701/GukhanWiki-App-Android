@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
 
@@ -41,6 +42,13 @@ class MainActivity : AppCompatActivity() {
             this.supportActionBar?.title = title
         }
 
+        val action = intent?.action
+        val path = intent?.data?.path
+        if(action != null && path != null) {
+            val decoded = GukhanWikiApi.decodeUriComponent(path).removePrefix(GukhanWikiApi.DOC_PATH)
+            val args = Bundle().apply { putString("title", decoded) }
+            navController.navigate(R.id.action_global_PageViewFragment, args)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

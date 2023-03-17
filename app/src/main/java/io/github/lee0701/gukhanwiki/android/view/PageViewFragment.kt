@@ -124,11 +124,7 @@ class PageViewFragment : Fragment() {
 
     private fun onInternalLinkClicked(url: URL) {
         val path = url.path.removePrefix(GukhanWikiApi.DOC_PATH)
-        val charset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            StandardCharsets.UTF_8.name()
-        else
-            "UTF-8"
-        val title = URLDecoder.decode(path, charset)
+        val title = GukhanWikiApi.decodeUriComponent(path)
         val args = Bundle().apply {
             putString("title", title)
         }

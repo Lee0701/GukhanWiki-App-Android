@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
+
     }
 
     flavorDimensions "server"
@@ -30,13 +31,15 @@ android {
             buildConfigField 'String', 'API_HOST', "\"${properties.getProperty("api.host")}\""
             buildConfigField 'String', 'API_BASE_PATH', "\"${properties.getProperty("api.base-path")}\""
             buildConfigField 'String', 'DOC_PATH', "\"${properties.getProperty("api.doc-path")}\""
+            manifestPlaceholders = [hostName: "${properties.getProperty("api.host")}"]
         }
         production {
             dimension "server"
             buildConfigField 'String', 'API_PROTOCOL', "\"https\""
             buildConfigField 'String', 'API_HOST', '"wiki.xn--9cs231j0ji.xn--p8s937b.net"'
             buildConfigField 'String', 'API_BASE_PATH', "\"/rest.php/v1/\""
-            buildConfigField 'String', 'API_DOC_PATH', "\"/wiki/\""
+            buildConfigField 'String', 'DOC_PATH', "\"/wiki/\""
+            manifestPlaceholders = [hostName: "wiki.xn--9cs231j0ji.xn--p8s937b.net"]
         }
     }
     buildTypes {

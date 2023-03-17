@@ -49,4 +49,9 @@
             android:id="@+id/action_searchFragment_to_searchResultFragment"
             app:destination="@id/searchResultFragment" />
     </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
+    <action
+        android:id="@+id/action_global_PageViewFragment"
+        app:destination="@id/PageViewFragment"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
 </navigation>
