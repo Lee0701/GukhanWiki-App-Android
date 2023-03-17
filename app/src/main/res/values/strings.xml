@@ -6,7 +6,7 @@
     <string name="action_start">Start</string>
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">Gukhan Wiki</string>
-    <string name="page_fragment_label">First Fragment</string>
+    <string name="search_result_fragment_label">Search</string>
 
     <string name="welcome">Welcome!</string>
 </resources>
