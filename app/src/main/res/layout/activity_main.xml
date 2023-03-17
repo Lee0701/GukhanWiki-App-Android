@@ -78,6 +78,8 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/margin_medium"
         app:srcCompat="@drawable/baseline_edit_24"
+        app:tint="@color/white"
+        app:backgroundTint="?attr/colorPrimaryVariant"
         android:contentDescription="@string/action_edit"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
