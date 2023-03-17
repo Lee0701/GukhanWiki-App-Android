@@ -53,14 +53,21 @@ class SearchFragment: Fragment() {
             viewModel.autocompleteSearch(text)
         }
 
-        binding.searchInput.setOnEditorActionListener { v, id, event ->
-            val text = v.text?.toString() ?: return@setOnEditorActionListener false
-            if(text.isBlank()) return@setOnEditorActionListener false
+        fun gotoSearch(text: String) {
+            if(text.isBlank()) return
             val args = Bundle().apply {
                 putString("query", text)
             }
             findNavController().navigate(R.id.action_searchFragment_to_searchResultFragment, args)
+        }
+
+        binding.searchInput.setOnEditorActionListener { v, id, event ->
+            gotoSearch(v.text?.toString() ?: return@setOnEditorActionListener false)
             true
+        }
+
+        binding.searchButton.setOnClickListener {
+            gotoSearch(binding.searchInput.text.toString())
         }
 
         binding.searchClear.setOnClickListener {
