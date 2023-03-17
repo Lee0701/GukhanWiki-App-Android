@@ -15,11 +15,18 @@
         <WebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <include
             layout="@layout/loading_indicator"
-            android:id="@+id/loading_indicator" />
+            android:id="@+id/loading_indicator"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/error_indicator"
+            android:id="@+id/error_indicator"
+            android:visibility="gone" />
 
     </FrameLayout>
 

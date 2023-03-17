@@ -17,12 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             tools:listitem="@layout/listitem_search_result"
             tools:itemCount="10" />
 
         <include
             layout="@layout/loading_indicator"
-            android:id="@+id/loading_indicator" />
+            android:id="@+id/loading_indicator"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/error_indicator"
+            android:id="@+id/error_indicator"
+            android:visibility="gone" />
 
     </FrameLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

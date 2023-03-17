@@ -48,15 +48,19 @@ class SearchResultFragment: Fragment() {
         }
 
         viewModel.searchResult.observe(viewLifecycleOwner) { result ->
+            binding.loadingIndicator.root.visibility = View.GONE
+            binding.errorIndicator.root.visibility = View.GONE
+            binding.recyclerView.visibility = View.GONE
             when(result) {
                 is Loadable.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Error -> {
-                    binding.loadingIndicator.root.visibility = View.GONE
+                    binding.errorIndicator.root.visibility = View.VISIBLE
+                    binding.errorIndicator.text.text = result.message
                 }
                 is Loadable.Loaded -> {
-                    binding.loadingIndicator.root.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
                     adapter.submitList(result.data)
                 }
             }

@@ -54,15 +54,19 @@ class PageViewFragment : Fragment() {
             activityViewModel.updateTitle(title)
         }
         viewModel.content.observe(viewLifecycleOwner) { content ->
+            binding.loadingIndicator.root.visibility = View.GONE
+            binding.errorIndicator.root.visibility = View.GONE
+            binding.webView.visibility = View.GONE
             when(content) {
                 is PageContent.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is PageContent.Error -> {
-                    binding.loadingIndicator.root.visibility = View.GONE
+                    binding.errorIndicator.root.visibility = View.VISIBLE
+                    binding.errorIndicator.text.text = content.message
                 }
                 is PageContent.Loaded -> {
-                    binding.loadingIndicator.root.visibility = View.GONE
+                    binding.webView.visibility = View.VISIBLE
                     val doc = Jsoup.parse(content.text)
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
