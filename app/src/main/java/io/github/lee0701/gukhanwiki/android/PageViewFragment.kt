@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import io.github.lee0701.gukhanwiki.android.document.DocumentViewConverter
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
@@ -16,7 +17,7 @@ import io.github.lee0701.gukhanwiki.android.view.PageViewModel
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class PageViewFragment : Fragment() {
+class PageViewFragment : Fragment(), DocumentViewConverter.Listener {
 
     private var _binding: FragmentPageViewBinding? = null
     private val viewModel: PageViewModel by viewModels()
@@ -32,7 +33,7 @@ class PageViewFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val argTitle = arguments?.getString("title")
         if(argTitle != null) viewModel.loadPage(argTitle)
-        context?.let { documentViewConverter = DocumentViewConverter(it) }
+        context?.let { documentViewConverter = DocumentViewConverter(it, this) }
     }
 
     override fun onCreateView(
@@ -52,6 +53,7 @@ class PageViewFragment : Fragment() {
             when(content) {
                 is PageContent.Loading -> {}
                 is PageContent.Loaded -> {
+                    binding.contentView.removeAllViews()
                     val converted = documentViewConverter.convert(content.text)
                     if(converted != null) binding.contentView.addView(converted)
                 }
@@ -63,5 +65,13 @@ class PageViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onInternalLinkClicked(path: String) {
+        val title = path.replace("./", "")
+        val args = Bundle().apply {
+            putString("title", title)
+        }
+        findNavController().navigate(R.id.action_PageViewFragment_self, args)
     }
 }

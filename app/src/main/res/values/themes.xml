@@ -28,6 +28,9 @@
         <item name="android:textSize">@dimen/text_size</item>
     </style>
 
+    <style name="Theme.GukhanWikiAppAndroid.WikiPage.A">
+        <item name="android:textColor">#0275d8</item>
+    </style>
     <style name="Theme.GukhanWikiAppAndroid.WikiPage.H1">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_h1</item>

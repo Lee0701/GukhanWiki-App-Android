@@ -19,8 +19,9 @@ import org.jsoup.nodes.TextNode
 
 class DocumentViewConverter(
     context: Context,
+    private val listener: Listener
 ) {
-    val context = ContextThemeWrapper(context, R.style.Theme_GukhanWikiAppAndroid_WikiPage)
+    private val context = ContextThemeWrapper(context, R.style.Theme_GukhanWikiAppAndroid_WikiPage)
 
     fun convert(html: String): View? {
         val doc = Jsoup.parse(html)
@@ -29,12 +30,16 @@ class DocumentViewConverter(
 
     fun parseRecursive(context: Context, element: Element): View? {
         val view = when(element.tagName()) {
-            "section" -> sectionElement(context)
-            in TAGS_HEADER -> headerElement(context, TAGS_HEADER.indexOf(element.tagName()))
-            "p" -> paragraphElement(context)
-            "a" -> anchorElement(context)
-            "span" -> spanElement(context)
-            "body" -> bodyElement(context)
+            "section" -> sectionElement(context, element)
+            in TAGS_HEADER -> headerElement(context, element)
+            "p" -> paragraphElement(context, element)
+            "a" -> anchorElement(context, element)
+            "span" -> spanElement(context, element)
+            "body" -> bodyElement(context, element)
+//            "ul" -> unorderedListElement(context, element)
+//            "ol" -> orderedListElement(context, element)
+//            "li" -> listItemElement(context, element)
+//            "table" -> tableElement(context, element)
             else -> null
         }
         val newContext = view?.context ?: return null
@@ -61,20 +66,21 @@ class DocumentViewConverter(
         return view
     }
 
-    private fun sectionElement(context: Context): View {
+    private fun sectionElement(context: Context, element: Element): View {
         return LinearLayoutCompat(context).apply {
             orientation = LinearLayoutCompat.VERTICAL
         }
     }
 
-    private fun headerElement(baseContext: Context, level: Int): View {
+    private fun headerElement(baseContext: Context, element: Element): View {
+        val level = TAGS_HEADER.indexOf(element.tagName())
         val context = ContextThemeWrapper(baseContext, HEADER_TEXT_STYLES[level])
         return LinearLayoutCompat(context).apply {
             orientation = LinearLayoutCompat.HORIZONTAL
         }
     }
 
-    private fun paragraphElement(context: Context): View {
+    private fun paragraphElement(context: Context, element: Element): View {
         return FlexboxLayout(context).apply {
             flexDirection = FlexDirection.ROW
             flexWrap = FlexWrap.WRAP
@@ -88,21 +94,23 @@ class DocumentViewConverter(
         }
     }
 
-    private fun anchorElement(context: Context): View {
+    private fun anchorElement(baseContext: Context, element: Element): View {
+        val context = ContextThemeWrapper(baseContext, R.style.Theme_GukhanWikiAppAndroid_WikiPage_A)
+        return LinearLayoutCompat(context).apply {
+            orientation = LinearLayoutCompat.HORIZONTAL
+            isClickable = true
+            setOnClickListener { listener.onInternalLinkClicked(element.attr("href")) }
+        }
+    }
+
+    private fun spanElement(context: Context, element: Element): View {
         return LinearLayoutCompat(context).apply {
             orientation = LinearLayoutCompat.HORIZONTAL
             isClickable = true
         }
     }
 
-    private fun spanElement(context: Context): View {
-        return LinearLayoutCompat(context).apply {
-            orientation = LinearLayoutCompat.HORIZONTAL
-            isClickable = true
-        }
-    }
-
-    private fun bodyElement(context: Context): View {
+    private fun bodyElement(context: Context, element: Element): View {
         return LinearLayoutCompat(context).apply {
             orientation = LinearLayoutCompat.VERTICAL
         }
@@ -112,6 +120,10 @@ class DocumentViewConverter(
         return TextView(context).apply {
             this.text = text
         }
+    }
+
+    interface Listener {
+        fun onInternalLinkClicked(path: String)
     }
 
     companion object {
