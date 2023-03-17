@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -20,16 +22,18 @@ class SearchResultViewModel: ViewModel() {
 
     fun search(query: String) {
         viewModelScope.launch {
-            _searchResult.postValue(Loadable.Loading())
-            try {
-                val result = GukhanWikiApi.service.searchPage(query, 10)
-                val list = result.pages.map { it.toSearchResultItem() }
-                _query.postValue(query)
-                _searchResult.postValue(Loadable.Loaded(list))
-            } catch(e: IOException) {
-                _searchResult.postValue(Loadable.Error(e.message))
-            } catch(e: HttpException) {
-                _searchResult.postValue(Loadable.Error(e.message))
+            withContext(Dispatchers.IO) {
+                _searchResult.postValue(Loadable.Loading())
+                try {
+                    val result = GukhanWikiApi.service.searchPage(query, 10)
+                    val list = result.pages.map { it.toSearchResultItem() }
+                    _query.postValue(query)
+                    _searchResult.postValue(Loadable.Loaded(list))
+                } catch(e: IOException) {
+                    _searchResult.postValue(Loadable.Error(e.message))
+                } catch(e: HttpException) {
+                    _searchResult.postValue(Loadable.Error(e.message))
+                }
             }
         }
     }
