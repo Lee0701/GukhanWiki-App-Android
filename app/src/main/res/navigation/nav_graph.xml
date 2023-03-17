@@ -34,11 +34,10 @@
         android:label="@string/search_result_fragment_label"
         tools:layout="@layout/fragment_search_result" >
         <action
-            android:id="@+id/action_searchResultFragment_pop"
-            app:popUpTo="@id/searchResultFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_searchResultFragment_to_PageViewFragment"
+            app:destination="@id/PageViewFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_searchResultFragment"
-        app:destination="@id/searchResultFragment" /><action android:id="@+id/action_global_PageViewFragment" app:destination="@id/PageViewFragment"/>
+        app:destination="@id/searchResultFragment" />
 </navigation>

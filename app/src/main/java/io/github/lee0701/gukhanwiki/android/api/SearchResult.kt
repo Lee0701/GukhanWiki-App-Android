@@ -1,9 +1,13 @@
 package io.github.lee0701.gukhanwiki.android.api
 
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.text.Html
+import androidx.core.text.HtmlCompat
 import com.google.gson.annotations.SerializedName
 import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteItem
 import io.github.lee0701.gukhanwiki.android.view.SearchResultItem
+import org.jsoup.Jsoup
 
 data class SearchResult(
     val id: Int,
@@ -23,6 +27,13 @@ data class SearchResult(
             val stream = ImageApi.getImageAsStream(it.url)
             Drawable.createFromStream(stream, "thumbnail")
         }
+        val doc = Jsoup.parse(this.excerpt)
+        val elements = doc.getElementsByTag("span")
+        elements.tagName("b").removeClass("searchmatch")
+        val excerpt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            Html.fromHtml(doc.body().html(), HtmlCompat.FROM_HTML_MODE_COMPACT)
+        else
+            Html.fromHtml(doc.body().html())
         return SearchResultItem(
             id = id,
             title = title,
