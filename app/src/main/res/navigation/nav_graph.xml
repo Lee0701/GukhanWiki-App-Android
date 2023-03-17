@@ -16,7 +16,11 @@
             app:destination="@id/StartFragment" />
         <action
             android:id="@+id/action_PageViewFragment_self"
-            app:destination="@id/PageViewFragment" />
+            app:destination="@id/PageViewFragment"
+            app:enterAnim="@anim/slide_from_right_with_fade"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right_with_fade" />
     </fragment>
     <fragment
         android:id="@+id/StartFragment"
