@@ -1,26 +1,17 @@
 package io.github.lee0701.gukhanwiki.android
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
-import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteAdapter
-import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +19,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel: MainViewModel by viewModels()
-
-    private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,39 +37,10 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        binding.searchInput.addTextChangedListener { editable ->
-            val text = editable?.toString() ?: return@addTextChangedListener
-            if(text.isBlank()) return@addTextChangedListener
-            viewModel.autocompleteSearch(text)
-        }
-        binding.searchInput.setOnEditorActionListener { v, id, event ->
-            val text = v.text?.toString() ?: return@setOnEditorActionListener false
-            if(text.isBlank()) return@setOnEditorActionListener false
-            val args = Bundle().apply {
-                putString("query", text)
-            }
-            setSearchWindowVisibility(false)
-            navController.navigate(R.id.action_global_searchResultFragment, args)
-            true
-        }
-
-        binding.searchAutocomplete.recyclerView.apply {
-            this.adapter = this@MainActivity.adapter
-            this.layoutManager = LinearLayoutManager(context)
-            this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-        }
-
-        binding.searchCancel.setOnClickListener {
-            setSearchWindowVisibility(false)
-        }
-
         viewModel.title.observe(this) { title ->
             this.supportActionBar?.title = title
         }
 
-        viewModel.autocompleteResult.observe(this) { list ->
-            adapter.submitList(list)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -93,10 +53,17 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                true
+            }
             R.id.action_search -> {
-                setSearchWindowVisibility(true)
+                if(navController.currentDestination?.id == R.id.searchFragment) {
+                    navController.navigateUp()
+                } else {
+                    navController.navigate(R.id.action_global_searchFragment)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -107,38 +74,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
-    }
-
-    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem) {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        val args = Bundle().apply {
-            putString("title", item.title)
-        }
-        if(navController.currentDestination?.id == R.id.PageViewFragment) {
-            navController.navigate(R.id.action_PageViewFragment_self, args)
-        } else if(navController.currentDestination?.id == R.id.StartFragment) {
-            navController.navigate(R.id.action_StartFragment_to_PageViewFragment, args)
-        }
-        setSearchWindowVisibility(false)
-    }
-
-    private fun setSearchWindowVisibility(visibility: Boolean) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val visible = if(visibility) View.VISIBLE else View.INVISIBLE
-        val invisible = if(!visibility) View.VISIBLE else View.INVISIBLE
-        binding.searchInput.visibility = visible
-        binding.searchAutocomplete.root.visibility = visible
-        binding.toolbar.visibility = invisible
-        binding.content.root.visibility = invisible
-        if(visibility) {
-            binding.searchInput.requestFocus()
-            imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
-        } else {
-            binding.searchInput.text?.clear()
-            binding.searchInput.clearFocus()
-            imm.hideSoftInputFromWindow(binding.searchInput.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
-            adapter.submitList(emptyList())
-        }
     }
 
 }

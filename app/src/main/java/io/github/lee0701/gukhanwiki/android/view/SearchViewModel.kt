@@ -10,7 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel: ViewModel() {
+class SearchViewModel: ViewModel() {
     private var autocompleteJob: Job? = null
 
     private val _title = MutableLiveData<String>()
@@ -19,8 +19,18 @@ class MainViewModel: ViewModel() {
     private val _autocompleteResult = MutableLiveData<List<SearchAutocompleteItem>>()
     val autocompleteResult: LiveData<List<SearchAutocompleteItem>> = _autocompleteResult
 
-    fun updateTitle(title: String) {
-        _title.postValue(title)
+    fun autocompleteSearch(text: String) {
+        autocompleteJob?.cancel()
+        autocompleteJob = viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = GukhanWikiApi.service.autocompletePageTitle(text, 10)
+                val match = listOfNotNull(result.pages.find { it.title == text })
+                val pages = match + result.pages.filter { match.isEmpty() || it != match.first() }
+                _autocompleteResult.postValue(pages.map { it.toAutocompleteItem() })
+            }
+        }
     }
-
+    fun autocompleteSelected(text: String) {
+        _title.postValue(text)
+    }
 }

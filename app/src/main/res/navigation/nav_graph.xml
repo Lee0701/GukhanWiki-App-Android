@@ -41,7 +41,12 @@
             android:id="@+id/action_searchResultFragment_to_PageViewFragment"
             app:destination="@id/PageViewFragment" />
     </fragment>
-    <action
-        android:id="@+id/action_global_searchResultFragment"
-        app:destination="@id/searchResultFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultFragment"
+            app:destination="@id/searchResultFragment" />
+    </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
 </navigation>
