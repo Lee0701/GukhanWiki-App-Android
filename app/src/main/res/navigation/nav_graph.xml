@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="io.github.lee0701.gukhanwiki.android.view.SearchFragment"
-        android:label="SearchFragment" >
+        android:label="@string/search_result_fragment_label" >
         <action
             android:id="@+id/action_searchFragment_to_searchResultFragment"
             app:destination="@id/searchResultFragment" />
