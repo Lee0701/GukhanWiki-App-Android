@@ -36,6 +36,10 @@ class DocumentViewConverter(
             "a" -> anchorElement(context, element)
             "span" -> spanElement(context, element)
             "body" -> bodyElement(context, element)
+            "i" -> italicElement(context, element)
+            "b" -> boldElement(context, element)
+//            "ins", "u" -> underlineElement(context, element)
+//            "del", "s" -> strikethroughElement(context, element)
 //            "ul" -> unorderedListElement(context, element)
 //            "ol" -> orderedListElement(context, element)
 //            "li" -> listItemElement(context, element)
@@ -113,6 +117,20 @@ class DocumentViewConverter(
     private fun bodyElement(context: Context, element: Element): View {
         return LinearLayoutCompat(context).apply {
             orientation = LinearLayoutCompat.VERTICAL
+        }
+    }
+
+    private fun boldElement(baseContext: Context, element: Element): View {
+        val context = ContextThemeWrapper(baseContext, R.style.Theme_GukhanWikiAppAndroid_WikiPage_Bold)
+        return LinearLayoutCompat(context).apply {
+            orientation = LinearLayoutCompat.HORIZONTAL
+        }
+    }
+
+    private fun italicElement(baseContext: Context, element: Element): View {
+        val context = ContextThemeWrapper(baseContext, R.style.Theme_GukhanWikiAppAndroid_WikiPage_Italic)
+        return LinearLayoutCompat(context).apply {
+            orientation = LinearLayoutCompat.HORIZONTAL
         }
     }
 
