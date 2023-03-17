@@ -8,4 +8,11 @@
     <dimen name="line_spacing">12sp</dimen>
     <dimen name="word_spacing">8sp</dimen>
     <dimen name="text_size">18sp</dimen>
+
+    <dimen name="text_size_h1">32sp</dimen>
+    <dimen name="text_size_h2">30sp</dimen>
+    <dimen name="text_size_h3">28sp</dimen>
+    <dimen name="text_size_h4">26sp</dimen>
+    <dimen name="text_size_h5">22sp</dimen>
+    <dimen name="text_size_h6">18sp</dimen>
 </resources>
