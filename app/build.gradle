@@ -18,17 +18,25 @@ android {
         versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     flavorDimensions "server"
     productFlavors {
         development {
             dimension "server"
+            buildConfigField 'String', 'API_PROTOCOL', "\"https\""
             buildConfigField 'String', 'API_HOST', "\"${properties.getProperty("api.host")}\""
+            buildConfigField 'String', 'API_BASE_PATH', "\"${properties.getProperty("api.base-path")}\""
+            buildConfigField 'String', 'DOC_PATH', "\"${properties.getProperty("api.doc-path")}\""
         }
         production {
             dimension "server"
+            buildConfigField 'String', 'API_PROTOCOL', "\"https\""
             buildConfigField 'String', 'API_HOST', '"wiki.xn--9cs231j0ji.xn--p8s937b.net"'
+            buildConfigField 'String', 'API_BASE_PATH', "\"/rest.php/v1/\""
+            buildConfigField 'String', 'API_DOC_PATH', "\"/wiki/\""
         }
     }
     buildTypes {
@@ -50,7 +58,7 @@ android {
 }
 
 dependencies {
-
+    implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'

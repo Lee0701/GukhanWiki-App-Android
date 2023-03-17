@@ -1,26 +1,28 @@
 package io.github.lee0701.gukhanwiki.android
 
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Space
-import android.widget.TextView
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.view.marginBottom
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
-import com.google.android.flexbox.JustifyContent
+import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
 import io.github.lee0701.gukhanwiki.android.view.PageContent
 import io.github.lee0701.gukhanwiki.android.view.PageViewModel
 import org.jsoup.Jsoup
+import java.net.URL
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -55,49 +57,47 @@ class PageViewFragment : Fragment() {
             activityViewModel.updateTitle(title)
         }
         viewModel.content.observe(viewLifecycleOwner) { content ->
-            val context = ContextThemeWrapper(context ?: return@observe, R.style.Theme_GukhanWikiAppAndroid_WikiPage)
             when(content) {
                 is PageContent.Loading -> {}
                 is PageContent.Loaded -> {
-                    binding.contentView.removeAllViews()
-                    val wrapContent = { FlexboxLayout.LayoutParams(
-                        FlexboxLayout.LayoutParams.WRAP_CONTENT,
-                        FlexboxLayout.LayoutParams.WRAP_CONTENT)
-                    }
                     val doc = Jsoup.parse(content.text)
-                    val paragraphs = doc.select("h1, h2, h3, h4, h5, h6, p")
-                    paragraphs.map { paragraph ->
-                        val words = paragraph.text().split(Regex("\\s")).map { word ->
-                            TextView(context).apply {
-                                text = word
+                    binding.webView.webViewClient = object: WebViewClient() {
+                        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            request: WebResourceRequest?
+                        ): Boolean {
+                            val uri = request?.url?.toString()
+                            if(uri != null) {
+                                val url = URL(uri.toString())
+                                if(isInternalLink(url)) {
+                                    onInternalLinkClicked(url)
+                                    return true
+                                }
                             }
+                            return super.shouldOverrideUrlLoading(view, request)
                         }
-                        FlexboxLayout(context).apply {
-                            flexDirection = FlexDirection.ROW
-                            flexWrap = FlexWrap.WRAP
-                            justifyContent = JustifyContent.SPACE_BETWEEN
-                            layoutParams = LinearLayoutCompat.LayoutParams(
-                                LinearLayoutCompat.LayoutParams.MATCH_PARENT,
-                                LinearLayoutCompat.LayoutParams.WRAP_CONTENT
-                            ).apply {
-                                bottomMargin = resources.getDimension(R.dimen.line_spacing).toInt()
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            uri: String?
+                        ): Boolean {
+                            if(uri != null) {
+                                val url = URL(uri)
+                                if(isInternalLink(url)) {
+                                    onInternalLinkClicked(url)
+                                    return true
+                                }
                             }
-                            words.forEach { word ->
-                                addView(word.apply {
-                                    layoutParams = wrapContent().apply {
-                                        rightMargin = resources.getDimension(R.dimen.word_spacing).toInt()/2
-                                        leftMargin = resources.getDimension(R.dimen.word_spacing).toInt()/2
-                                    }
-                                })
-                            }
-                            addView(Space(context).apply {
-                                layoutParams = wrapContent().apply { flexGrow = 1.0f }
-                            })
+                            return super.shouldOverrideUrlLoading(view, uri)
                         }
-                    }.forEach { paragraph ->
-                        binding.contentView.addView(paragraph)
                     }
-//                    binding.webView.loadData(content.text, "text/html", "UTF-8")
+                    binding.webView.loadDataWithBaseURL(
+                        GukhanWikiApi.DOC_URL.toString(),
+                        doc.body().html(),
+                        "text/html",
+                        "UTF-8",
+                        null
+                    )
                 }
                 is PageContent.Error -> {}
             }
@@ -108,4 +108,25 @@ class PageViewFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun isInternalLink(url: URL): Boolean {
+        if(url.host == GukhanWikiApi.DOC_URL.host) {
+            return true
+        }
+        return false
+    }
+
+    private fun onInternalLinkClicked(url: URL) {
+        val path = url.path.removePrefix(GukhanWikiApi.DOC_PATH)
+        val charset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            StandardCharsets.UTF_8.name()
+        else
+            "UTF-8"
+        val title = URLDecoder.decode(path, charset)
+        val args = Bundle().apply {
+            putString("title", title)
+        }
+        findNavController().navigate(R.id.action_PageViewFragment_self, args)
+    }
+
 }
