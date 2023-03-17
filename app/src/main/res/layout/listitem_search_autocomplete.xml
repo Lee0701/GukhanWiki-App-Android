@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/margin_medium"
-    android:paddingVertical="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_smaller"
     android:background="?selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
