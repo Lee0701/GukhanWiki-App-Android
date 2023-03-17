@@ -8,9 +8,22 @@
     android:layout_height="match_parent"
     tools:context=".view.PageViewFragment">
 
-    <WebView
-        android:id="@+id/web_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/loading_indicator"
+            style="@style/SpinKitView.Large.FadingCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/black" />
+    </FrameLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -55,8 +55,14 @@ class PageViewFragment : Fragment() {
         }
         viewModel.content.observe(viewLifecycleOwner) { content ->
             when(content) {
-                is PageContent.Loading -> {}
+                is PageContent.Loading -> {
+                    binding.loadingIndicator.visibility = View.VISIBLE
+                }
+                is PageContent.Error -> {
+                    binding.loadingIndicator.visibility = View.GONE
+                }
                 is PageContent.Loaded -> {
+                    binding.loadingIndicator.visibility = View.GONE
                     val doc = Jsoup.parse(content.text)
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -96,7 +102,6 @@ class PageViewFragment : Fragment() {
                         null
                     )
                 }
-                is PageContent.Error -> {}
             }
         }
     }

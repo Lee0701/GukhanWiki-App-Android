@@ -49,9 +49,14 @@ class SearchResultFragment: Fragment() {
 
         viewModel.searchResult.observe(viewLifecycleOwner) { result ->
             when(result) {
-                is Loadable.Loading -> {}
-                is Loadable.Error -> {}
+                is Loadable.Loading -> {
+                    binding.loadingIndicator.visibility = View.VISIBLE
+                }
+                is Loadable.Error -> {
+                    binding.loadingIndicator.visibility = View.GONE
+                }
                 is Loadable.Loaded -> {
+                    binding.loadingIndicator.visibility = View.GONE
                     adapter.submitList(result.data)
                 }
             }

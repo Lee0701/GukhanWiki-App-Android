@@ -8,11 +8,24 @@
     android:orientation="vertical"
     tools:context=".view.SearchResultFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:listitem="@layout/listitem_search_result"
-        tools:itemCount="10" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:listitem="@layout/listitem_search_result"
+            tools:itemCount="10" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/loading_indicator"
+            style="@style/SpinKitView.Large.FadingCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/black" />
+    </FrameLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
