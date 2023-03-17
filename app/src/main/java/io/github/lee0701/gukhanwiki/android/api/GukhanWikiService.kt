@@ -10,4 +10,8 @@ interface GukhanWikiService {
 
     @GET("search/title")
     suspend fun autocompletePageTitle(@Query("q") q: String, @Query("limit") limit: Int): SearchResults
+
+    @GET("search/page")
+    suspend fun searchPage(@Query("q") q: String, @Query("limit") limit: Int): SearchResults
+
 }

@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android
+package io.github.lee0701.gukhanwiki.android.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentStartBinding
 
 /**

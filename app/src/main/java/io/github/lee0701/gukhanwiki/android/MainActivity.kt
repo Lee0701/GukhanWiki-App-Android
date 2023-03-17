@@ -53,7 +53,16 @@ class MainActivity : AppCompatActivity() {
             if(text.isBlank()) return@addTextChangedListener
             viewModel.autocompleteSearch(text)
         }
-
+        binding.searchInput.setOnEditorActionListener { v, id, event ->
+            val text = v.text?.toString() ?: return@setOnEditorActionListener false
+            if(text.isBlank()) return@setOnEditorActionListener false
+            val args = Bundle().apply {
+                putString("query", text)
+            }
+            setSearchWindowVisibility(false)
+            navController.navigate(R.id.action_global_searchResultFragment, args)
+            true
+        }
 
         binding.searchAutocomplete.recyclerView.apply {
             this.adapter = this@MainActivity.adapter

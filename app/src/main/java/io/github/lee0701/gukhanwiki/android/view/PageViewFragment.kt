@@ -1,6 +1,5 @@
-package io.github.lee0701.gukhanwiki.android
+package io.github.lee0701.gukhanwiki.android.view
 
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,11 +13,9 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
-import io.github.lee0701.gukhanwiki.android.view.MainViewModel
-import io.github.lee0701.gukhanwiki.android.view.PageContent
-import io.github.lee0701.gukhanwiki.android.view.PageViewModel
 import org.jsoup.Jsoup
 import java.net.URL
 import java.net.URLDecoder

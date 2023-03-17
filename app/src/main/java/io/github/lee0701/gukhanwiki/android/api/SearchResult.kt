@@ -2,6 +2,7 @@ package io.github.lee0701.gukhanwiki.android.api
 
 import com.google.gson.annotations.SerializedName
 import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteItem
+import io.github.lee0701.gukhanwiki.android.view.SearchResultItem
 
 data class SearchResult(
     val id: Int,
@@ -14,6 +15,15 @@ data class SearchResult(
 ) {
     fun toAutocompleteItem(): SearchAutocompleteItem {
         return SearchAutocompleteItem(id = id, title = title)
+    }
+
+    fun toSearchResultItem(): SearchResultItem {
+        return SearchResultItem(
+            id = id,
+            title = title,
+            excerpt = excerpt,
+            thumbnail = null,
+        )
     }
 }
 

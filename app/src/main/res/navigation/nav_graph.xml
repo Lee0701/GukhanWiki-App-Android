@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/PageViewFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.PageViewFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.PageViewFragment"
         tools:layout="@layout/fragment_page_view">
 
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/StartFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.StartFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.StartFragment"
         android:label="@string/start_fragment_label"
         tools:layout="@layout/fragment_start">
 
@@ -28,4 +28,17 @@
             android:id="@+id/action_StartFragment_to_PageViewFragment"
             app:destination="@id/PageViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchResultFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.SearchResultFragment"
+        android:label="fragment_search_result"
+        tools:layout="@layout/fragment_search_result" >
+        <action
+            android:id="@+id/action_searchResultFragment_pop"
+            app:popUpTo="@id/searchResultFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_searchResultFragment"
+        app:destination="@id/searchResultFragment" /><action android:id="@+id/action_global_PageViewFragment" app:destination="@id/PageViewFragment"/>
 </navigation>
