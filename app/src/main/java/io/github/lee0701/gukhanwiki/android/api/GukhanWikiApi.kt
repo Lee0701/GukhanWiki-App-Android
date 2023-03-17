@@ -6,6 +6,8 @@ import io.github.lee0701.gukhanwiki.android.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.IOException
+import java.io.InputStream
 import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -28,6 +30,18 @@ object GukhanWikiApi {
     }
     val service: GukhanWikiService by lazy {
         retrofit.create(GukhanWikiService::class.java)
+    }
+
+    fun getImageAsStream(url: String): InputStream? {
+        val call = service.download(url)
+        try {
+            val response = call.execute()
+            if(response.isSuccessful) return response.body()?.byteStream()
+        } catch(ex: IOException) {
+            ex.printStackTrace()
+            return null
+        }
+        return null
     }
 
     fun decodeUriComponent(path: String): String {

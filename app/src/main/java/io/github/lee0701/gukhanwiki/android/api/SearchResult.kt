@@ -24,7 +24,7 @@ data class SearchResult(
 
     fun toSearchResultItem(): SearchResultItem {
         val thumbnail = thumbnail?.let {
-            val stream = ImageApi.getImageAsStream(it.url)
+            val stream = GukhanWikiApi.getImageAsStream(it.url)
             Drawable.createFromStream(stream, "thumbnail")
         }
         val doc = Jsoup.parse(this.excerpt)
