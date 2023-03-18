@@ -4,6 +4,7 @@
     <string name="action_search">Search</string>
     <string name="action_edit">Edit</string>
     <string name="action_start">Start</string>
+    <string name="action_submit">Submit</string>
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">Gukhan Wiki</string>
     <string name="search_result_fragment_label">Search</string>

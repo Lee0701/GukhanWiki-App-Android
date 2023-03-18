@@ -2,14 +2,21 @@ package io.github.lee0701.gukhanwiki.android.api
 
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
-interface GukhanWikiService {
+interface GukhanWikiRESTApiService {
+
+    @GET("page/{title}")
+    suspend fun getPageSource(@Path("title") title: String): Page
+
     @GET("page/{title}/html")
     suspend fun getPageHtml(@Path("title") title: String): String
+
+    @PUT("page/{title}")
+    suspend fun updatePage(
+        @Path("title") title: String,
+        @Body body: UpdatePageBody,
+    ): Page
 
     @GET("search/title")
     suspend fun autocompletePageTitle(@Query("q") q: String, @Query("limit") limit: Int): SearchResults

@@ -34,10 +34,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val title = viewModel.title.value ?: return@setOnClickListener
+            val args = Bundle().apply {
+                putString("title", title)
+            }
+            navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
         }
-
         viewModel.title.observe(this) { title ->
             this.supportActionBar?.title = title
         }

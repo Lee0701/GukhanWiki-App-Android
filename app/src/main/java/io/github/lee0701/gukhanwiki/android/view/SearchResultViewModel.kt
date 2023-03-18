@@ -25,7 +25,7 @@ class SearchResultViewModel: ViewModel() {
             withContext(Dispatchers.IO) {
                 _searchResult.postValue(Loadable.Loading())
                 try {
-                    val result = GukhanWikiApi.service.searchPage(query, 10)
+                    val result = GukhanWikiApi.restApiService.searchPage(query, 10)
                     val list = result.pages.map { it.toSearchResultItem() }
                     _query.postValue(query)
                     _searchResult.postValue(Loadable.Loaded(list))

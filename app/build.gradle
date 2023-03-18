@@ -29,7 +29,8 @@ android {
             dimension "server"
             buildConfigField 'String', 'API_PROTOCOL', "\"https\""
             buildConfigField 'String', 'API_HOST', "\"${properties.getProperty("api.host")}\""
-            buildConfigField 'String', 'API_BASE_PATH', "\"${properties.getProperty("api.base-path")}\""
+            buildConfigField 'String', 'REST_BASE_PATH', "\"${properties.getProperty("api.rest-base-path")}\""
+            buildConfigField 'String', 'ACTION_BASE_PATH', "\"${properties.getProperty("api.action-base-path")}\""
             buildConfigField 'String', 'DOC_PATH', "\"${properties.getProperty("api.doc-path")}\""
             manifestPlaceholders = [hostName: "${properties.getProperty("api.host")}"]
         }
@@ -37,7 +38,8 @@ android {
             dimension "server"
             buildConfigField 'String', 'API_PROTOCOL', "\"https\""
             buildConfigField 'String', 'API_HOST', '"wiki.xn--9cs231j0ji.xn--p8s937b.net"'
-            buildConfigField 'String', 'API_BASE_PATH', "\"/rest.php/v1/\""
+            buildConfigField 'String', 'REST_BASE_PATH', "\"/rest.php/v1/\""
+            buildConfigField 'String', 'ACTION_BASE_PATH', "\"/api.php/\""
             buildConfigField 'String', 'DOC_PATH', "\"/wiki/\""
             manifestPlaceholders = [hostName: "wiki.xn--9cs231j0ji.xn--p8s937b.net"]
         }
@@ -74,6 +76,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:5.0.0-alpha.11'
     implementation 'org.jsoup:jsoup:1.15.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

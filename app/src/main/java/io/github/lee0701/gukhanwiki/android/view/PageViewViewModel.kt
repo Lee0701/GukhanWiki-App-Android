@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class PageViewModel: ViewModel() {
+class PageViewViewModel: ViewModel() {
 
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
@@ -21,7 +21,7 @@ class PageViewModel: ViewModel() {
         viewModelScope.launch {
             _content.postValue(PageContent.Loading)
             try {
-                val result = GukhanWikiApi.service.getPageHtml(title)
+                val result = GukhanWikiApi.restApiService.getPageHtml(title)
                 _title.postValue(title)
                 _content.postValue(PageContent.Loaded(result))
             } catch(e: IOException) {

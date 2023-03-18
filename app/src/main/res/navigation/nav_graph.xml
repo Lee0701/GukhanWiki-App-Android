@@ -21,6 +21,9 @@
             app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_left"
             app:popExitAnim="@anim/slide_to_right_with_fade" />
+        <action
+            android:id="@+id/action_PageViewFragment_to_pageEditFragment"
+            app:destination="@id/pageEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/StartFragment"
@@ -54,4 +57,8 @@
         app:destination="@id/PageViewFragment"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/pageEditFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.PageEditFragment"
+        android:label="PageEditFragment" />
 </navigation>

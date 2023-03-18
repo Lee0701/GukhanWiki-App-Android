@@ -23,7 +23,7 @@ class SearchViewModel: ViewModel() {
         autocompleteJob?.cancel()
         autocompleteJob = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = GukhanWikiApi.service.autocompletePageTitle(text, 10)
+                val result = GukhanWikiApi.restApiService.autocompletePageTitle(text, 10)
                 val match = listOfNotNull(result.pages.find { it.title == text })
                 val pages = match + result.pages.filter { match.isEmpty() || it != match.first() }
                 _autocompleteResult.postValue(pages.map { it.toAutocompleteItem() })

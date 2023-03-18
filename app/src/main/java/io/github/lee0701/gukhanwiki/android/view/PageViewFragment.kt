@@ -18,8 +18,6 @@ import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import org.jsoup.Jsoup
 import java.net.URL
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -27,7 +25,7 @@ import java.nio.charset.StandardCharsets
 class PageViewFragment : Fragment() {
 
     private var _binding: FragmentPageViewBinding? = null
-    private val viewModel: PageViewModel by viewModels()
+    private val viewModel: PageViewViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
