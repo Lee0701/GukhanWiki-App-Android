@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import java.io.Serializable
@@ -43,15 +44,13 @@ object AccountHelper {
 
     suspend fun signIn(username: String, password: String): Loadable<SignedInAccount> {
         val tokenResult = GukhanWikiApi.actionApiService.retrieveToken(type = "login")
-        // TODO: Use string resources
-        val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(RuntimeException("Cound not retrieve a login token."))
+        val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(RuntimeException("token"))
         val loginResult = GukhanWikiApi.actionApiService.clientLogin(
             loginToken = loginToken,
             username = username,
             password = password,
         )
-        // TODO: use string resource
-        if(loginResult.clientLogin?.status != "PASS") return Loadable.Error(RuntimeException("Login failed."))
+        if(loginResult.clientLogin?.status != "PASS") return Loadable.Error(RuntimeException("status"))
 
         val account = SignedInAccount(username, password)
         return Loadable.Loaded(account)

@@ -42,10 +42,12 @@ class MainActivity : AppCompatActivity() {
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
-                    Snackbar.make(binding.root, R.string.msg_signin_error, Snackbar.LENGTH_LONG).show()
+                    val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
+                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                 }
                 is Loadable.Loaded -> {
-                    Snackbar.make(binding.root, R.string.msg_signin_success, Snackbar.LENGTH_LONG).show()
+                    val msg = resources.getString(R.string.msg_signin_success, result.data.username)
+                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                     viewModel.useAccount(result.data)
                 }
             }

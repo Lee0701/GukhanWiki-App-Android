@@ -15,8 +15,8 @@
     <string name="input_password">Password</string>
 
     <string name="msg_welcome">Welcome!</string>
-    <string name="msg_signin_error">Error while signing in.</string>
-    <string name="msg_signin_success">Signed in.</string>
+    <string name="msg_signin_error">Error while signing in: %s.</string>
+    <string name="msg_signin_success">Signed in with: %s.</string>
     <string name="msg_edit_saved">Edit saved.</string>
 
     <!-- Strings used for fragments for navigation -->
