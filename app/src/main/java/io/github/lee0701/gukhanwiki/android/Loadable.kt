@@ -6,6 +6,6 @@ sealed interface Loadable<T> {
     ): Loadable<T>
     class Loading<T>: Loadable<T>
     data class Error<T>(
-        val message: String?,
+        val exception: Exception,
     ): Loadable<T>
 }

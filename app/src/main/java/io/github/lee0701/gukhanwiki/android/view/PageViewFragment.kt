@@ -13,10 +13,12 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import org.jsoup.Jsoup
+import retrofit2.HttpException
 import java.net.URL
 
 /**
@@ -56,16 +58,30 @@ class PageViewFragment : Fragment() {
             binding.errorIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
             when(content) {
-                is PageContent.Loading -> {
+                is Loadable.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
-                is PageContent.Error -> {
-                    binding.errorIndicator.root.visibility = View.VISIBLE
-                    binding.errorIndicator.text.text = content.message
+                is Loadable.Error -> {
+                    when(content.exception) {
+                        is HttpException -> {
+                            if(content.exception.code() == 404) {
+                                val args = Bundle().apply {
+                                    putString("title", arguments?.getString("title"))
+                                }
+                                val navController = findNavController()
+                                navController.popBackStack()
+                                navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
+                            }
+                        }
+                        else -> {
+                            binding.errorIndicator.root.visibility = View.VISIBLE
+                            binding.errorIndicator.text.text = content.exception.message
+                        }
+                    }
                 }
-                is PageContent.Loaded -> {
+                is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    val doc = Jsoup.parse(content.text)
+                    val doc = Jsoup.parse(content.data)
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                         override fun shouldOverrideUrlLoading(

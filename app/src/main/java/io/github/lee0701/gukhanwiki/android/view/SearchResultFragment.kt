@@ -57,7 +57,7 @@ class SearchResultFragment: Fragment() {
                 }
                 is Loadable.Error -> {
                     binding.errorIndicator.root.visibility = View.VISIBLE
-                    binding.errorIndicator.text.text = result.message
+                    binding.errorIndicator.text.text = result.exception.message
                 }
                 is Loadable.Loaded -> {
                     binding.recyclerView.visibility = View.VISIBLE

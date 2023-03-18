@@ -39,7 +39,11 @@ class PageEditFragment: Fragment() {
 
         binding.editSubmit.setOnClickListener {
             val title = viewModel.page.value?.title
-            if(title != null) viewModel.updatePage(title, binding.editContent.text.toString())
+            if(title != null) {
+                viewModel.updatePage(title, binding.editContent.text.toString())
+                binding.editContent.isEnabled = false
+                binding.editSubmit.isEnabled = false
+            }
         }
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
@@ -51,9 +55,10 @@ class PageEditFragment: Fragment() {
             Snackbar.make(view, content.message, Snackbar.LENGTH_LONG).show()
             val navController = findNavController()
             navController.navigateUp()
-            navController.popBackStack()
+            val id = navController.currentDestination?.id!!
+            navController.popBackStack(id, true)
             val args = Bundle().apply { putString("title", arguments?.getString("title")) }
-            navController.navigate(R.id.action_PageViewFragment_self_noanim, args)
+            navController.navigate(id, args)
         }
 
     }

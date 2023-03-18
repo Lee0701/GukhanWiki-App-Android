@@ -29,10 +29,10 @@ class SearchResultViewModel: ViewModel() {
                     val list = result.pages.map { it.toSearchResultItem() }
                     _query.postValue(query)
                     _searchResult.postValue(Loadable.Loaded(list))
-                } catch(e: IOException) {
-                    _searchResult.postValue(Loadable.Error(e.message))
-                } catch(e: HttpException) {
-                    _searchResult.postValue(Loadable.Error(e.message))
+                } catch(ex: IOException) {
+                    _searchResult.postValue(Loadable.Error(ex))
+                } catch(ex: HttpException) {
+                    _searchResult.postValue(Loadable.Error(ex))
                 }
             }
         }

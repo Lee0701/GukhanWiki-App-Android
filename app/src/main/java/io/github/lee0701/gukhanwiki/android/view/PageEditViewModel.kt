@@ -9,6 +9,7 @@ import io.github.lee0701.gukhanwiki.android.api.Page
 import io.github.lee0701.gukhanwiki.android.api.UpdatePageBody
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 
 class PageEditViewModel: ViewModel() {
 
@@ -20,8 +21,14 @@ class PageEditViewModel: ViewModel() {
 
     fun loadPageSource(title: String) {
         viewModelScope.launch {
-            val response = GukhanWikiApi.restApiService.getPageSource(title)
-            _page.postValue(response)
+            try {
+                val response = GukhanWikiApi.restApiService.getPageSource(title)
+                _page.postValue(response)
+            } catch(ex: IOException) {
+                ex.printStackTrace()
+            } catch(ex: HttpException) {
+                _page.postValue(Page(title = title))
+            }
         }
     }
 
@@ -48,7 +55,7 @@ class PageEditViewModel: ViewModel() {
                         token = csrfToken,
                         source = content,
                         comment = "",
-                        latest = page.value?.latest ?: return@launch,
+                        latest = page.value?.latest,
                     ),
                 )
                 _result.postValue(EditResult.Success(result, "Edit saved."))
