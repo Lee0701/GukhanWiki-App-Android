@@ -18,8 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
     private val viewModel: MainViewModel by viewModels()
+
+    private var selectedAccountIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +59,10 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_PageViewFragment, args)
         }
 
-        val account = AccountHelper.getAccounts()?.firstOrNull()
+        val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
         val password = account?.let { AccountHelper.getPassword(it) }
         if(account != null && password != null) {
+            viewModel.signOut()
             viewModel.signIn(account.name, password)
         }
     }
@@ -84,8 +86,10 @@ class MainActivity : AppCompatActivity() {
                 val bottomSheet = SwitchAccountBottomSheet { i, account ->
                     val password = AccountHelper.getPassword(account)
                     if(password != null) viewModel.signIn(account.name, password)
+                    selectedAccountIndex = i
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
+                bottomSheet.adapter.selectedIndex = selectedAccountIndex
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)
                 true
             }
