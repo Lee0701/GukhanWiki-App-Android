@@ -37,18 +37,25 @@ class PageEditFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideAllLayers()
+        binding.loadingIndicator.root.visibility = View.VISIBLE
+
         binding.editSubmit.setOnClickListener {
             val title = viewModel.page.value?.title
             if(title != null) {
-                viewModel.updatePage(title, binding.editContent.text.toString())
+                hideAllLayers()
+                binding.loadingIndicator.root.visibility = View.VISIBLE
                 binding.editContent.isEnabled = false
                 binding.editSubmit.isEnabled = false
+                viewModel.updatePage(title, binding.editContent.text.toString())
             }
         }
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
+            hideAllLayers()
             activityViewModel.updateTitle(page.title)
             binding.editContent.setText(page.source)
+            binding.editContent.visibility = View.VISIBLE
         }
 
         viewModel.result.observe(viewLifecycleOwner) { content ->
@@ -66,6 +73,12 @@ class PageEditFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun hideAllLayers() {
+        binding.loadingIndicator.root.visibility = View.GONE
+        binding.errorIndicator.root.visibility = View.GONE
+        binding.editContent.visibility = View.GONE
     }
 
 }

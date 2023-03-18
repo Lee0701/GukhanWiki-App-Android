@@ -5,15 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/edit_content"
-        android:inputType="textMultiLine"
-        android:fontFamily="monospace"
-        android:textAlignment="gravity"
-        android:gravity="top|start"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edit_content"
+            android:inputType="textMultiLine"
+            android:fontFamily="monospace"
+            android:textAlignment="gravity"
+            android:gravity="top|start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <include
+            layout="@layout/loading_indicator"
+            android:id="@+id/loading_indicator"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/error_indicator"
+            android:id="@+id/error_indicator"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/edit_submit"
