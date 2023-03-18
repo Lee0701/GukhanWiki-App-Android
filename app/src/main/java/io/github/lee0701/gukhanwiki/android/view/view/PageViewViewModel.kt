@@ -18,16 +18,18 @@ class PageViewViewModel: ViewModel() {
     private val _content = MutableLiveData<Loadable<String?>>()
     val content: LiveData<Loadable<String?>> = _content
 
-    fun loadPage(title: String) {
+    fun loadPage(path: String) {
         viewModelScope.launch {
             _content.postValue(Loadable.Loading())
             try {
-                val result = GukhanWikiApi.actionApiService.parse(page = title).parse?.text?.text
-                if(result == null) {
-                    _content.postValue(Loadable.Error(java.lang.RuntimeException("Reslt text is null")))
+                val response = GukhanWikiApi.actionApiService.parse(page = path)
+                val title = response.parse?.title
+                val content = response.parse?.text?.text
+                if(content == null) {
+                    _content.postValue(Loadable.Error(java.lang.RuntimeException("Result text is null")))
                 } else {
-                    _title.postValue(title)
-                    _content.postValue(Loadable.Loaded(result))
+                    _title.postValue(title ?: path)
+                    _content.postValue(Loadable.Loaded(content))
                 }
             } catch(ex: IOException) {
                 _content.postValue(Loadable.Error(ex))
