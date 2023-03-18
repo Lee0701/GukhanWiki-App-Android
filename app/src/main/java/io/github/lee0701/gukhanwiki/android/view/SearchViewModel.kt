@@ -23,12 +23,18 @@ class SearchViewModel: ViewModel() {
         autocompleteJob = viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val result = GukhanWikiApi.restApiService.autocompletePageTitle(text, 10)
-                val match = listOfNotNull(result.pages.find { it.title == text })
-                val pages = match + result.pages.filter { match.isEmpty() || it != match.first() }
-                _autocompleteResult.postValue(pages.map { it.toAutocompleteItem() })
+                val match = listOfNotNull(result.pages.find { it.title == text }).map { it.toAutocompleteItem().copy(goto = true) }
+                val pages = result.pages.map { it.toAutocompleteItem() }.filter { match.isEmpty() || it.title != match.first().title }
+                _autocompleteResult.postValue(match + pages)
             }
         }
     }
+
+    fun clearAutocomplete() {
+        autocompleteJob?.cancel()
+        _autocompleteResult.postValue(emptyList())
+    }
+
     fun autocompleteSelected(text: String) {
         _title.postValue(text)
     }
