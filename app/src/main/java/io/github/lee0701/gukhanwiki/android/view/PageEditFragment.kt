@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageEditBinding
 
 class PageEditFragment: Fragment() {
@@ -39,14 +40,16 @@ class PageEditFragment: Fragment() {
         hideAllLayers()
         binding.loadingIndicator.root.visibility = View.VISIBLE
 
-        binding.fab.setOnClickListener {
-            val title = viewModel.page.value?.title
-            if(title != null) {
-                hideAllLayers()
-                binding.loadingIndicator.root.visibility = View.VISIBLE
-                binding.editContent.isEnabled = false
-                binding.fab.isEnabled = false
-                viewModel.updatePage(title, binding.editContent.text.toString())
+        activityViewModel.signedInAccount.observe(viewLifecycleOwner) { account ->
+            binding.fab.setOnClickListener {
+                val title = viewModel.page.value?.title
+                if(title != null) {
+                    hideAllLayers()
+                    binding.loadingIndicator.root.visibility = View.VISIBLE
+                    binding.editContent.isEnabled = false
+                    binding.fab.isEnabled = false
+                    viewModel.updatePage(title, binding.editContent.text.toString())
+                }
             }
         }
 

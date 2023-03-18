@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.AccountHelper
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentStartBinding
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -34,6 +37,7 @@ class StartFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_StartFragment_to_PageViewFragment, args)
         }
+
     }
 
     override fun onDestroyView() {

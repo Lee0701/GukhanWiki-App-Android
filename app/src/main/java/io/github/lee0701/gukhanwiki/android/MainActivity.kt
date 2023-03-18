@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity() {
             val args = Bundle().apply { putString("title", decoded) }
             navController.navigate(R.id.action_global_PageViewFragment, args)
         }
+
+        val account = AccountHelper.getAccounts()?.firstOrNull()
+        if(account != null) {
+            val signedInAccount = AccountHelper.SignedInAccount(username = account.name, password = "")
+            viewModel.setSignedInAccount(signedInAccount)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

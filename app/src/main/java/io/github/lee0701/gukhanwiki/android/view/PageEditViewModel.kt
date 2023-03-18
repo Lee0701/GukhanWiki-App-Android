@@ -33,22 +33,9 @@ class PageEditViewModel: ViewModel() {
     }
 
     fun updatePage(title: String, content: String) {
-        val username = "Test"
-        val password = "arst"
         viewModelScope.launch {
-            val tokenResult = GukhanWikiApi.actionApiService.retrieveToken(type = "login")
-            val loginToken = tokenResult.query.tokens["logintoken"] ?: return@launch
-            val loginResult = GukhanWikiApi.actionApiService.clientLogin(
-                    loginToken = loginToken,
-                    username = username,
-                    password = password,
-            )
-            if(loginResult.clientLogin?.status != "PASS") return@launch
-
-            val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf")
-                .query.tokens["csrftoken"] ?: return@launch
-
             try {
+                val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
                 val result = GukhanWikiApi.restApiService.updatePage(
                     title = title,
                     body = UpdatePageBody(
