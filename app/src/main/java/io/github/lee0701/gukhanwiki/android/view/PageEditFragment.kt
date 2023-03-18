@@ -39,13 +39,13 @@ class PageEditFragment: Fragment() {
         hideAllLayers()
         binding.loadingIndicator.root.visibility = View.VISIBLE
 
-        binding.editSubmit.setOnClickListener {
+        binding.fab.setOnClickListener {
             val title = viewModel.page.value?.title
             if(title != null) {
                 hideAllLayers()
                 binding.loadingIndicator.root.visibility = View.VISIBLE
                 binding.editContent.isEnabled = false
-                binding.editSubmit.isEnabled = false
+                binding.fab.isEnabled = false
                 viewModel.updatePage(title, binding.editContent.text.toString())
             }
         }
@@ -67,7 +67,7 @@ class PageEditFragment: Fragment() {
                 else resources.getString(R.string.msg_edit_saved)
             val args = Bundle().apply {
                 putString("title", arguments?.getString("title"))
-                putString("message", content.message)
+                putString("message", message)
             }
             navController.navigate(id, args)
         }
