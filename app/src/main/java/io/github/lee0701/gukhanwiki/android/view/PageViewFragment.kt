@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RawRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,6 +19,8 @@ import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import retrofit2.HttpException
 import java.net.URL
 
@@ -81,7 +84,12 @@ class PageViewFragment : Fragment() {
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    val doc = Jsoup.parse(content.data)
+                    val body = Jsoup.parse(content.data).body()
+                    val doc = Document(GukhanWikiApi.DOC_URL.toString())
+                    doc.appendChild(body)
+                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
+                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
+                    println(doc.html())
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                         override fun shouldOverrideUrlLoading(
@@ -114,7 +122,7 @@ class PageViewFragment : Fragment() {
                     }
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.DOC_URL.toString(),
-                        doc.body().html(),
+                        doc.html(),
                         "text/html",
                         "UTF-8",
                         null
@@ -127,6 +135,13 @@ class PageViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun loadCustomCss(@RawRes id: Int): String {
+        val stream = resources.openRawResource(id)
+        val data = stream.readBytes()
+        stream.close()
+        return data.decodeToString()
     }
 
     private fun isInternalLink(url: URL): Boolean {
