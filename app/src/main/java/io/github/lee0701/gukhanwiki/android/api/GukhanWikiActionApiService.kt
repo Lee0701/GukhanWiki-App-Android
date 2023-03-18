@@ -5,6 +5,13 @@ import retrofit2.http.*
 interface GukhanWikiActionApiService {
 
     @GET("/api.php")
+    suspend fun parse(
+        @Query("action") action: String = "parse",
+        @Query("format") format: String = "json",
+        @Query("page") page: String? = null,
+    ): ParseResponse
+
+    @GET("/api.php")
     suspend fun retrieveToken(
         @Query("action") action: String = "query",
         @Query("format") format: String = "json",
