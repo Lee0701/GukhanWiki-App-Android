@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import io.github.lee0701.gukhanwiki.android.databinding.FragmentSwitchAccountBinding
 
 class SwitchAccountBottomSheet(
-    private val onClick: (Int, Account) -> Unit
+    private val onClick: (Int, Account?) -> Unit
 ): BottomSheetDialogFragment() {
 
     val adapter = SwitchAccountAdapter { i, account ->
@@ -24,14 +25,21 @@ class SwitchAccountBottomSheet(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_switch_account, container, false)
-        view.findViewById<RecyclerView>(R.id.recycler_view).apply {
+    ): View {
+        val view = FragmentSwitchAccountBinding.inflate(inflater, container, false)
+        view.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SwitchAccountBottomSheet.adapter
             this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
-        return view
+        view.anonymous.setOnClickListener {
+            onClick(-1, null)
+            this.dismiss()
+        }
+        view.anonymousCheckIcon.visibility =
+            if(adapter.selectedIndex == -1) View.VISIBLE
+            else View.INVISIBLE
+        return view.root
     }
 
     companion object {
