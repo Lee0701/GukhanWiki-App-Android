@@ -6,7 +6,12 @@
         android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@drawable/baseline_search_24"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_accounts"
+        android:title="@string/action_accounts"
+        android:icon="@drawable/baseline_account_circle_24"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
