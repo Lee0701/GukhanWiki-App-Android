@@ -13,6 +13,10 @@ img {
     margin: 0;
 }
 
+span.mw-editsection {
+    display: none;
+}
+
 .tp_link a:active {
     color: inherit !important;
 }
