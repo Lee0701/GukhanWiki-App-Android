@@ -170,6 +170,9 @@ class PageViewFragment : Fragment() {
                     "edit" -> {
                         onInternalEditLinkClicked(title)
                     }
+                    else -> {
+                        onExternalLinkClicked(url)
+                    }
                 }
             }
         }
