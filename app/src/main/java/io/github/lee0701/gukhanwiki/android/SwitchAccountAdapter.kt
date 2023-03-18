@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView.*
 import io.github.lee0701.gukhanwiki.android.databinding.ListitemAccountBinding
 
 class SwitchAccountAdapter(
-    private val onClick: (position: Int, item: Account) -> Unit
+    var selectedIndex: Int = -1,
+    private val onClick: (position: Int, item: Account) -> Unit,
 ): ListAdapter<Account, SwitchAccountAdapter.ItemViewHolder>(ItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -27,14 +28,16 @@ class SwitchAccountAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item) { onClick(position, item) }
+        holder.bind(position, item) { onClick(position, item) }
     }
 
-    class ItemViewHolder(
+    inner class ItemViewHolder(
         itemView: View,
     ): ViewHolder(itemView) {
-        fun bind(item: Account, onClick: () -> Unit) {
+        fun bind(position: Int, item: Account, onClick: () -> Unit) {
             val binding = ListitemAccountBinding.bind(itemView)
+            if(position == selectedIndex) binding.checkIcon.visibility = VISIBLE
+            else binding.checkIcon.visibility = INVISIBLE
             binding.title.text = item.name
             binding.root.setOnClickListener { _ ->
                 onClick()

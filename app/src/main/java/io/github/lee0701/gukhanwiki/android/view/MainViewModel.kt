@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.AccountHelper
 import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
@@ -27,6 +28,13 @@ class MainViewModel: ViewModel() {
         viewModelScope.launch {
             val result = AccountHelper.signIn(username, password)
             _signinResult.postValue(result)
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
+            if(csrfToken != null) GukhanWikiApi.actionApiService.logout(token = csrfToken)
         }
     }
 
