@@ -32,6 +32,15 @@ object AccountHelper {
         }
     }
 
+    fun getPassword(account: Account): String? {
+        return try {
+            accountManager?.getPassword(account)
+        } catch(ex: Exception) {
+            ex.printStackTrace()
+            null
+        }
+    }
+
     suspend fun signIn(username: String, password: String): Loadable<SignedInAccount> {
         val tokenResult = GukhanWikiApi.actionApiService.retrieveToken(type = "login")
         val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(RuntimeException("Cound not retrieve a login token."))
@@ -44,8 +53,6 @@ object AccountHelper {
         if(loginResult.clientLogin?.status != "PASS") return Loadable.Error(RuntimeException("Login failed."))
 
         val account = SignedInAccount(username, password)
-        addAccount(username, password)
-
         return Loadable.Loaded(account)
     }
 

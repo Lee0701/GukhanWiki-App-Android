@@ -13,12 +13,12 @@ class AuthenticationViewModel: ViewModel() {
 
     fun signIn(username: String, password: String) {
         viewModelScope.launch {
-            val loggedInAccount = AccountHelper.signIn(username, password)
-            when(loggedInAccount) {
+            val signedInAccount = AccountHelper.signIn(username, password)
+            when(signedInAccount) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {}
                 is Loadable.Loaded -> {
-                    _signedInAccount.postValue(loggedInAccount.data!!)
+                    _signedInAccount.postValue(signedInAccount.data!!)
                 }
             }
         }

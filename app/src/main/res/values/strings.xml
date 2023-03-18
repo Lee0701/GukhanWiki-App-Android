@@ -11,6 +11,8 @@
     <string name="action_signin">Sign In</string>
 
     <string name="msg_welcome">Welcome!</string>
+    <string name="msg_signin_error">Error while signing in.</string>
+    <string name="msg_signin_success">Signed in.</string>
     <string name="msg_edit_saved">Edit saved.</string>
 
     <!-- Strings used for fragments for navigation -->
