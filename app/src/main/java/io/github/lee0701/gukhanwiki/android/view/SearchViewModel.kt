@@ -18,7 +18,6 @@ class SearchViewModel: ViewModel() {
 
     private val _autocompleteResult = MutableLiveData<List<SearchAutocompleteItem>>()
     val autocompleteResult: LiveData<List<SearchAutocompleteItem>> = _autocompleteResult
-
     fun autocompleteSearch(text: String) {
         autocompleteJob?.cancel()
         autocompleteJob = viewModelScope.launch {

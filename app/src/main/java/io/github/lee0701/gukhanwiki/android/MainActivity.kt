@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 import io.github.lee0701.gukhanwiki.android.view.MainViewModel
@@ -36,6 +37,19 @@ class MainActivity : AppCompatActivity() {
             this.supportActionBar?.title = title
         }
 
+        viewModel.signinResult.observe(this) { result ->
+            when(result) {
+                is Loadable.Loading -> {}
+                is Loadable.Error -> {
+                    Snackbar.make(binding.root, R.string.msg_signin_error, Snackbar.LENGTH_LONG).show()
+                }
+                is Loadable.Loaded -> {
+                    Snackbar.make(binding.root, R.string.msg_signin_success, Snackbar.LENGTH_LONG).show()
+                    viewModel.useAccount(result.data)
+                }
+            }
+        }
+
         val action = intent?.action
         val path = intent?.data?.path
         if(action != null && path != null) {
@@ -45,9 +59,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val account = AccountHelper.getAccounts()?.firstOrNull()
-        if(account != null) {
-            val signedInAccount = AccountHelper.SignedInAccount(username = account.name, password = "")
-            viewModel.setSignedInAccount(signedInAccount)
+        val password = account?.let { AccountHelper.getPassword(it) }
+        if(account != null && password != null) {
+            viewModel.signIn(account.name, password)
         }
     }
 
@@ -68,8 +82,8 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_accounts -> {
                 val bottomSheet = SwitchAccountBottomSheet { i, account ->
-                    val signedInAccount = AccountHelper.SignedInAccount(username = account.name, password = "")
-                    viewModel.setSignedInAccount(signedInAccount)
+                    val password = AccountHelper.getPassword(account)
+                    if(password != null) viewModel.signIn(account.name, password)
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)

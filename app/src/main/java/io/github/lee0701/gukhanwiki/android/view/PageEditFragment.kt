@@ -40,16 +40,14 @@ class PageEditFragment: Fragment() {
         hideAllLayers()
         binding.loadingIndicator.root.visibility = View.VISIBLE
 
-        activityViewModel.signedInAccount.observe(viewLifecycleOwner) { account ->
-            binding.fab.setOnClickListener {
-                val title = viewModel.page.value?.title
-                if(title != null) {
-                    hideAllLayers()
-                    binding.loadingIndicator.root.visibility = View.VISIBLE
-                    binding.editContent.isEnabled = false
-                    binding.fab.isEnabled = false
-                    viewModel.updatePage(title, binding.editContent.text.toString())
-                }
+        binding.fab.setOnClickListener {
+            val title = viewModel.page.value?.title
+            if(title != null) {
+                hideAllLayers()
+                binding.loadingIndicator.root.visibility = View.VISIBLE
+                binding.editContent.isEnabled = false
+                binding.fab.isEnabled = false
+                viewModel.updatePage(title, binding.editContent.text.toString())
             }
         }
 
