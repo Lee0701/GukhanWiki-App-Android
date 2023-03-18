@@ -1,5 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -117,6 +119,9 @@ class PageViewFragment : Fragment() {
                                 if(isInternalLink(url)) {
                                     onInternalLinkClicked(url)
                                     return true
+                                } else {
+                                    onExternalLinkClicked(url)
+                                    return true
                                 }
                             }
                             return super.shouldOverrideUrlLoading(view, request)
@@ -130,9 +135,12 @@ class PageViewFragment : Fragment() {
                                 if(isInternalLink(url)) {
                                     onInternalLinkClicked(url)
                                     return true
+                                } else {
+                                    onExternalLinkClicked(url)
+                                    return true
                                 }
                             }
-                            return super.shouldOverrideUrlLoading(view, uri)
+                            return super.shouldOverrideUrlLoading(view, uri.toString())
                         }
                     }
                     binding.webView.loadDataWithBaseURL(
@@ -173,6 +181,11 @@ class PageViewFragment : Fragment() {
             putString("title", title)
         }
         findNavController().navigate(R.id.action_PageViewFragment_self, args)
+    }
+
+    private fun onExternalLinkClicked(url: URL) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
+        startActivity(intent)
     }
 
 }
