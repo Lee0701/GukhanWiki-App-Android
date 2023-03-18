@@ -19,7 +19,8 @@
             android:orientation="vertical"
             android:visibility="gone"
             tools:listitem="@layout/listitem_search_result"
-            tools:itemCount="10" />
+            tools:itemCount="10"
+            tools:visibility="visible" />
 
         <include
             layout="@layout/loading_indicator"

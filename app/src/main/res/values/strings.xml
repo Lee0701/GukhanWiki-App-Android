@@ -11,6 +11,9 @@
     <string name="action_signin">Sign In</string>
     <string name="action_goto">Go</string>
 
+    <string name="input_username">Username</string>
+    <string name="input_password">Password</string>
+
     <string name="msg_welcome">Welcome!</string>
     <string name="msg_signin_error">Error while signing in.</string>
     <string name="msg_signin_success">Signed in.</string>
@@ -18,7 +21,9 @@
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
-    <string name="search_result_fragment_label">Search</string>
+    <string name="search_fragment_label">Search</string>
+    <string name="search_result_fragment_label">Search Result</string>
+    <string name="authentication_activity_label">Sign In</string>
 
     <string name="switch_account_label">Switch Account</string>
     <string name="authenticator_label">國漢大百科</string>

@@ -26,6 +26,7 @@
 
         <activity
             android:name=".AuthenticationActivity"
+            android:label="@string/authentication_activity_label"
             android:exported="false" />
 
         <activity
