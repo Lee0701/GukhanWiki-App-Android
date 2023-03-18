@@ -22,7 +22,7 @@ class PageViewViewModel: ViewModel() {
         viewModelScope.launch {
             _content.postValue(Loadable.Loading())
             try {
-                val result = GukhanWikiApi.restApiService.getPageHtml(title)
+                val result = GukhanWikiApi.actionApiService.parse(page = title).parse.text.text
                 _title.postValue(title)
                 _content.postValue(Loadable.Loaded(result))
             } catch(ex: IOException) {
