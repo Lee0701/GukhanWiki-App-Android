@@ -17,6 +17,18 @@ span.mw-editsection {
     display: none;
 }
 
+blockquote {
+    border: 2px dashed #8884;
+    border-inline-start: 5px solid #222;
+    padding: 10px;
+    background: #8881;
+    text-indent: 0px;
+}
+
+blockquote p {
+    margin: 0px;
+}
+
 .tp_link a:active {
     color: inherit !important;
 }
