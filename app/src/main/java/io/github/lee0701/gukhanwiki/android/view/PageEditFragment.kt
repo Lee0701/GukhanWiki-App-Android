@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageEditBinding
 
@@ -59,12 +58,17 @@ class PageEditFragment: Fragment() {
         }
 
         viewModel.result.observe(viewLifecycleOwner) { content ->
-            Snackbar.make(view, content.message, Snackbar.LENGTH_LONG).show()
             val navController = findNavController()
             navController.navigateUp()
             val id = navController.currentDestination?.id!!
             navController.popBackStack(id, true)
-            val args = Bundle().apply { putString("title", arguments?.getString("title")) }
+            val message =
+                if(content.message != null) content.message
+                else resources.getString(R.string.msg_edit_saved)
+            val args = Bundle().apply {
+                putString("title", arguments?.getString("title"))
+                putString("message", content.message)
+            }
             navController.navigate(id, args)
         }
 

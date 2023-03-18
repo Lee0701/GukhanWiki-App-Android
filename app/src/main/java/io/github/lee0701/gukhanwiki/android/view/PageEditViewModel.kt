@@ -58,23 +58,23 @@ class PageEditViewModel: ViewModel() {
                         latest = page.value?.latest,
                     ),
                 )
-                _result.postValue(EditResult.Success(result, "Edit saved."))
+                _result.postValue(EditResult.Success(result, null))
             } catch(ex: HttpException) {
                 ex.printStackTrace()
-                _result.postValue(EditResult.Error(ex, "An error occurred while saving."))
+                _result.postValue(EditResult.Error(ex, ex.message ?: ""))
             }
         }
     }
 
     sealed interface EditResult {
-        val message: String
+        val message: String?
         data class Success(
             val page: Page,
-            override val message: String,
+            override val message: String?,
         ): EditResult
         data class Error(
             val exception: Exception,
-            override val message: String,
+            override val message: String?,
         ): EditResult
     }
 }

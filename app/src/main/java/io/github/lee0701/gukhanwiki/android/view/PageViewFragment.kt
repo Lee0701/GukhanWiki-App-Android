@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
@@ -53,6 +54,21 @@ class PageViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val message = arguments?.getString("message")
+        if(message != null && message.isNotBlank()) {
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
+            arguments?.remove("message")
+        }
+
+        binding.fab.setOnClickListener { _ ->
+            val title = viewModel.title.value ?: return@setOnClickListener
+            val args = Bundle().apply {
+                putString("title", title)
+            }
+            findNavController().navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
+        }
+
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.updateTitle(title)
         }
@@ -89,7 +105,6 @@ class PageViewFragment : Fragment() {
                     doc.appendChild(body)
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
-                    println(doc.html())
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                         override fun shouldOverrideUrlLoading(

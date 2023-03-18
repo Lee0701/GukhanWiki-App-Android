@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingVertical="@dimen/margin_medium"
-    android:paddingHorizontal="@dimen/margin_small">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/margin_medium"
+        android:paddingHorizontal="@dimen/margin_small">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_content"
-            android:inputType="textMultiLine"
-            android:fontFamily="monospace"
-            android:textAlignment="gravity"
-            android:gravity="top|start"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <include
-            layout="@layout/loading_indicator"
-            android:id="@+id/loading_indicator"
-            android:visibility="gone" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_content"
+                android:inputType="textMultiLine"
+                android:fontFamily="monospace"
+                android:textAlignment="gravity"
+                android:gravity="top|start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-        <include
-            layout="@layout/error_indicator"
-            android:id="@+id/error_indicator"
-            android:visibility="gone" />
+            <include
+                layout="@layout/loading_indicator"
+                android:id="@+id/loading_indicator"
+                android:visibility="gone" />
 
-    </FrameLayout>
+            <include
+                layout="@layout/error_indicator"
+                android:id="@+id/error_indicator"
+                android:visibility="gone" />
 
-    <Button
-        android:id="@+id/edit_submit"
-        android:text="@string/action_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        </FrameLayout>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <Button
+            android:id="@+id/edit_submit"
+            android:text="@string/action_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

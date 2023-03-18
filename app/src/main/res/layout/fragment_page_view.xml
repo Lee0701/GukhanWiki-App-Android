@@ -1,35 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="@dimen/margin_medium"
-    android:paddingHorizontal="@dimen/margin_small"
     tools:context=".view.PageViewFragment">
 
-    <FrameLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/margin_medium"
+        android:paddingHorizontal="@dimen/margin_small">
 
-        <WebView
-            android:id="@+id/web_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="match_parent">
 
-        <include
-            layout="@layout/loading_indicator"
-            android:id="@+id/loading_indicator"
-            android:visibility="gone" />
+            <WebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
-        <include
-            layout="@layout/error_indicator"
-            android:id="@+id/error_indicator"
-            android:visibility="gone" />
+            <include
+                layout="@layout/loading_indicator"
+                android:id="@+id/loading_indicator"
+                android:visibility="gone" />
 
-    </FrameLayout>
+            <include
+                layout="@layout/error_indicator"
+                android:id="@+id/error_indicator"
+                android:visibility="gone" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        </FrameLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/margin_medium"
+        app:srcCompat="@drawable/baseline_edit_24"
+        app:tint="@color/white"
+        app:backgroundTint="?attr/colorPrimaryVariant"
+        android:contentDescription="@string/action_edit"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

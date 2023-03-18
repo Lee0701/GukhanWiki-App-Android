@@ -1,13 +1,17 @@
 <resources>
-    <string name="app_name">GukhanWiki-App-Android</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_search">Search</string>
-    <string name="action_edit">Edit</string>
-    <string name="action_start">Start</string>
-    <string name="action_submit">Submit</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="start_fragment_label">Gukhan Wiki</string>
-    <string name="search_result_fragment_label">Search</string>
+<string name="app_name">國漢大百科</string>
 
-    <string name="welcome">Welcome!</string>
+<string name="action_settings">Settings</string>
+<string name="action_search">Search</string>
+<string name="action_edit">Edit</string>
+<string name="action_start">Start</string>
+<string name="action_submit">Submit</string>
+
+<string name="msg_edit_saved">Edit saved.</string>
+
+<!-- Strings used for fragments for navigation -->
+<string name="start_fragment_label">Gukhan Wiki</string>
+<string name="search_result_fragment_label">Search</string>
+
+<string name="welcome">Welcome!</string>
 </resources>
