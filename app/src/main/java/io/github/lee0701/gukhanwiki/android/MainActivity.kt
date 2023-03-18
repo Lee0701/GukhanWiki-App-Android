@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-    private var selectedAccountIndex: Int = 0
+    private var selectedAccountIndex: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,15 +38,20 @@ class MainActivity : AppCompatActivity() {
             this.supportActionBar?.title = title
         }
 
-        viewModel.signinResult.observe(this) { result ->
+        viewModel.signInResult.observe(this) { result ->
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
-                    Snackbar.make(binding.root, R.string.msg_signin_error, Snackbar.LENGTH_LONG).show()
+                    val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
+                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                 }
                 is Loadable.Loaded -> {
-                    Snackbar.make(binding.root, R.string.msg_signin_success, Snackbar.LENGTH_LONG).show()
-                    viewModel.useAccount(result.data)
+                    val msg = resources.getString(R.string.msg_signin_success, result.data.username)
+                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                }
+                null -> {
+                    val msg = resources.getString(R.string.msg_signout_success)
+                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
@@ -83,10 +88,15 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_accounts -> {
-                val bottomSheet = SwitchAccountBottomSheet { i, account ->
-                    val password = AccountHelper.getPassword(account)
-                    if(password != null) viewModel.signIn(account.name, password)
-                    selectedAccountIndex = i
+                val bottomSheet = SwitchAccountBottomSheet { index, account ->
+                    if(index > -1 && account != null) {
+                        val password = AccountHelper.getPassword(account)
+                        if(password != null) viewModel.signIn(account.name, password)
+                        selectedAccountIndex = index
+                    } else {
+                        viewModel.signOut()
+                        selectedAccountIndex = -1
+                    }
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
                 bottomSheet.adapter.selectedIndex = selectedAccountIndex
