@@ -24,7 +24,6 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import retrofit2.HttpException
 import java.net.URL
 
 /**
@@ -83,40 +82,12 @@ class PageViewFragment : Fragment() {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Error -> {
-                    when(content.exception) {
-                        is HttpException -> {
-                            if(content.exception.code() == 404) {
-                                val args = Bundle().apply {
-                                    putString("title", arguments?.getString("title"))
-                                }
-                                val navController = findNavController()
-                                navController.popBackStack()
-                                navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
-                            }
-                        }
-                        is RuntimeException -> {
-                            val args = Bundle().apply {
-                                putString("title", arguments?.getString("title"))
-                            }
-                            val navController = findNavController()
-                            navController.popBackStack()
-                            navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
-                        }
-                        else -> {
-                            binding.errorIndicator.root.visibility = View.VISIBLE
-                            binding.errorIndicator.text.text = content.exception.message
-                        }
-                    }
+                    binding.errorIndicator.root.visibility = View.VISIBLE
+                    binding.errorIndicator.text.text = content.exception.message
                 }
                 is Loadable.Loaded -> {
-                    val body = Jsoup.parse(content.data).body()
+                    val body = Jsoup.parse(content.data.orEmpty()).body()
                     val doc = Document(GukhanWikiApi.DOC_URL.toString())
-                    body.select("a.new").forEach { a ->
-                        val href = a.attr("href")
-                        val title = href.removePrefix("/index.php?").split("&").firstOrNull()?.split("=")?.getOrNull(1) ?: ""
-                        val docPath = GukhanWikiApi.DOC_PATH
-                        a.attr("href", "$docPath$title")
-                    }
                     doc.appendChild(body)
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
@@ -129,13 +100,7 @@ class PageViewFragment : Fragment() {
                             val uri = request?.url?.toString()
                             if(uri != null) {
                                 val url = URL(uri.toString())
-                                if(isInternalLink(url)) {
-                                    onInternalLinkClicked(url)
-                                    return true
-                                } else {
-                                    onExternalLinkClicked(url)
-                                    return true
-                                }
+                                return shouldOverrideUrlLoading(url)
                             }
                             return super.shouldOverrideUrlLoading(view, request)
                         }
@@ -145,13 +110,7 @@ class PageViewFragment : Fragment() {
                         ): Boolean {
                             if(uri != null) {
                                 val url = URL(uri)
-                                if(isInternalLink(url)) {
-                                    onInternalLinkClicked(url)
-                                    return true
-                                } else {
-                                    onExternalLinkClicked(url)
-                                    return true
-                                }
+                                return shouldOverrideUrlLoading(url)
                             }
                             return super.shouldOverrideUrlLoading(view, uri.toString())
                         }
@@ -181,6 +140,16 @@ class PageViewFragment : Fragment() {
         return data.decodeToString()
     }
 
+    private fun shouldOverrideUrlLoading(url: URL): Boolean {
+        if(isInternalLink(url)) {
+            onInternalLinkClicked(url)
+            return true
+        } else {
+            onExternalLinkClicked(url)
+            return true
+        }
+    }
+
     private fun isInternalLink(url: URL): Boolean {
         if(url.host == GukhanWikiApi.DOC_URL.host) {
             return true
@@ -189,12 +158,36 @@ class PageViewFragment : Fragment() {
     }
 
     private fun onInternalLinkClicked(url: URL) {
+        if(url.path.startsWith(GukhanWikiApi.DOC_PATH)) onDocLinkClicked(url)
+        else {
+            if(url.path == "/index.php") {
+                val query = url.query
+                    .split("&").map { it.split("=") }
+                    .associate { (key, value) -> key to value }
+                val title = GukhanWikiApi.decodeUriComponent(query["title"] ?: return)
+                when(query["action"]) {
+                    "edit" -> {
+                        onInternalEditLinkClicked(title)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onDocLinkClicked(url: URL) {
         val path = url.path.removePrefix(GukhanWikiApi.DOC_PATH)
         val title = GukhanWikiApi.decodeUriComponent(path)
         val args = Bundle().apply {
             putString("title", title)
         }
         findNavController().navigate(R.id.action_PageViewFragment_self, args)
+    }
+
+    private fun onInternalEditLinkClicked(title: String) {
+        val args = Bundle().apply {
+            putString("title", title)
+        }
+        findNavController().navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
     }
 
     private fun onExternalLinkClicked(url: URL) {
