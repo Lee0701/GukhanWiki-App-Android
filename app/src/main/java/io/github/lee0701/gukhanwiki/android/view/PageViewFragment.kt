@@ -61,7 +61,7 @@ class PageViewFragment : Fragment() {
             arguments?.remove("message")
         }
 
-        binding.fab.setOnClickListener { _ ->
+        binding.fab.setOnClickListener {
             val title = viewModel.title.value ?: return@setOnClickListener
             val args = Bundle().apply {
                 putString("title", title)
