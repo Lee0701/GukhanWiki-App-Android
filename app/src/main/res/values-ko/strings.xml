@@ -11,6 +11,9 @@
     <string name="action_signin">로그인</string>
     <string name="action_goto">이동</string>
 
+    <string name="input_username">사용자 이름</string>
+    <string name="input_password">비밀번호</string>
+
     <string name="msg_welcome">환영합니다!</string>
     <string name="msg_signin_error">로그인 중에 오류가 발생했습니다.</string>
     <string name="msg_signin_success">로그인되었습니다.</string>
@@ -18,7 +21,9 @@
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
-    <string name="search_result_fragment_label">검색결과</string>
+    <string name="search_fragment_label">검색</string>
+    <string name="search_result_fragment_label">검색 결과</string>
+    <string name="authentication_activity_label">로그인</string>
 
     <string name="switch_account_label">계정 전환</string>
     <string name="authenticator_label">國漢大百科</string>
