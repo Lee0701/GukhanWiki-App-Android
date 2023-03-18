@@ -58,6 +58,13 @@
         <action
             android:id="@+id/action_searchFragment_to_searchResultFragment"
             app:destination="@id/searchResultFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_PageViewFragment"
+            app:destination="@id/PageViewFragment"
+            app:enterAnim="@anim/slide_from_right_with_fade"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right_with_fade" />
     </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
     <action
         android:id="@+id/action_global_PageViewFragment"

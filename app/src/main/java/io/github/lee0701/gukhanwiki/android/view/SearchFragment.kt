@@ -22,7 +22,7 @@ class SearchFragment: Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModels()
 
-    private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
+    private val adapter = SearchAutocompleteAdapter { position, item, goto -> onAutocompleteClicked(position, item, goto) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +49,8 @@ class SearchFragment: Fragment() {
 
         binding.searchInput.addTextChangedListener { editable ->
             val text = editable?.toString() ?: return@addTextChangedListener
-            if(text.isBlank()) return@addTextChangedListener
-            viewModel.autocompleteSearch(text)
+            if(text.isBlank()) viewModel.clearAutocomplete()
+            else viewModel.autocompleteSearch(text)
         }
 
         fun gotoSearch(text: String) {
@@ -89,8 +89,15 @@ class SearchFragment: Fragment() {
         imm?.showSoftInput(binding.searchInput, 0)
     }
 
-    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem) {
-        viewModel.autocompleteSelected(item.title)
+    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem, goto: Boolean) {
+        if(goto) {
+            val args = Bundle().apply {
+                putString("title", item.title)
+            }
+            findNavController().navigate(R.id.action_searchFragment_to_PageViewFragment, args)
+        } else {
+            viewModel.autocompleteSelected(item.title)
+        }
     }
 
     override fun onDestroyView() {

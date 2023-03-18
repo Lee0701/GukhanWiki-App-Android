@@ -36,7 +36,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:tint="@color/black"
+                android:tint="?attr/colorPrimary"
                 android:src="@drawable/baseline_cancel_24"
                 android:background="@android:color/transparent" />
         </androidx.appcompat.widget.LinearLayoutCompat>

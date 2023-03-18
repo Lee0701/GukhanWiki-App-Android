@@ -9,6 +9,7 @@
     <string name="action_start">시작하기</string>
     <string name="action_save">저장</string>
     <string name="action_signin">로그인</string>
+    <string name="action_goto">이동</string>
 
     <string name="msg_welcome">환영합니다!</string>
     <string name="msg_signin_error">로그인 중에 오류가 발생했습니다.</string>
