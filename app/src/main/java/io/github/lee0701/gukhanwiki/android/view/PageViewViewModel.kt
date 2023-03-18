@@ -15,16 +15,20 @@ class PageViewViewModel: ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private val _content = MutableLiveData<Loadable<String>>()
-    val content: LiveData<Loadable<String>> = _content
+    private val _content = MutableLiveData<Loadable<String?>>()
+    val content: LiveData<Loadable<String?>> = _content
 
     fun loadPage(title: String) {
         viewModelScope.launch {
             _content.postValue(Loadable.Loading())
             try {
-                val result = GukhanWikiApi.actionApiService.parse(page = title).parse.text.text
-                _title.postValue(title)
-                _content.postValue(Loadable.Loaded(result))
+                val result = GukhanWikiApi.actionApiService.parse(page = title).parse?.text?.text
+                if(result == null) {
+                    _content.postValue(Loadable.Error(java.lang.RuntimeException("Reslt text is null")))
+                } else {
+                    _title.postValue(title)
+                    _content.postValue(Loadable.Loaded(result))
+                }
             } catch(ex: IOException) {
                 _content.postValue(Loadable.Error(ex))
             } catch(ex: HttpException) {

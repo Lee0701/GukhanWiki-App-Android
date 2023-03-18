@@ -94,6 +94,14 @@ class PageViewFragment : Fragment() {
                                 navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
                             }
                         }
+                        is RuntimeException -> {
+                            val args = Bundle().apply {
+                                putString("title", arguments?.getString("title"))
+                            }
+                            val navController = findNavController()
+                            navController.popBackStack()
+                            navController.navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
+                        }
                         else -> {
                             binding.errorIndicator.root.visibility = View.VISIBLE
                             binding.errorIndicator.text.text = content.exception.message
@@ -101,9 +109,14 @@ class PageViewFragment : Fragment() {
                     }
                 }
                 is Loadable.Loaded -> {
-                    binding.webView.visibility = View.VISIBLE
                     val body = Jsoup.parse(content.data).body()
                     val doc = Document(GukhanWikiApi.DOC_URL.toString())
+                    body.select("a.new").forEach { a ->
+                        val href = a.attr("href")
+                        val title = href.removePrefix("/index.php?").split("&").firstOrNull()?.split("=")?.getOrNull(1) ?: ""
+                        val docPath = GukhanWikiApi.DOC_PATH
+                        a.attr("href", "$docPath$title")
+                    }
                     doc.appendChild(body)
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
@@ -150,6 +163,7 @@ class PageViewFragment : Fragment() {
                         "UTF-8",
                         null
                     )
+                    binding.webView.visibility = View.VISIBLE
                 }
             }
         }
