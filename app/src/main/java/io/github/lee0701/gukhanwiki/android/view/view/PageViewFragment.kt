@@ -91,6 +91,7 @@ class PageViewFragment : Fragment() {
                     val doc = Document(GukhanWikiApi.DOC_URL.toString())
                     doc.appendChild(body)
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
+                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.responsive)))
                     doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
