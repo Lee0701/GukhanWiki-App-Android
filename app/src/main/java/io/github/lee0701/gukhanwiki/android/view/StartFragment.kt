@@ -15,9 +15,6 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentStartBinding
 class StartFragment : Fragment() {
 
     private var _binding: FragmentStartBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
