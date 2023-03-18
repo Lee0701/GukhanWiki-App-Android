@@ -17,17 +17,17 @@
         <action
             android:id="@+id/action_PageViewFragment_self"
             app:destination="@id/PageViewFragment"
-            app:enterAnim="@anim/slide_from_right_with_fade"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right_with_fade" />
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
         <action
             android:id="@+id/action_PageViewFragment_to_pageEditFragment"
             app:destination="@id/pageEditFragment"
-            app:enterAnim="@anim/slide_from_right_with_fade"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right_with_fade" />
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
         <action
             android:id="@+id/action_PageViewFragment_self_noanim"
             app:destination="@id/PageViewFragment" />
@@ -49,7 +49,11 @@
         tools:layout="@layout/fragment_search_result" >
         <action
             android:id="@+id/action_searchResultFragment_to_PageViewFragment"
-            app:destination="@id/PageViewFragment" />
+            app:destination="@id/PageViewFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -57,15 +61,26 @@
         android:label="@string/search_result_fragment_label" >
         <action
             android:id="@+id/action_searchFragment_to_searchResultFragment"
-            app:destination="@id/searchResultFragment" />
+            app:destination="@id/searchResultFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
         <action
             android:id="@+id/action_searchFragment_to_PageViewFragment"
             app:destination="@id/PageViewFragment"
-            app:enterAnim="@anim/slide_from_right_with_fade"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right_with_fade" />
-    </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_searchFragment"
+        app:destination="@id/searchFragment"
+        app:enterAnim="@anim/slide_from_right"
+        app:exitAnim="@anim/slide_to_left_with_fade"
+        app:popEnterAnim="@anim/slide_from_left_with_fade"
+        app:popExitAnim="@anim/slide_to_right" />
     <action
         android:id="@+id/action_global_PageViewFragment"
         app:destination="@id/PageViewFragment"
