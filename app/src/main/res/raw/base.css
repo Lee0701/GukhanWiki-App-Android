@@ -9,6 +9,23 @@ img {
     margin: 0;
 }
 
+.tp_link a:active {
+    color: inherit !important;
+}
+.tp_link a:hover {
+    color: inherit !important;
+}
+.tp_link a:link {
+    color: inherit !important;
+}
+.tp_link a:visited {
+    color: inherit !important;
+}
+
+span.color a {
+    color: inherit !important;
+}
+
 @media screen and (max-width:520px) {
     .tright, .floatright {
         float: none;
