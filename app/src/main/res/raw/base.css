@@ -1,12 +1,16 @@
 
-@media screen and (max-width:520px) {
-    .tright, .floatright {
-        float: none;
-    }
+a {
+    text-decoration: none;
 }
 
 img {
     max-width: 100%;
     height: auto;
     margin: 0;
+}
+
+@media screen and (max-width:520px) {
+    .tright, .floatright {
+        float: none;
+    }
 }
