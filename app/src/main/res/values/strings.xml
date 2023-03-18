@@ -16,11 +16,11 @@
     <string name="msg_edit_saved">Edit saved.</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="start_fragment_label">Gukhan Wiki</string>
+    <string name="start_fragment_label">國漢大百科</string>
     <string name="search_result_fragment_label">Search</string>
 
     <string name="switch_account_label">Switch Account</string>
-
-    <string name="account_type">io.github.lee0701.gukhanwiki.android</string>
     <string name="authenticator_label">國漢大百科</string>
+
+    <string translatable="false" name="account_type">io.github.lee0701.gukhanwiki.android</string>
 </resources>
