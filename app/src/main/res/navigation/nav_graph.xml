@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_PageViewFragment_to_pageEditFragment"
             app:destination="@id/pageEditFragment" />
+        <action
+            android:id="@+id/action_PageViewFragment_self_noanim"
+            app:destination="@id/PageViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/StartFragment"
