@@ -3,15 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical"
         tools:listitem="@layout/listitem_account"
         tools:itemCount="10" />
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/anonymous"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/margin_large"
+        android:paddingVertical="@dimen/margin_medium"
+        android:background="@color/gray_50"
+        android:clickable="true">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/anonymous"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="@dimen/margin_medium" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/anonymous_check_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_check_24"
+            android:tint="@color/black"
+            android:visibility="invisible" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

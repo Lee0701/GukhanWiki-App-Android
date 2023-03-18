@@ -14,11 +14,8 @@ class MainViewModel: ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private val _signinResult = MutableLiveData<Loadable<AccountHelper.SignedInAccount>>()
-    val signinResult: LiveData<Loadable<AccountHelper.SignedInAccount>> = _signinResult
-
-    private val _signedInAccount = MutableLiveData<AccountHelper.SignedInAccount>()
-    val signedInAccount: LiveData<AccountHelper.SignedInAccount> = _signedInAccount
+    private val _signInResult = MutableLiveData<Loadable<AccountHelper.SignedInAccount>?>()
+    val signInResult: LiveData<Loadable<AccountHelper.SignedInAccount>?> = _signInResult
 
     fun updateTitle(title: String) {
         _title.postValue(title)
@@ -27,7 +24,7 @@ class MainViewModel: ViewModel() {
     fun signIn(username: String, password: String) {
         viewModelScope.launch {
             val result = AccountHelper.signIn(username, password)
-            _signinResult.postValue(result)
+            _signInResult.postValue(result)
         }
     }
 
@@ -35,11 +32,8 @@ class MainViewModel: ViewModel() {
         viewModelScope.launch {
             val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
             if(csrfToken != null) GukhanWikiApi.actionApiService.logout(token = csrfToken)
+            _signInResult.postValue(null)
         }
-    }
-
-    fun useAccount(signedInAccount: AccountHelper.SignedInAccount) {
-        _signedInAccount.postValue(signedInAccount)
     }
 
 }
