@@ -2,17 +2,24 @@
     <string name="app_name">國漢大百科</string>
 
     <string name="action_settings">설정</string>
+    <string name="action_accounts">계정</string>
     <string name="action_search">검색</string>
     <string name="action_edit">편집</string>
     <string name="action_submit">전송</string>
     <string name="action_start">시작하기</string>
     <string name="action_save">저장</string>
+    <string name="action_signin">로그인</string>
 
+    <string name="msg_welcome">환영합니다!</string>
+    <string name="msg_signin_error">로그인 중에 오류가 발생했습니다.</string>
+    <string name="msg_signin_success">로그인되었습니다.</string>
     <string name="msg_edit_saved">편집이 저장되었습니다.</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
     <string name="search_result_fragment_label">검색결과</string>
 
-    <string name="welcome">환영합니다!</string>
+    <string name="switch_account_label">계정 전환</string>
+    <string name="authenticator_label">國漢大百科</string>
+
 </resources>
