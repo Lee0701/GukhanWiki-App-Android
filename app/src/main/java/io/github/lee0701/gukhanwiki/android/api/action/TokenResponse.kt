@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.api
+package io.github.lee0701.gukhanwiki.android.api.action
 
 data class TokenResponse(
     val batchComplete: String = "",

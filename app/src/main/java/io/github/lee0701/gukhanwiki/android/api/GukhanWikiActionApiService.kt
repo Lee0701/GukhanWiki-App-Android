@@ -1,5 +1,8 @@
 package io.github.lee0701.gukhanwiki.android.api
 
+import io.github.lee0701.gukhanwiki.android.api.action.ClientLoginResponse
+import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
+import io.github.lee0701.gukhanwiki.android.api.action.TokenResponse
 import retrofit2.http.*
 
 interface GukhanWikiActionApiService {

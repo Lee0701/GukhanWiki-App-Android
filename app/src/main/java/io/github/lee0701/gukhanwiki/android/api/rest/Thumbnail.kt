@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.api
+package io.github.lee0701.gukhanwiki.android.api.rest
 
 data class Thumbnail(
     val mimetype: String,

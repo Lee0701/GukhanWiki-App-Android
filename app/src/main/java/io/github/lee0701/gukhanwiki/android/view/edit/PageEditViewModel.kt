@@ -1,12 +1,12 @@
-package io.github.lee0701.gukhanwiki.android.view
+package io.github.lee0701.gukhanwiki.android.view.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.api.Page
-import io.github.lee0701.gukhanwiki.android.api.UpdatePageBody
+import io.github.lee0701.gukhanwiki.android.api.action.Page
+import io.github.lee0701.gukhanwiki.android.api.rest.UpdatePageBody
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException

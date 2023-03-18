@@ -1,14 +1,11 @@
-package io.github.lee0701.gukhanwiki.android
+package io.github.lee0701.gukhanwiki.android.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
-import android.os.Bundle
+import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import java.io.Serializable
-import java.util.concurrent.TimeUnit
 
 object AccountHelper {
     private var accountManager: AccountManager? = null
@@ -44,7 +41,9 @@ object AccountHelper {
 
     suspend fun signIn(username: String, password: String): Loadable<SignedInAccount> {
         val tokenResult = GukhanWikiApi.actionApiService.retrieveToken(type = "login")
-        val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(RuntimeException("token"))
+        val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(
+            RuntimeException("token")
+        )
         val loginResult = GukhanWikiApi.actionApiService.clientLogin(
             loginToken = loginToken,
             username = username,

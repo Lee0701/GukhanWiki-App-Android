@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/PageViewFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.PageViewFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.view.PageViewFragment"
         tools:layout="@layout/fragment_page_view">
 
         <action
@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchResultFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.SearchResultFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.search.SearchResultFragment"
         android:label="@string/search_result_fragment_label"
         tools:layout="@layout/fragment_search_result" >
         <action
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.SearchFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.search.SearchFragment"
         android:label="@string/search_fragment_label"
         tools:layout="@layout/fragment_search" >
         <action
@@ -89,6 +89,6 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/pageEditFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.PageEditFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.PageEditFragment"
         android:label="PageEditFragment" />
 </navigation>
