@@ -2,6 +2,7 @@
     <string name="app_name">國漢大百科</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_accounts">Accounts</string>
     <string name="action_search">Search</string>
     <string name="action_edit">Edit</string>
     <string name="action_start">Start</string>
@@ -15,6 +16,8 @@
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">Gukhan Wiki</string>
     <string name="search_result_fragment_label">Search</string>
+
+    <string name="switch_account_label">Switch Account</string>
 
     <string name="account_type">io.github.lee0701.gukhanwiki.android</string>
     <string name="authenticator_label">國漢大百科</string>

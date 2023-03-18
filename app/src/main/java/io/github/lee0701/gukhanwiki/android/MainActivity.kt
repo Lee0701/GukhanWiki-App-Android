@@ -66,6 +66,15 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 true
             }
+            R.id.action_accounts -> {
+                val bottomSheet = SwitchAccountBottomSheet { i, account ->
+                    val signedInAccount = AccountHelper.SignedInAccount(username = account.name, password = "")
+                    viewModel.setSignedInAccount(signedInAccount)
+                }
+                bottomSheet.adapter.submitList(AccountHelper.getAccounts())
+                bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)
+                true
+            }
             R.id.action_search -> {
                 if(navController.currentDestination?.id == R.id.searchFragment) {
                     navController.navigateUp()
