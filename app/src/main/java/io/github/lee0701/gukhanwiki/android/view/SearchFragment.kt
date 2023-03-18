@@ -2,6 +2,7 @@ package io.github.lee0701.gukhanwiki.android.view
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,8 +63,15 @@ class SearchFragment: Fragment() {
         }
 
         binding.searchInput.setOnEditorActionListener { v, id, event ->
-            gotoSearch(v.text?.toString() ?: return@setOnEditorActionListener false)
+            gotoSearch(binding.searchInput.text.toString())
             true
+        }
+
+        binding.searchInput.setOnKeyListener { v, keyCode, event ->
+            if(keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
+                gotoSearch(binding.searchInput.text.toString())
+                true
+            } else false
         }
 
         binding.searchButton.setOnClickListener {
