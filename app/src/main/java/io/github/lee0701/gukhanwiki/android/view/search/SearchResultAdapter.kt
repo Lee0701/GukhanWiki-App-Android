@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.view
+package io.github.lee0701.gukhanwiki.android.view.search
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,12 +1,13 @@
-package io.github.lee0701.gukhanwiki.android.api
+package io.github.lee0701.gukhanwiki.android.api.rest
 
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Html
 import androidx.core.text.HtmlCompat
 import com.google.gson.annotations.SerializedName
-import io.github.lee0701.gukhanwiki.android.view.SearchAutocompleteItem
-import io.github.lee0701.gukhanwiki.android.view.SearchResultItem
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.view.search.SearchAutocompleteItem
+import io.github.lee0701.gukhanwiki.android.view.search.SearchResultItem
 import org.jsoup.Jsoup
 
 data class SearchResult(

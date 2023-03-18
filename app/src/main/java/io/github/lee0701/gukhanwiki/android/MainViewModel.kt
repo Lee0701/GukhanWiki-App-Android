@@ -1,11 +1,10 @@
-package io.github.lee0701.gukhanwiki.android.view
+package io.github.lee0701.gukhanwiki.android
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.lee0701.gukhanwiki.android.AccountHelper
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.launch
 

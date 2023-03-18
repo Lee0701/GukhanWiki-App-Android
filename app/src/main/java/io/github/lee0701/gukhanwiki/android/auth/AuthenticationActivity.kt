@@ -1,7 +1,6 @@
-package io.github.lee0701.gukhanwiki.android
+package io.github.lee0701.gukhanwiki.android.auth
 
 import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater

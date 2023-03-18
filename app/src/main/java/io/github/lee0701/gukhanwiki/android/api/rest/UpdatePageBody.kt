@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.api
+package io.github.lee0701.gukhanwiki.android.api.rest
 
 import com.google.gson.annotations.SerializedName
 

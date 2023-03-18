@@ -11,8 +11,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
+import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
-import io.github.lee0701.gukhanwiki.android.view.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 

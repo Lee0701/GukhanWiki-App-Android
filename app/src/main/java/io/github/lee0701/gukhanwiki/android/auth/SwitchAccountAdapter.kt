@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android
+package io.github.lee0701.gukhanwiki.android.auth
 
 import android.accounts.Account
 import android.view.LayoutInflater

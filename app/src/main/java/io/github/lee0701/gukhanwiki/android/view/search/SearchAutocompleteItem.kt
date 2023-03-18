@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.view
+package io.github.lee0701.gukhanwiki.android.view.search
 
 data class SearchAutocompleteItem(
     val id: Int,

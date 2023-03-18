@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.view
+package io.github.lee0701.gukhanwiki.android.view.view
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
