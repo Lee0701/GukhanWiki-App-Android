@@ -15,7 +15,7 @@
     <string name="input_password">비밀번호</string>
 
     <string name="msg_welcome">환영합니다!</string>
-    <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s.</string>
+    <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s</string>
     <string name="msg_signin_success">%s 계정으로 로그인했습니다.</string>
     <string name="msg_signout_success">로그아웃했습니다.</string>
     <string name="msg_edit_saved">편집이 저장되었습니다.</string>

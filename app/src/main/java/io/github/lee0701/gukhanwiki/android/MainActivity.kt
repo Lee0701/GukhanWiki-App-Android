@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-    private var selectedAccountIndex: Int = -1
+    private var selectedAccountIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
         val password = account?.let { AccountHelper.getPassword(it) }
         if(account != null && password != null) {
-            viewModel.signOut()
             viewModel.signIn(account.name, password)
         }
     }
@@ -94,13 +93,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_accounts -> {
                 val bottomSheet = SwitchAccountBottomSheet { index, account ->
-                    if(index > -1 && account != null) {
+                    if(account != null) {
                         val password = AccountHelper.getPassword(account)
                         if(password != null) viewModel.signIn(account.name, password)
                         selectedAccountIndex = index
-                    } else {
-                        viewModel.signOut()
-                        selectedAccountIndex = -1
                     }
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())

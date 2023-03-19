@@ -15,8 +15,8 @@
     <string name="input_password">Password</string>
 
     <string name="msg_welcome">Welcome!</string>
-    <string name="msg_signin_error">Error while signing in: %s.</string>
-    <string name="msg_signin_success">Signed in with: %s.</string>
+    <string name="msg_signin_error">Error while signing in: %s</string>
+    <string name="msg_signin_success">Signed in with: %s</string>
     <string name="msg_signout_success">Successfully signed out.</string>
     <string name="msg_edit_saved">Edit saved.</string>
     <string name="msg_edit_failed">Edit failed. Did you verify your email?</string>
@@ -31,6 +31,7 @@
     <string name="authenticator_label">國漢大百科</string>
 
     <string name="anonymous">Anonymous</string>
+    <string name="select_account">Select account</string>
 
     <string name="account_type" translatable="false">io.github.lee0701.gukhanwiki.android</string>
 

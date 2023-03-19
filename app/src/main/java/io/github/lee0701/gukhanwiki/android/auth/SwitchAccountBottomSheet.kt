@@ -31,13 +31,6 @@ class SwitchAccountBottomSheet(
             adapter = this@SwitchAccountBottomSheet.adapter
             this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
-        view.anonymous.setOnClickListener {
-            onClick(-1, null)
-            this.dismiss()
-        }
-        view.anonymousCheckIcon.visibility =
-            if(adapter.selectedIndex == -1) View.VISIBLE
-            else View.INVISIBLE
         return view.root
     }
 
