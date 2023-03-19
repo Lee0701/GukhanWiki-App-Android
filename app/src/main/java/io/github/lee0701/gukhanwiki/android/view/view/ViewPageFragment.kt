@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -50,12 +51,6 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val message = arguments?.getString("message")
-        if(message != null && message.isNotBlank()) {
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
-            arguments?.remove("message")
-        }
 
         binding.fab.setOnClickListener {
             val title = viewModel.title.value ?: return@setOnClickListener
