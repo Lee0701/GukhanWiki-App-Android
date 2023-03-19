@@ -49,6 +49,7 @@ object AccountHelper {
             username = username,
             password = password,
         )
+        if(loginResult.error != null) return Loadable.Error(RuntimeException(loginResult.error["*"]))
         if(loginResult.clientLogin?.status != "PASS") return Loadable.Error(RuntimeException(loginResult.clientLogin?.status))
 
         val account = SignedInAccount(username, password)

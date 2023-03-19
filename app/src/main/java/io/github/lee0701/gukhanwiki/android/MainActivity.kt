@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
+import io.github.lee0701.gukhanwiki.android.auth.AuthenticationActivity
 import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 
@@ -92,13 +93,16 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_accounts -> {
-                val bottomSheet = SwitchAccountBottomSheet { index, account ->
+                val bottomSheet = SwitchAccountBottomSheet({ index, account ->
                     if(account != null) {
                         val password = AccountHelper.getPassword(account)
                         if(password != null) viewModel.signIn(account.name, password)
                         selectedAccountIndex = index
                     }
-                }
+                }, {
+                    val intent = Intent(this, AuthenticationActivity::class.java)
+                    startActivity(intent)
+                })
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
                 bottomSheet.adapter.selectedIndex = selectedAccountIndex
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)

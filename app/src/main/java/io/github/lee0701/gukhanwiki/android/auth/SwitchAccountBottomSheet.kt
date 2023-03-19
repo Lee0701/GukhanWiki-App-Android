@@ -12,7 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentSwitchAccountBinding
 
 class SwitchAccountBottomSheet(
-    private val onClick: (Int, Account?) -> Unit
+    private val onClick: (Int, Account?) -> Unit,
+    private val onAdd: () -> Unit,
 ): BottomSheetDialogFragment() {
 
     val adapter = SwitchAccountAdapter { i, account ->
@@ -25,13 +26,16 @@ class SwitchAccountBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = FragmentSwitchAccountBinding.inflate(inflater, container, false)
-        view.recyclerView.apply {
+        val binding = FragmentSwitchAccountBinding.inflate(inflater, container, false)
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SwitchAccountBottomSheet.adapter
             this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
-        return view.root
+        binding.addAccount.setOnClickListener {
+            onAdd()
+        }
+        return binding.root
     }
 
     companion object {
