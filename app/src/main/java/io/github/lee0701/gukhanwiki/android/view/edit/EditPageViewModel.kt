@@ -16,6 +16,9 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
+    private val _pageToReview = MutableLiveData<Page>()
+    val pageToReview: LiveData<Page> = _pageToReview
+
     private val _result = MutableLiveData<Loadable<EditResponse>>()
     val result: LiveData<Loadable<EditResponse>> = _result
 
@@ -46,18 +49,24 @@ class EditPageViewModel: ViewModel() {
         }
     }
 
-    fun updatePage(title: String, content: String, section: String?, summary: String?, baseRevId: Int?) {
+    fun reviewEdit(page: Page) {
+        viewModelScope.launch {
+            _pageToReview.postValue(page)
+        }
+    }
+
+    fun updatePage(page: Page, summary: String?) {
         viewModelScope.launch {
             _page.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
                 val response = GukhanWikiApi.actionApiService.edit(
                     token = csrfToken,
-                    title = title,
+                    title = page.title,
                     summary = summary,
-                    section = section,
-                    baseRevId = baseRevId,
-                    text = content,
+                    section = page.section,
+                    baseRevId = page.revId,
+                    text = page.content,
                 )
                 if(response.edit?.result == "Success") _result.postValue(Loadable.Loaded(response))
                 else _result.postValue(Loadable.Error(java.lang.RuntimeException(response.edit?.result)))
