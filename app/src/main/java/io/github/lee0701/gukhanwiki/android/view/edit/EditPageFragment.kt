@@ -13,11 +13,11 @@ import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageEditBinding
 
-class PageEditFragment: Fragment() {
+class EditPageFragment: Fragment() {
 
     private var _binding: FragmentPageEditBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PageEditViewModel by viewModels()
+    private val viewModel: EditPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

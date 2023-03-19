@@ -33,10 +33,10 @@ import java.net.URL
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class PageViewFragment : Fragment() {
+class ViewPageFragment : Fragment() {
 
     private var _binding: FragmentPageViewBinding? = null
-    private val viewModel: PageViewViewModel by viewModels()
+    private val viewModel: ViewPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
