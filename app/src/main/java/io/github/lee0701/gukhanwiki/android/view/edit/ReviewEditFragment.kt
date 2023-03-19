@@ -1,0 +1,92 @@
+package io.github.lee0701.gukhanwiki.android.view.edit
+
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
+import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.MainViewModel
+import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
+import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
+import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+
+class ReviewEditFragment: Fragment(), WebViewClient.Listener {
+
+    private var _binding: FragmentReviewEditBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: EditPageViewModel by viewModels()
+    private val activityViewModel: MainViewModel by activityViewModels()
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var webViewRenderer: WebViewRenderer
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        webViewRenderer = WebViewRenderer(requireContext(), this)
+        val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("page", EditPageViewModel.Page::class.java)
+        } else {
+            arguments?.getSerializable("page") as EditPageViewModel.Page
+        }
+        if(page != null) {
+            viewModel.reviewEdit(page)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentReviewEditBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.page.observe(viewLifecycleOwner) { page ->
+            binding.loadingIndicator.root.visibility = View.GONE
+            binding.errorIndicator.root.visibility = View.GONE
+            binding.webView.visibility = View.GONE
+            when(page) {
+                is Loadable.Error -> {
+                    binding.errorIndicator.root.visibility = View.VISIBLE
+                    binding.errorIndicator.text.text = page.exception.message
+                }
+                is Loadable.Loading -> {
+                    binding.loadingIndicator.root.visibility = View.VISIBLE
+                }
+                is Loadable.Loaded -> {
+                    binding.webView.visibility = View.VISIBLE
+                    webViewRenderer.render(binding.webView, page.data.content)
+                    binding.fab.setOnClickListener {
+                        viewModel.updatePage(page.data, binding.summary.text.toString())
+                    }
+                }
+            }
+        }
+
+    }
+
+    override fun onNavigate(resId: Int, args: Bundle) {
+    }
+
+    override fun onStartActivity(intent: Intent) {
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+}

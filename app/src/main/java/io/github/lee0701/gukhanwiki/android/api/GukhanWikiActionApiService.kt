@@ -9,6 +9,7 @@ interface GukhanWikiActionApiService {
     suspend fun parse(
         @Query("action") action: String = "parse",
         @Query("format") format: String = "json",
+        @Query("text") text: String? = null,
         @Query("page") page: String? = null,
         @Query("prop") prop: String? = null,
         @Query("section") section: String? = null,

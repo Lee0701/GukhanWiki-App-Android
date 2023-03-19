@@ -10,14 +10,12 @@ import io.github.lee0701.gukhanwiki.android.api.action.EditResponse
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import java.io.Serializable
 
 class EditPageViewModel: ViewModel() {
 
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
-
-    private val _pageToReview = MutableLiveData<Page>()
-    val pageToReview: LiveData<Page> = _pageToReview
 
     private val _result = MutableLiveData<Loadable<EditResponse>>()
     val result: LiveData<Loadable<EditResponse>> = _result
@@ -51,7 +49,15 @@ class EditPageViewModel: ViewModel() {
 
     fun reviewEdit(page: Page) {
         viewModelScope.launch {
-            _pageToReview.postValue(page)
+            val response = GukhanWikiApi.actionApiService.parse(
+                text = page.content,
+            )
+            val text = response.parse?.text?.text
+            if(text != null) {
+                val newPage = page.copy(content = text)
+//                _pageToReview.postValue(Loadable.Loaded(newPage))
+                _page.postValue(Loadable.Loaded(newPage))
+            }
         }
     }
 
@@ -82,6 +88,6 @@ class EditPageViewModel: ViewModel() {
         val content: String,
         val section: String?,
         val revId: Int?,
-    )
+    ): Serializable
 
 }

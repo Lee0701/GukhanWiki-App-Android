@@ -8,14 +8,14 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
-import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import java.net.URL
 
 class WebViewClient(
-    val listener: Listener,
+    private val listener: Listener,
 ): android.webkit.WebViewClient() {
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun shouldOverrideUrlLoading(
         view: WebView?,
@@ -90,7 +90,7 @@ class WebViewClient(
             putString("title", title)
             if(section != null) putString("section", section)
         }
-        listener.onNavigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
+        listener.onNavigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
     }
 
     private fun onExternalLinkClicked(url: URL) {

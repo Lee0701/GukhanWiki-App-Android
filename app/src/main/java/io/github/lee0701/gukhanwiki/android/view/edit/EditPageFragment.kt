@@ -63,13 +63,11 @@ class EditPageFragment: Fragment() {
                         binding.loadingIndicator.root.visibility = View.VISIBLE
                         binding.editContent.isEnabled = false
                         binding.fab.isEnabled = false
-                        viewModel.reviewEdit(
-                            page.data.copy(content = binding.editContent.text.toString()),
-                        )
-//                        viewModel.updatePage(
-//                            page.data.copy(content = binding.editContent.text.toString()),
-//                            summary = "",   // TODO
-//                        )
+                        val newPage = page.data.copy(content = binding.editContent.text.toString())
+                        val args = Bundle().apply {
+                            putSerializable("page", newPage)
+                        }
+                        findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
                     }
                 }
             }
