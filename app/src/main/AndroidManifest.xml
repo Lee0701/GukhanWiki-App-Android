@@ -3,12 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
     <uses-permission
         android:name="android.permission.AUTHENTICATE_ACCOUNTS"
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
@@ -23,12 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GukhanWikiAppAndroid"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".auth.AuthenticationActivity"
-            android:label="@string/authentication_activity_label"
-            android:exported="false" />
-
+            android:exported="false"
+            android:label="@string/authentication_activity_label" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -54,13 +54,13 @@
         <service
             android:name=".auth.AuthenticatorService"
             android:exported="false">
-
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
+                android:resource="@xml/authenticator" />
         </service>
     </application>
 

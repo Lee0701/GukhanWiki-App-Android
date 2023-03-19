@@ -31,5 +31,32 @@
 
     <string name="anonymous">Anonymous</string>
 
-    <string translatable="false" name="account_type">io.github.lee0701.gukhanwiki.android</string>
+    <string name="account_type" translatable="false">io.github.lee0701.gukhanwiki.android</string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_ruby_header">Ruby</string>
+    <string name="pref_ruby_enabled_title">Display ruby (Hanja reading)</string>
+    <string name="pref_ruby_grade_title">Minimal grade for ruby display</string>
+    <string name="pref_ruby_position_title">Ruby display position</string>
+
+    <string name="pref_ruby_grade_80">Grade 8</string>
+    <string name="pref_ruby_grade_72">Grade 7-II</string>
+    <string name="pref_ruby_grade_70">Grade 7</string>
+    <string name="pref_ruby_grade_62">Grade 6-II</string>
+    <string name="pref_ruby_grade_60">Grade 6</string>
+    <string name="pref_ruby_grade_52">Grade 5-II</string>
+    <string name="pref_ruby_grade_50">Grade 5</string>
+    <string name="pref_ruby_grade_42">Grade 4-II</string>
+    <string name="pref_ruby_grade_40">Grade 4</string>
+    <string name="pref_ruby_grade_32">Grade 3-II</string>
+    <string name="pref_ruby_grade_30">Grade 3</string>
+    <string name="pref_ruby_grade_20">Grade 2</string>
+    <string name="pref_ruby_grade_10">Grade 1</string>
+    <string name="pref_ruby_grade_0">Special</string>
+    <string name="pref_ruby_grade_none">None</string>
+
+    <string name="pref_ruby_position_side">Side</string>
+    <string name="pref_ruby_position_top">Top</string>
+
 </resources>

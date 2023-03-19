@@ -60,7 +60,6 @@ class PageEditViewModel: ViewModel() {
                     text = content,
                 )
                 if(response.edit?.result == "Success") _result.postValue(Loadable.Loaded(response))
-                else println(response)
             } catch(ex: HttpException) {
                 ex.printStackTrace()
                 _result.postValue(Loadable.Error(ex))

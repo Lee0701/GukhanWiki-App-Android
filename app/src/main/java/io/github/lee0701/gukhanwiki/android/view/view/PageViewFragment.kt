@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.view.view
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
@@ -23,6 +25,7 @@ import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
 import org.jsoup.Jsoup
+import org.jsoup.nodes.DataNode
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.net.URL
@@ -36,12 +39,15 @@ class PageViewFragment : Fragment() {
     private val viewModel: PageViewViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val argTitle = arguments?.getString("title")
         if(argTitle != null) viewModel.loadPage(argTitle)
     }
@@ -89,10 +95,26 @@ class PageViewFragment : Fragment() {
                 is Loadable.Loaded -> {
                     val body = Jsoup.parse(content.data.orEmpty()).body()
                     val doc = Document(GukhanWikiApi.DOC_URL.toString())
+                    doc.outputSettings(Document.OutputSettings().prettyPrint(false))
                     doc.appendChild(body)
-                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.base)))
-                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.responsive)))
-                    doc.head().appendChild(Element("style").text(loadCustomCss(R.raw.wikitable)))
+                    doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.base)))))
+                    doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.responsive)))))
+                    doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.wikitable)))))
+
+                    doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.ruby_hide)))))
+                    if(sharedPreferences.getBoolean("ruby_enabled", true)) {
+                        val minGrade = sharedPreferences.getString("ruby_grade", "80")
+                        val position = sharedPreferences.getString("ruby_position", "top")
+                        val grades = resources.getStringArray(R.array.pref_ruby_grade_values).reversed()
+                        val display = if(position == "top") "revert" else "inline-block"
+                        val rubyShow = mutableListOf<String>()
+                        for(g in grades) {
+                            rubyShow += "ruby.hanja.grade$g > rt { display: $display; } ruby.hanja.grade$g > rp { display: revert; }"
+                            if(minGrade == g) break
+                        }
+                        doc.head().appendChild(Element("style").appendChild(DataNode(rubyShow.joinToString("\n"))))
+                    }
+
                     binding.webView.webViewClient = object: WebViewClient() {
                         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                         override fun shouldOverrideUrlLoading(
