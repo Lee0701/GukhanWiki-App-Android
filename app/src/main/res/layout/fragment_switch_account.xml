@@ -7,15 +7,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:text="@string/select_account"
-        android:textSize="20sp"
-        android:textColor="@color/black"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_large"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/margin_small"
         android:paddingVertical="@dimen/margin_medium"
-        android:background="@color/gray_50" />
+        android:background="@color/gray_50">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/select_account"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="@dimen/margin_medium" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/add_account"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_add_circle_24"
+            android:tint="@color/black"
+            android:background="?selectableItemBackground" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
