@@ -82,7 +82,7 @@ class WebViewClient(
         val args = Bundle().apply {
             putString("title", title)
         }
-        listener.onNavigate(R.id.action_PageViewFragment_self, args)
+        listener.onNavigate(R.id.action_ViewPageFragment_self, args)
     }
 
     private fun onInternalEditLinkClicked(title: String, section: String? = null) {

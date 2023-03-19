@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
@@ -22,7 +23,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
     private var _binding: FragmentReviewEditBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: EditPageViewModel by viewModels()
+    private val viewModel: ReviewEditViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -33,9 +34,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         webViewRenderer = WebViewRenderer(requireContext(), this)
         val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("page", EditPageViewModel.Page::class.java)
+            arguments?.getSerializable("page", Page::class.java)
         } else {
-            arguments?.getSerializable("page") as EditPageViewModel.Page
+            arguments?.getSerializable("page") as Page
         }
         if(page != null) {
             viewModel.reviewEdit(page)
@@ -54,26 +55,43 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.page.observe(viewLifecycleOwner) { page ->
+        viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE
             binding.errorIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
-            when(page) {
+            when(response) {
                 is Loadable.Error -> {
                     binding.errorIndicator.root.visibility = View.VISIBLE
-                    binding.errorIndicator.text.text = page.exception.message
+                    binding.errorIndicator.text.text = response.exception.message
                 }
                 is Loadable.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    webViewRenderer.render(binding.webView, page.data.content)
-                    binding.fab.setOnClickListener {
-                        viewModel.updatePage(page.data, binding.summary.text.toString())
-                    }
+                    webViewRenderer.render(binding.webView, response.data)
                 }
             }
+        }
+
+        binding.fab.setOnClickListener {
+            val page = viewModel.page.value
+            if(page is Loadable.Loaded)
+                viewModel.updatePage(page.data, binding.summary.text?.toString().orEmpty())
+        }
+
+        viewModel.result.observe(viewLifecycleOwner) { response ->
+            val message =
+                if(response is Loadable.Error) {
+                    if(response.exception.message == "Failure") resources.getString(R.string.msg_edit_failed)
+                    else response.exception.message
+                } else resources.getString(R.string.msg_edit_saved)
+            val args = Bundle().apply {
+                putString("title", arguments?.getString("title"))
+                putString("message", message)
+                putBoolean("reload", true)
+            }
+            findNavController().popBackStack(R.id.ViewPageFragment, false)
         }
 
     }
