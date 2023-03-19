@@ -39,7 +39,7 @@ object AccountHelper {
         }
     }
 
-    suspend fun signIn(username: String, password: String): Loadable<SignedInAccount> {
+    suspend fun signIn(username: String, password: String): Loadable<SignedInAccount?> {
         val tokenResult = GukhanWikiApi.actionApiService.retrieveToken(type = "login")
         val loginToken = tokenResult.query.tokens["logintoken"] ?: return Loadable.Error(
             RuntimeException("token")

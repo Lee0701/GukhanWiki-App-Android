@@ -48,12 +48,13 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                 }
                 is Loadable.Loaded -> {
-                    val msg = resources.getString(R.string.msg_signin_success, result.data.username)
-                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
-                }
-                null -> {
-                    val msg = resources.getString(R.string.msg_signout_success)
-                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    if(result.data == null) {
+                        val msg = resources.getString(R.string.msg_signout_success)
+                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    } else {
+                        val msg = resources.getString(R.string.msg_signin_success, result.data.username)
+                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }
         }

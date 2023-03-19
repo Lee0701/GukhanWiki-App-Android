@@ -1,9 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.api
 
-import io.github.lee0701.gukhanwiki.android.api.action.ClientLoginResponse
-import io.github.lee0701.gukhanwiki.android.api.action.EditResponse
-import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
-import io.github.lee0701.gukhanwiki.android.api.action.TokenResponse
+import io.github.lee0701.gukhanwiki.android.api.action.*
 import retrofit2.http.*
 
 interface GukhanWikiActionApiService {
@@ -49,9 +46,11 @@ interface GukhanWikiActionApiService {
         @Field("password") password: String = "",
     ): ClientLoginResponse
 
+    @FormUrlEncoded
     @POST("/api.php")
     suspend fun logout(
         @Query("action") action: String = "logout",
-        @Query("token") token: String = "",
-    )
+        @Query("format") format: String = "json",
+        @Field("token") token: String = "",
+    ): LogoutResponse
 }
