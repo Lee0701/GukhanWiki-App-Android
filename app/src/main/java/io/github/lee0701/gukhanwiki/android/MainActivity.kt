@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return when (item.itemId) {
             R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.action_accounts -> {
