@@ -23,7 +23,6 @@ class MainViewModel: ViewModel() {
     fun signIn(username: String, password: String) {
         viewModelScope.launch {
             val result = AccountHelper.signIn(username, password)
-            println(result)
             _signInResult.postValue(result)
         }
     }

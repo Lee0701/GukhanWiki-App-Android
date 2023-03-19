@@ -22,8 +22,8 @@
             app:popEnterAnim="@anim/slide_from_left_with_fade"
             app:popExitAnim="@anim/slide_to_right" />
         <action
-            android:id="@+id/action_PageViewFragment_to_pageEditFragment"
-            app:destination="@id/pageEditFragment"
+            android:id="@+id/action_ViewPageFragment_to_editPageFragment"
+            app:destination="@id/editPageFragment"
             app:enterAnim="@anim/slide_from_right"
             app:exitAnim="@anim/slide_to_left_with_fade"
             app:popEnterAnim="@anim/slide_from_left_with_fade"
@@ -88,7 +88,16 @@
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
     <fragment
-        android:id="@+id/pageEditFragment"
+        android:id="@+id/editPageFragment"
         android:name="io.github.lee0701.gukhanwiki.android.view.edit.EditPageFragment"
-        android:label="PageEditFragment" />
+        android:label="EditPageFragment"
+        tools:layout="@layout/fragment_edit_page" >
+        <action
+            android:id="@+id/action_editPageFragment_to_reviewEditFragment"
+            app:destination="@id/commitEditWithCaptchaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commitEditWithCaptchaFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.ReviewEditFragment"
+        android:label="CommitEditWithCaptchaFragment" />
 </navigation>
