@@ -55,7 +55,7 @@ class EditPageFragment: Fragment() {
                     binding.editContent.visibility = View.VISIBLE
 
                     activityViewModel.updateTitle(page.data.title)
-                    binding.editContent.setText(page.data.content)
+                    binding.editContent.setText(page.data.wikiText)
                     binding.editContent.visibility = View.VISIBLE
 
                     binding.fab.setOnClickListener {
@@ -63,7 +63,7 @@ class EditPageFragment: Fragment() {
                         binding.loadingIndicator.root.visibility = View.VISIBLE
                         binding.editContent.isEnabled = false
                         binding.fab.isEnabled = false
-                        val newPage = page.data.copy(content = binding.editContent.text.toString())
+                        val newPage = page.data.copy(wikiText = binding.editContent.text.toString())
                         val args = Bundle().apply {
                             putSerializable("page", newPage)
                         }
@@ -71,23 +71,6 @@ class EditPageFragment: Fragment() {
                     }
                 }
             }
-        }
-
-        viewModel.result.observe(viewLifecycleOwner) { response ->
-            val navController = findNavController()
-            navController.navigateUp()
-            val id = navController.currentDestination?.id!!
-            navController.popBackStack(id, true)
-            val message =
-                if(response is Loadable.Error) {
-                    if(response.exception.message == "Failure") resources.getString(R.string.msg_edit_failed)
-                    else response.exception.message
-                } else resources.getString(R.string.msg_edit_saved)
-            val args = Bundle().apply {
-                putString("title", arguments?.getString("title"))
-                putString("message", message)
-            }
-            navController.navigate(id, args)
         }
 
     }

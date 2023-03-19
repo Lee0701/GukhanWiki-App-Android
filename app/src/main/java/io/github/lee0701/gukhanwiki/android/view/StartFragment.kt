@@ -32,7 +32,7 @@ class StartFragment : Fragment() {
             val args = Bundle().apply {
                 putString("title", "國漢大百科:大門")
             }
-            findNavController().navigate(R.id.action_StartFragment_to_PageViewFragment, args)
+            findNavController().navigate(R.id.action_StartFragment_to_ViewPageFragment, args)
         }
 
     }

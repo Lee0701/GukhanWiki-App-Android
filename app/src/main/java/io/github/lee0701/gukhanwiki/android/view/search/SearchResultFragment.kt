@@ -78,6 +78,6 @@ class SearchResultFragment: Fragment() {
         val args = Bundle().apply {
             putString("title", item.title)
         }
-        navController.navigate(R.id.action_searchResultFragment_to_PageViewFragment, args)
+        navController.navigate(R.id.action_searchResultFragment_to_ViewPageFragment, args)
     }
 }

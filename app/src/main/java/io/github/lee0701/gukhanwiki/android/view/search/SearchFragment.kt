@@ -102,7 +102,7 @@ class SearchFragment: Fragment() {
             val args = Bundle().apply {
                 putString("title", item.title)
             }
-            findNavController().navigate(R.id.action_searchFragment_to_PageViewFragment, args)
+            findNavController().navigate(R.id.action_searchFragment_to_ViewPageFragment, args)
         } else {
             viewModel.autocompleteSelected(item.title)
         }
