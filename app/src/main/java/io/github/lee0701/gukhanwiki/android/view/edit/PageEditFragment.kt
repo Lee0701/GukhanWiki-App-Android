@@ -81,8 +81,10 @@ class PageEditFragment: Fragment() {
             val id = navController.currentDestination?.id!!
             navController.popBackStack(id, true)
             val message =
-                if(response is Loadable.Error) response.exception.message
-                else resources.getString(R.string.msg_edit_saved)
+                if(response is Loadable.Error) {
+                    if(response.exception.message == "Failure") resources.getString(R.string.msg_edit_failed)
+                    else response.exception.message
+                } else resources.getString(R.string.msg_edit_saved)
             val args = Bundle().apply {
                 putString("title", arguments?.getString("title"))
                 putString("message", message)

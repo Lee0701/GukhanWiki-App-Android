@@ -19,6 +19,7 @@
     <string name="msg_signin_success">%s 계정으로 로그인했습니다.</string>
     <string name="msg_signout_success">로그아웃했습니다.</string>
     <string name="msg_edit_saved">편집이 저장되었습니다.</string>
+    <string name="msg_edit_failed">편집을 저장할 수 없습니다. 이메일 인증 상태를 확인해 주세요.</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
