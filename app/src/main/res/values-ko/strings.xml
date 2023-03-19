@@ -31,4 +31,30 @@
 
     <string name="anonymous">익명</string>
 
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_ruby_header">한자 독음</string>
+    <string name="pref_ruby_enabled_title">한자 독음 표시</string>
+    <string name="pref_ruby_grade_title">독음을 표시할 최소 급수</string>
+    <string name="pref_ruby_position_title">독음 표시 위치</string>
+
+    <string name="pref_ruby_grade_80">8급</string>
+    <string name="pref_ruby_grade_72">7급II</string>
+    <string name="pref_ruby_grade_70">7급</string>
+    <string name="pref_ruby_grade_62">6급II</string>
+    <string name="pref_ruby_grade_60">6급</string>
+    <string name="pref_ruby_grade_52">5급II</string>
+    <string name="pref_ruby_grade_50">5급</string>
+    <string name="pref_ruby_grade_42">4급II</string>
+    <string name="pref_ruby_grade_40">4급</string>
+    <string name="pref_ruby_grade_32">3급II</string>
+    <string name="pref_ruby_grade_30">3급</string>
+    <string name="pref_ruby_grade_20">2급</string>
+    <string name="pref_ruby_grade_10">1급</string>
+    <string name="pref_ruby_grade_0">특급</string>
+    <string name="pref_ruby_grade_none">비표시</string>
+
+    <string name="pref_ruby_position_side">측면</string>
+    <string name="pref_ruby_position_top">상단</string>
+
 </resources>
