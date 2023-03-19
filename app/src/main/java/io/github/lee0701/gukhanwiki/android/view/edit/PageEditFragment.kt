@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageEditBinding
@@ -22,7 +23,8 @@ class PageEditFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val argTitle = arguments?.getString("title")
-        if(argTitle != null) viewModel.loadPageSource(argTitle)
+        val argSection = arguments?.getString("section", null)
+        if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
     }
     
     override fun onCreateView(
@@ -37,34 +39,49 @@ class PageEditFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        hideAllLayers()
-        binding.loadingIndicator.root.visibility = View.VISIBLE
+        viewModel.page.observe(viewLifecycleOwner) { page ->
+            binding.loadingIndicator.root.visibility = View.GONE
+            binding.errorIndicator.root.visibility = View.GONE
+            binding.editContent.visibility = View.GONE
+            when(page) {
+                is Loadable.Loading -> {
+                    binding.loadingIndicator.root.visibility = View.VISIBLE
+                }
+                is Loadable.Error -> {
+                    binding.errorIndicator.root.visibility = View.VISIBLE
+                    binding.errorIndicator.text.text = page.exception.message
+                }
+                is Loadable.Loaded -> {
+                    binding.editContent.visibility = View.VISIBLE
 
-        binding.fab.setOnClickListener {
-            val title = viewModel.page.value?.title
-            if(title != null) {
-                hideAllLayers()
-                binding.loadingIndicator.root.visibility = View.VISIBLE
-                binding.editContent.isEnabled = false
-                binding.fab.isEnabled = false
-                viewModel.updatePage(title, binding.editContent.text.toString())
+                    activityViewModel.updateTitle(page.data.title)
+                    binding.editContent.setText(page.data.content)
+                    binding.editContent.visibility = View.VISIBLE
+
+                    binding.fab.setOnClickListener {
+                        hideAllLayers()
+                        binding.loadingIndicator.root.visibility = View.VISIBLE
+                        binding.editContent.isEnabled = false
+                        binding.fab.isEnabled = false
+                        viewModel.updatePage(
+                            title = page.data.title,
+                            content = binding.editContent.text.toString(),
+                            section = page.data.section,
+                            summary = "",   // TODO
+                            baseRevId = page.data.revId,
+                        )
+                    }
+                }
             }
         }
 
-        viewModel.page.observe(viewLifecycleOwner) { page ->
-            hideAllLayers()
-            activityViewModel.updateTitle(page.title)
-            binding.editContent.setText(page.source)
-            binding.editContent.visibility = View.VISIBLE
-        }
-
-        viewModel.result.observe(viewLifecycleOwner) { content ->
+        viewModel.result.observe(viewLifecycleOwner) { response ->
             val navController = findNavController()
             navController.navigateUp()
             val id = navController.currentDestination?.id!!
             navController.popBackStack(id, true)
             val message =
-                if(content.message != null) content.message
+                if(response is Loadable.Error) response.exception.message
                 else resources.getString(R.string.msg_edit_saved)
             val args = Bundle().apply {
                 putString("title", arguments?.getString("title"))

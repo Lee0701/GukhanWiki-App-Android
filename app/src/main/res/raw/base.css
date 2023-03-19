@@ -13,10 +13,6 @@ img {
     margin: 0;
 }
 
-span.mw-editsection {
-    display: none;
-}
-
 blockquote {
     border: 2px dashed #8884;
     border-inline-start: 5px solid #222;

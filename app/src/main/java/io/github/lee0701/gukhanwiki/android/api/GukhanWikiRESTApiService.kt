@@ -1,6 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.api
 
-import io.github.lee0701.gukhanwiki.android.api.action.Page
+import io.github.lee0701.gukhanwiki.android.api.rest.Page
 import io.github.lee0701.gukhanwiki.android.api.rest.SearchResults
 import io.github.lee0701.gukhanwiki.android.api.rest.UpdatePageBody
 import okhttp3.ResponseBody

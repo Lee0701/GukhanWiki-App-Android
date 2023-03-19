@@ -169,7 +169,7 @@ class PageViewFragment : Fragment() {
                 val title = GukhanWikiApi.decodeUriComponent(query["title"] ?: return)
                 when(query["action"]) {
                     "edit" -> {
-                        onInternalEditLinkClicked(title)
+                        onInternalEditLinkClicked(title, query["section"])
                     }
                     else -> {
                         onExternalLinkClicked(url)
@@ -188,9 +188,10 @@ class PageViewFragment : Fragment() {
         findNavController().navigate(R.id.action_PageViewFragment_self, args)
     }
 
-    private fun onInternalEditLinkClicked(title: String) {
+    private fun onInternalEditLinkClicked(title: String, section: String? = null) {
         val args = Bundle().apply {
             putString("title", title)
+            if(section != null) putString("section", section)
         }
         findNavController().navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
     }
