@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/PageViewFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.view.PageViewFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.view.ViewPageFragment"
         tools:layout="@layout/fragment_page_view">
 
         <action
@@ -89,6 +89,6 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/pageEditFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.view.edit.PageEditFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.EditPageFragment"
         android:label="PageEditFragment" />
 </navigation>

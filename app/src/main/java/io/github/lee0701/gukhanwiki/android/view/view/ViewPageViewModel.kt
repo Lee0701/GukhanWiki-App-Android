@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class PageViewViewModel: ViewModel() {
+class ViewPageViewModel: ViewModel() {
 
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
