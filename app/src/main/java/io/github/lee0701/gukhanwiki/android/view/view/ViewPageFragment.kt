@@ -2,18 +2,12 @@ package io.github.lee0701.gukhanwiki.android.view.view
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.annotation.RawRes
-import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,19 +17,19 @@ import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageViewBinding
+import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
+import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import org.jsoup.Jsoup
 import org.jsoup.nodes.DataNode
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import java.net.URL
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ViewPageFragment : Fragment() {
+class ViewPageFragment : Fragment(), WebViewClient.Listener {
 
-    private var _binding: FragmentPageViewBinding? = null
+    private var _binding: FragmentViewPageBinding? = null
     private val viewModel: ViewPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
@@ -56,7 +50,7 @@ class ViewPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPageViewBinding.inflate(inflater, container, false)
+        _binding = FragmentViewPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -115,30 +109,7 @@ class ViewPageFragment : Fragment() {
                         doc.head().appendChild(Element("style").appendChild(DataNode(rubyShow.joinToString("\n"))))
                     }
 
-                    binding.webView.webViewClient = object: WebViewClient() {
-                        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-                        override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            request: WebResourceRequest?
-                        ): Boolean {
-                            val uri = request?.url?.toString()
-                            if(uri != null) {
-                                val url = URL(uri.toString())
-                                return shouldOverrideUrlLoading(url)
-                            }
-                            return super.shouldOverrideUrlLoading(view, request)
-                        }
-                        override fun shouldOverrideUrlLoading(
-                            view: WebView?,
-                            uri: String?
-                        ): Boolean {
-                            if(uri != null) {
-                                val url = URL(uri)
-                                return shouldOverrideUrlLoading(url)
-                            }
-                            return super.shouldOverrideUrlLoading(view, uri.toString())
-                        }
-                    }
+                    binding.webView.webViewClient = WebViewClient(this)
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.DOC_URL.toString(),
                         doc.html(),
@@ -164,63 +135,11 @@ class ViewPageFragment : Fragment() {
         return data.decodeToString()
     }
 
-    private fun shouldOverrideUrlLoading(url: URL): Boolean {
-        if(isInternalLink(url)) {
-            onInternalLinkClicked(url)
-            return true
-        } else {
-            onExternalLinkClicked(url)
-            return true
-        }
+    override fun onNavigate(resId: Int, args: Bundle) {
+        findNavController().navigate(resId, args)
     }
 
-    private fun isInternalLink(url: URL): Boolean {
-        if(url.host == GukhanWikiApi.DOC_URL.host) {
-            return true
-        }
-        return false
-    }
-
-    private fun onInternalLinkClicked(url: URL) {
-        if(url.path.startsWith(GukhanWikiApi.DOC_PATH)) onDocLinkClicked(url)
-        else {
-            if(url.path == "/index.php") {
-                val query = url.query
-                    .split("&").map { it.split("=") }
-                    .associate { (key, value) -> key to value }
-                val title = GukhanWikiApi.decodeUriComponent(query["title"] ?: return)
-                when(query["action"]) {
-                    "edit" -> {
-                        onInternalEditLinkClicked(title, query["section"])
-                    }
-                    else -> {
-                        onExternalLinkClicked(url)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onDocLinkClicked(url: URL) {
-        val path = url.path.removePrefix(GukhanWikiApi.DOC_PATH)
-        val title = GukhanWikiApi.decodeUriComponent(path)
-        val args = Bundle().apply {
-            putString("title", title)
-        }
-        findNavController().navigate(R.id.action_PageViewFragment_self, args)
-    }
-
-    private fun onInternalEditLinkClicked(title: String, section: String? = null) {
-        val args = Bundle().apply {
-            putString("title", title)
-            if(section != null) putString("section", section)
-        }
-        findNavController().navigate(R.id.action_PageViewFragment_to_pageEditFragment, args)
-    }
-
-    private fun onExternalLinkClicked(url: URL) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
+    override fun onStartActivity(intent: Intent) {
         startActivity(intent)
     }
-
 }

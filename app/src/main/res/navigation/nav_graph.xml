@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/PageViewFragment"
         android:name="io.github.lee0701.gukhanwiki.android.view.view.ViewPageFragment"
-        tools:layout="@layout/fragment_page_view">
+        tools:layout="@layout/fragment_view_page">
 
         <action
             android:id="@+id/action_PageViewFragment_to_StartFragment"

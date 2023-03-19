@@ -11,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
-import io.github.lee0701.gukhanwiki.android.databinding.FragmentPageEditBinding
+import io.github.lee0701.gukhanwiki.android.databinding.FragmentEditPageBinding
 
 class EditPageFragment: Fragment() {
 
-    private var _binding: FragmentPageEditBinding? = null
+    private var _binding: FragmentEditPageBinding? = null
     private val binding get() = _binding!!
     private val viewModel: EditPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
@@ -32,7 +32,7 @@ class EditPageFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPageEditBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentEditPageBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -63,13 +63,13 @@ class EditPageFragment: Fragment() {
                         binding.loadingIndicator.root.visibility = View.VISIBLE
                         binding.editContent.isEnabled = false
                         binding.fab.isEnabled = false
-                        viewModel.updatePage(
-                            title = page.data.title,
-                            content = binding.editContent.text.toString(),
-                            section = page.data.section,
-                            summary = "",   // TODO
-                            baseRevId = page.data.revId,
+                        viewModel.reviewEdit(
+                            page.data.copy(content = binding.editContent.text.toString()),
                         )
+//                        viewModel.updatePage(
+//                            page.data.copy(content = binding.editContent.text.toString()),
+//                            summary = "",   // TODO
+//                        )
                     }
                 }
             }
