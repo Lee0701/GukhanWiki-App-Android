@@ -30,8 +30,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
+
+        viewModel.message.observe(this) { msg ->
+            if(msg != null) {
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                viewModel.clearMessage()
+            }
+        }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -46,15 +52,15 @@ class MainActivity : AppCompatActivity() {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
                     val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
-                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    viewModel.displayMessage(msg)
                 }
                 is Loadable.Loaded -> {
                     if(result.data == null) {
                         val msg = resources.getString(R.string.msg_signout_success)
-                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.displayMessage(msg)
                     } else {
                         val msg = resources.getString(R.string.msg_signin_success, result.data.username)
-                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.displayMessage(msg)
                     }
                 }
             }

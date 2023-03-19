@@ -18,7 +18,6 @@ class AuthenticationViewModel: ViewModel() {
             when(signedInAccount) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
-//                    println(signedInAccount)
                 }
                 is Loadable.Loaded -> {
                     _signedInAccount.postValue(signedInAccount.data!!)

@@ -16,6 +16,9 @@ class MainViewModel: ViewModel() {
     private val _signInResult = MutableLiveData<Loadable<AccountHelper.SignedInAccount?>>()
     val signInResult: LiveData<Loadable<AccountHelper.SignedInAccount?>> = _signInResult
 
+    private val _message = MutableLiveData<String?>()
+    val message: LiveData<String?> = _message
+
     fun updateTitle(title: String) {
         _title.postValue(title)
     }
@@ -39,6 +42,14 @@ class MainViewModel: ViewModel() {
                 _signInResult.postValue(Loadable.Loaded(null))
             }
         }
+    }
+
+    fun displayMessage(message: String) {
+        _message.postValue(message)
+    }
+
+    fun clearMessage() {
+        _message.postValue(null)
     }
 
 }
