@@ -4,64 +4,75 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.api.action.Page
-import io.github.lee0701.gukhanwiki.android.api.rest.UpdatePageBody
+import io.github.lee0701.gukhanwiki.android.api.action.EditResponse
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 class PageEditViewModel: ViewModel() {
 
-    private val _page = MutableLiveData<Page>()
-    val page: LiveData<Page> = _page
+    private val _page = MutableLiveData<Loadable<Page>>()
+    val page: LiveData<Loadable<Page>> = _page
 
-    private val _result = MutableLiveData<EditResult>()
-    val result: LiveData<EditResult> = _result
+    private val _result = MutableLiveData<Loadable<EditResponse>>()
+    val result: LiveData<Loadable<EditResponse>> = _result
 
-    fun loadPageSource(title: String) {
+    fun loadPageSource(title: String, section: String?) {
         viewModelScope.launch {
+            _page.postValue(Loadable.Loading())
             try {
-                val response = GukhanWikiApi.restApiService.getPageSource(title)
-                _page.postValue(response)
+                val response = GukhanWikiApi.actionApiService.parse(page = title, prop = "wikitext", section = section)
+                val content = response.parse?.wikiText
+                if(content?.wikiText == null) {
+                    _page.postValue(Loadable.Error(java.lang.RuntimeException("Result text is null")))
+                } else {
+                    _page.postValue(Loadable.Loaded(
+                        Page(
+                            title = response.parse.title ?: title,
+                            content = content.wikiText,
+                            section = section,
+                            revId = response.parse.revId,
+                        )
+                    ))
+                }
             } catch(ex: IOException) {
                 ex.printStackTrace()
+                _page.postValue(Loadable.Error(ex))
             } catch(ex: HttpException) {
-                _page.postValue(Page(title = title))
+                _page.postValue(Loadable.Error(ex))
             }
         }
     }
 
-    fun updatePage(title: String, content: String) {
+    fun updatePage(title: String, content: String, section: String?, summary: String?, baseRevId: Int?) {
         viewModelScope.launch {
+            _page.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
-                val result = GukhanWikiApi.restApiService.updatePage(
+                val response = GukhanWikiApi.actionApiService.edit(
+                    token = csrfToken,
                     title = title,
-                    body = UpdatePageBody(
-                        token = csrfToken,
-                        source = content,
-                        comment = "",
-                        latest = page.value?.latest,
-                    ),
+                    summary = summary,
+                    section = section,
+                    baseRevId = baseRevId,
+                    text = content,
                 )
-                _result.postValue(EditResult.Success(result, null))
+                if(response.edit?.result == "Success") _result.postValue(Loadable.Loaded(response))
+                else println(response)
             } catch(ex: HttpException) {
                 ex.printStackTrace()
-                _result.postValue(EditResult.Error(ex, ex.message ?: ""))
+                _result.postValue(Loadable.Error(ex))
             }
         }
     }
 
-    sealed interface EditResult {
-        val message: String?
-        data class Success(
-            val page: Page,
-            override val message: String?,
-        ): EditResult
-        data class Error(
-            val exception: Exception,
-            override val message: String?,
-        ): EditResult
-    }
+    data class Page(
+        val title: String,
+        val content: String,
+        val section: String?,
+        val revId: Int?,
+    )
+
 }
