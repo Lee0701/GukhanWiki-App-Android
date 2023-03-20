@@ -7,41 +7,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
-import io.github.lee0701.gukhanwiki.android.R
-import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
-import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.databinding.FragmentConfirmEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 
-class ReviewEditFragment: Fragment(), WebViewClient.Listener {
+class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
 
-    private var _binding: FragmentReviewEditBinding? = null
+    private var _binding: FragmentConfirmEditBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ReviewEditViewModel by viewModels()
+    private val viewModel: ConfirmEditViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var webViewRenderer: WebViewRenderer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        webViewRenderer = WebViewRenderer(requireContext(), this)
+
         val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable("page", Page::class.java)
         } else {
             arguments?.getSerializable("page") as Page
         }
+        val summary = arguments?.getString("summary").orEmpty()
         if(page != null) {
-            viewModel.reviewEdit(page)
+            viewModel.showConfirmation(page, summary)
         }
     }
 
@@ -50,12 +45,15 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentReviewEditBinding.inflate(inflater, container, false)
+        _binding = FragmentConfirmEditBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.webView.webViewClient = WebViewClient()
+        binding.webView.settings.javaScriptEnabled = true
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE
@@ -70,30 +68,15 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Loaded -> {
+                    binding.webView.loadDataWithBaseURL(
+                        GukhanWikiApi.CLIENT_URL.toString(),
+                        response.data,
+                        "text/html",
+                        "UTF-8",
+                        null,
+                    )
                     binding.webView.visibility = View.VISIBLE
-                    webViewRenderer.render(binding.webView, response.data)
                 }
-            }
-        }
-
-        binding.fab.setOnClickListener {
-            val page = viewModel.page.value
-            if(page is Loadable.Loaded)
-                viewModel.updatePage(page.data, binding.summary.text?.toString().orEmpty())
-        }
-
-        viewModel.result.observe(viewLifecycleOwner) { response ->
-            if(response is Loadable.Error) {
-                val page = viewModel.page.value
-                if(page is Loadable.Loaded) {
-                    val args = Bundle().apply {
-                        putSerializable("page", page.data)
-                        putString("summary", binding.summary.text.toString())
-                    }
-                    findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)
-                }
-            } else if(response is Loadable.Loaded) {
-                findNavController().popBackStack(R.id.ViewPageFragment, false)
             }
         }
 
@@ -110,4 +93,10 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         _binding = null
     }
 
+    class WebViewClient: android.webkit.WebViewClient() {
+        override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+            super.doUpdateVisitedHistory(view, url, isReload)
+//            println("doUpdateVisitedHistory $url $isReload")
+        }
+    }
 }

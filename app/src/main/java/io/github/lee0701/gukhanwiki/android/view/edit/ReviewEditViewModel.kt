@@ -35,7 +35,7 @@ class ReviewEditViewModel: ViewModel() {
 
     fun updatePage(page: Page, summary: String?) {
         viewModelScope.launch {
-            _page.postValue(Loadable.Loading())
+            _result.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
                 val response = GukhanWikiApi.actionApiService.edit(
@@ -53,7 +53,7 @@ class ReviewEditViewModel: ViewModel() {
                         wikiText = page.wikiText
                     )
                 ))
-                else _result.postValue(Loadable.Error(java.lang.RuntimeException(response.edit?.result)))
+                else _result.postValue(Loadable.Error(RuntimeException(response.edit?.result)))
             } catch(ex: HttpException) {
                 ex.printStackTrace()
                 _result.postValue(Loadable.Error(ex))
