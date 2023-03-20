@@ -34,6 +34,7 @@ class SwitchAccountBottomSheet(
         }
         binding.addAccount.setOnClickListener {
             onAdd()
+            dismiss()
         }
         return binding.root
     }
