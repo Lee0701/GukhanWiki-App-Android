@@ -23,11 +23,11 @@ class WebViewRenderer(
         val doc = Document(GukhanWikiApi.DOC_URL.toString())
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
-        doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.base)))))
-        doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.responsive)))))
-        doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.wikitable)))))
+        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.base))))
+        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.responsive))))
+        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.wikitable))))
 
-        doc.head().appendChild(Element("style").appendChild(DataNode((loadCustomCss(R.raw.ruby_hide)))))
+        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.ruby_hide))))
         if(sharedPreferences.getBoolean("ruby_enabled", true)) {
             val minGrade = sharedPreferences.getString("ruby_grade", "80")
             val position = sharedPreferences.getString("ruby_position", "top")

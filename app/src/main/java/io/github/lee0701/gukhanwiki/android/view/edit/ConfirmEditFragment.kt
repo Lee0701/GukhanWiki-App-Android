@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
+import android.webkit.JavascriptInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentConfirmEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
@@ -52,8 +54,15 @@ class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.webView.webViewClient = WebViewClient()
+        val onSubmit = {
+            activity?.runOnUiThread {
+                findNavController().popBackStack(R.id.ViewPageFragment, false)
+            }
+            Unit
+        }
+
         binding.webView.settings.javaScriptEnabled = true
+        binding.webView.addJavascriptInterface(WebAppInterface(onSubmit), "Android")
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE
@@ -93,10 +102,11 @@ class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
         _binding = null
     }
 
-    class WebViewClient: android.webkit.WebViewClient() {
-        override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
-            super.doUpdateVisitedHistory(view, url, isReload)
-//            println("doUpdateVisitedHistory $url $isReload")
+    class WebAppInterface(val onSubmitLambda: () -> Unit) {
+        @JavascriptInterface
+        fun onSubmit() {
+            this.onSubmitLambda()
         }
     }
+
 }

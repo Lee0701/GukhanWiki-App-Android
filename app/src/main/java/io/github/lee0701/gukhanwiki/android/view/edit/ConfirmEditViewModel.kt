@@ -9,6 +9,8 @@ import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
+import org.jsoup.nodes.DataNode
+import org.jsoup.nodes.Element
 
 class ConfirmEditViewModel: ViewModel() {
 
@@ -28,10 +30,21 @@ class ConfirmEditViewModel: ViewModel() {
             )
 
             val doc = Jsoup.parse(content)
+            val script = Element("script").appendChild(DataNode("""
+                function onSubmit() {
+                    if(typeof Android !== "undefined" && Android !== null) {
+                        Android.onSubmit();
+                    }
+                }
+            """.trimIndent()))
+            doc.head().appendChild(script)
+
             val textBox = doc.select("#editform #wpTextbox1").first()
             textBox?.text(page.wikiText)
             val summaryBox = doc.select("#editform #wpSummary").first()
             summaryBox?.attr("value", summary)
+            val editForm = doc.select("#editform")
+            editForm.attr("onsubmit", "onSubmit()")
 
             _html.postValue(Loadable.Loaded(doc.html()))
         }
