@@ -21,19 +21,17 @@ class SearchResultViewModel: ViewModel() {
     val searchResult: LiveData<Loadable<List<SearchResultItem>>> = _searchResult
 
     fun search(query: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _searchResult.postValue(Loadable.Loading())
-                try {
-                    val result = GukhanWikiApi.restApiService.searchPage(query, 10)
-                    val list = result.pages.map { it.toSearchResultItem() }
-                    _query.postValue(query)
-                    _searchResult.postValue(Loadable.Loaded(list))
-                } catch(ex: IOException) {
-                    _searchResult.postValue(Loadable.Error(ex))
-                } catch(ex: HttpException) {
-                    _searchResult.postValue(Loadable.Error(ex))
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            _searchResult.postValue(Loadable.Loading())
+            try {
+                val result = GukhanWikiApi.restApiService.searchPage(query, 10)
+                val list = result.pages.map { it.toSearchResultItem() }
+                _query.postValue(query)
+                _searchResult.postValue(Loadable.Loaded(list))
+            } catch(ex: IOException) {
+                _searchResult.postValue(Loadable.Error(ex))
+            } catch(ex: HttpException) {
+                _searchResult.postValue(Loadable.Error(ex))
             }
         }
     }

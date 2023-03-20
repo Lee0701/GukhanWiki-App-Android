@@ -20,13 +20,11 @@ class SearchViewModel: ViewModel() {
     val autocompleteResult: LiveData<List<SearchAutocompleteItem>> = _autocompleteResult
     fun autocompleteSearch(text: String) {
         autocompleteJob?.cancel()
-        autocompleteJob = viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val result = GukhanWikiApi.restApiService.autocompletePageTitle(text, 10)
-                val match = listOfNotNull(result.pages.find { it.title == text }).map { it.toAutocompleteItem().copy(goto = true) }
-                val pages = result.pages.map { it.toAutocompleteItem() }.filter { match.isEmpty() || it.title != match.first().title }
-                _autocompleteResult.postValue(match + pages)
-            }
+        autocompleteJob = viewModelScope.launch(Dispatchers.IO) {
+            val result = GukhanWikiApi.restApiService.autocompletePageTitle(text, 10)
+            val match = listOfNotNull(result.pages.find { it.title == text }).map { it.toAutocompleteItem().copy(goto = true) }
+            val pages = result.pages.map { it.toAutocompleteItem() }.filter { match.isEmpty() || it.title != match.first().title }
+            _autocompleteResult.postValue(match + pages)
         }
     }
 

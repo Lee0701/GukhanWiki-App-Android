@@ -24,6 +24,7 @@ object GukhanWikiApi {
 
     val REST_API_URL = URL(PROTOCOL, HOST, REST_BASE_PATH)
     val ACTION_API_URL = URL(PROTOCOL, HOST, ACTION_BASE_PATH)
+    val CLIENT_URL = URL(PROTOCOL, HOST, "/")
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -51,6 +52,17 @@ object GukhanWikiApi {
     }
     val actionApiService: GukhanWikiActionApiService by lazy {
         actionRetrofit.create(GukhanWikiActionApiService::class.java)
+    }
+    private val clientRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(CLIENT_URL)
+            .client(okHttpClient)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val clientService: GukhanWikiClientService by lazy {
+        clientRetrofit.create(GukhanWikiClientService::class.java)
     }
 
     fun getImageAsStream(url: String): InputStream? {
