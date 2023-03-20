@@ -7,19 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
-import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 

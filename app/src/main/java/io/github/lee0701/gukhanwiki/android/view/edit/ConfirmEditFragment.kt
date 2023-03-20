@@ -1,13 +1,15 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,9 +19,9 @@ import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentConfirmEditBinding
-import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+import java.net.URL
 
-class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
+class ConfirmEditFragment: Fragment() {
 
     private var _binding: FragmentConfirmEditBinding? = null
     private val binding get() = _binding!!
@@ -27,6 +29,40 @@ class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
     private val activityViewModel: MainViewModel by activityViewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val WebViewClient = object: WebViewClient() {
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+        ): Boolean {
+            if(view != null && request != null) {
+                val url = URL(request.url.toString())
+                if(shouldOverrideUrlLoading(url)) return true
+            }
+            return super.shouldOverrideUrlLoading(view, request)
+        }
+
+        override fun shouldOverrideUrlLoading(view: WebView?, strUrl: String?): Boolean {
+            if(view != null && strUrl != null) {
+                val url = URL(strUrl)
+                if(shouldOverrideUrlLoading(url)) return true
+            }
+            return super.shouldOverrideUrlLoading(view, strUrl)
+        }
+
+        fun shouldOverrideUrlLoading(url: URL): Boolean {
+            val query = url.query.orEmpty()
+                .split("&").map { it.split("=") }
+                .filter { it.size >= 2 }
+                .associate { (key, value) -> key to value }
+            if(query["action"] != "edit") {
+                findNavController().popBackStack(R.id.ViewPageFragment, false)
+                return true
+            }
+            return false
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,15 +90,8 @@ class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onSubmit = {
-            activity?.runOnUiThread {
-                findNavController().popBackStack(R.id.ViewPageFragment, false)
-            }
-            Unit
-        }
-
         binding.webView.settings.javaScriptEnabled = true
-        binding.webView.addJavascriptInterface(WebAppInterface(onSubmit), "Android")
+        binding.webView.webViewClient = WebViewClient
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE
@@ -91,22 +120,9 @@ class ConfirmEditFragment: Fragment(), WebViewClient.Listener {
 
     }
 
-    override fun onNavigate(resId: Int, args: Bundle) {
-    }
-
-    override fun onStartActivity(intent: Intent) {
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    class WebAppInterface(val onSubmitLambda: () -> Unit) {
-        @JavascriptInterface
-        fun onSubmit() {
-            this.onSubmitLambda()
-        }
     }
 
 }

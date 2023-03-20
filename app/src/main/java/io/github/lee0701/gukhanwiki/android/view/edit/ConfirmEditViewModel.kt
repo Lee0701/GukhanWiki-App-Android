@@ -31,9 +31,10 @@ class ConfirmEditViewModel: ViewModel() {
 
             val doc = Jsoup.parse(content)
             val script = Element("script").appendChild(DataNode("""
+                
                 function onSubmit() {
                     if(typeof Android !== "undefined" && Android !== null) {
-                        Android.onSubmit();
+                        alert(location.href)
                     }
                 }
             """.trimIndent()))
