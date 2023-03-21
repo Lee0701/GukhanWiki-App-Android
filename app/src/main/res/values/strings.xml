@@ -11,6 +11,8 @@
     <string name="action_signin">Sign in</string>
     <string name="action_join">Join the wiki</string>
     <string name="action_goto">Go</string>
+    <string name="action_discard_edit">Discard</string>
+    <string name="action_keep_editing">Keep editing</string>
 
     <string name="input_username">Username</string>
     <string name="input_password">Password</string>
@@ -24,6 +26,7 @@
     <string name="msg_edit_saved">Edit saved.</string>
     <string name="msg_edit_failed">Edit failed. Did you verify your email?</string>
     <string name="msg_confirm_edit">Please solve the CAPTCHA and submit.</string>
+    <string name="msg_confirm_discard_edit">Do you want to discard the current edit?</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>

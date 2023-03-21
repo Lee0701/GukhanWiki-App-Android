@@ -11,6 +11,8 @@
     <string name="action_signin">로그인</string>
     <string name="action_join">가입하기</string>
     <string name="action_goto">이동</string>
+    <string name="action_discard_edit">편집 취소</string>
+    <string name="action_keep_editing">계속 편집하기</string>
 
     <string name="input_username">사용자 이름</string>
     <string name="input_password">비밀번호</string>
@@ -18,11 +20,13 @@
 
     <string name="msg_welcome">환영합니다!</string>
     <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s</string>
+    <string name="msg_edit_error">편집을 저장하는 중에 오류가 발생했습니다: %s</string>
     <string name="msg_signin_success">%s 계정으로 로그인했습니다.</string>
     <string name="msg_signout_success">로그아웃했습니다.</string>
     <string name="msg_edit_saved">편집이 저장되었습니다.</string>
     <string name="msg_edit_failed">편집을 저장할 수 없습니다. 이메일 인증 상태를 확인해 주세요.</string>
     <string name="msg_confirm_edit">자동 등록 방지 문제를 풀고 제출해 주세요.</string>
+    <string name="msg_confirm_discard_edit">현재 편집을 취소하시겠습니까?</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
