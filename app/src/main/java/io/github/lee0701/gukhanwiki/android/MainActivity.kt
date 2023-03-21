@@ -3,11 +3,13 @@ package io.github.lee0701.gukhanwiki.android
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -36,14 +38,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        viewModel.message.observe(this) { msg ->
-            if(msg != null) {
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
-                viewModel.clearMessage()
-            }
-        }
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -51,20 +48,29 @@ class MainActivity : AppCompatActivity() {
             this.supportActionBar?.title = title
         }
 
+        viewModel.snackbarMessage.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
         viewModel.signInResult.observe(this) { result ->
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
                     val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
-                    viewModel.displayMessage(msg)
+//                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    viewModel.showSnackbar(msg)
                 }
                 is Loadable.Loaded -> {
                     if(result.data == null) {
                         val msg = resources.getString(R.string.msg_signout_success)
-                        viewModel.displayMessage(msg)
+//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.showSnackbar(msg)
                     } else {
                         val msg = resources.getString(R.string.msg_signin_success, result.data.username)
-                        viewModel.displayMessage(msg)
+//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.showSnackbar(msg)
                     }
                 }
             }
@@ -78,18 +84,15 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_ViewPageFragment, args)
         }
 
-        if(savedInstanceState == null) {
-            selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
-            val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
-            val password = account?.let { AccountHelper.getPassword(it) }
-            if(account != null && password != null) {
-                viewModel.signIn(account.name, password)
-            }
+        selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
+        val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
+        val password = account?.let { AccountHelper.getPassword(it) }
+        if(account != null && password != null) {
+            viewModel.signIn(account.name, password)
+        }
 
-            if(!preference.getBoolean("startpage_hide", false)) {
-                startActivity(Intent(this, StartActivity::class.java))
-            }
-
+        if(!preference.getBoolean("startpage_hide", false)) {
+            startActivity(Intent(this, StartActivity::class.java))
         }
 
     }
@@ -98,6 +101,10 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

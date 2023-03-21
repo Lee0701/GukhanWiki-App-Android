@@ -1,12 +1,11 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.os.Build
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -25,39 +24,15 @@ class EditPageFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(savedInstanceState != null) {
-            val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                savedInstanceState.getSerializable("page", Page::class.java)
-            } else {
-                savedInstanceState.getSerializable("page")
-            } as Page?
-            if(page != null) viewModel.restorePageSource(page)
-        } else {
+        val content = savedInstanceState?.getString("content")
+        if(content == null) {
             val argTitle = arguments?.getString("title")
             val argSection = arguments?.getString("section", null)
             if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        } else {
+            viewModel.updatePageSource(content)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            AlertDialog.Builder(requireContext())
-                .setMessage(R.string.msg_confirm_discard_edit)
-                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
-                    findNavController().navigateUp()
-                }
-                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
-                }
-                .show()
-        }
-
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val page = viewModel.page.value
-        val text = binding.editContent.text.toString()
-        if(page is Loadable.Loaded) {
-            outState.putSerializable("page", page.data.copy(wikiText = text))
-        }
     }
 
     override fun onCreateView(
@@ -86,16 +61,14 @@ class EditPageFragment: Fragment() {
                 }
                 is Loadable.Loaded -> {
                     binding.editContent.visibility = View.VISIBLE
-
                     activityViewModel.updateTitle(page.data.title)
-                    binding.editContent.setText(page.data.wikiText)
-                    binding.editContent.visibility = View.VISIBLE
+                    if(binding.editContent.toString() != page.data.wikiText)
+                        binding.editContent.setText(page.data.wikiText)
                 }
             }
         }
 
         binding.fab.setOnClickListener {
-            hideAllLayers()
             val page = viewModel.page.value
             if(page is Loadable.Loaded) {
                 binding.loadingIndicator.root.visibility = View.VISIBLE
@@ -105,20 +78,32 @@ class EditPageFragment: Fragment() {
                 val args = Bundle().apply {
                     putSerializable("page", newPage)
                 }
+                viewModel.updatePage(page = newPage)
                 findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.msg_confirm_discard_edit)
+                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
+                    findNavController().navigateUp()
+                }
+                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
+                }
+                .show()
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("content", binding.editContent.text.toString())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun hideAllLayers() {
-        binding.loadingIndicator.root.visibility = View.GONE
-        binding.errorIndicator.root.visibility = View.GONE
-        binding.editContent.visibility = View.GONE
     }
 
 }
