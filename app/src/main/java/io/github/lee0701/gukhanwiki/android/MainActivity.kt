@@ -3,6 +3,7 @@ package io.github.lee0701.gukhanwiki.android
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -92,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, StartActivity::class.java))
         }
 
-        println(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
