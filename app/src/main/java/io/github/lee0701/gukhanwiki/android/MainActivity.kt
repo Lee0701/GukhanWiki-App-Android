@@ -33,10 +33,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         preference = PreferenceManager.getDefaultSharedPreferences(this)
 
-        if(!preference.getBoolean("startpage_hide", false)) {
-            startActivity(Intent(this, StartActivity::class.java))
-        }
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -83,11 +79,17 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_ViewPageFragment, args)
         }
 
-        selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
-        val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
-        val password = account?.let { AccountHelper.getPassword(it) }
-        if(account != null && password != null) {
-            viewModel.signIn(account.name, password)
+        if(savedInstanceState == null) {
+            selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
+            val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
+            val password = account?.let { AccountHelper.getPassword(it) }
+            if(account != null && password != null) {
+                viewModel.signIn(account.name, password)
+            }
+
+            if(!preference.getBoolean("startpage_hide", false)) {
+                startActivity(Intent(this, StartActivity::class.java))
+            }
         }
     }
 
