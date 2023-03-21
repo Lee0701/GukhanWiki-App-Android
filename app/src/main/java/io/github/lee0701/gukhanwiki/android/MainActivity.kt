@@ -59,17 +59,14 @@ class MainActivity : AppCompatActivity() {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
                     val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
-//                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                     viewModel.showSnackbar(msg)
                 }
                 is Loadable.Loaded -> {
                     if(result.data == null) {
                         val msg = resources.getString(R.string.msg_signout_success)
-//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                         viewModel.showSnackbar(msg)
                     } else {
                         val msg = resources.getString(R.string.msg_signin_success, result.data.username)
-//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
                         viewModel.showSnackbar(msg)
                     }
                 }
@@ -91,8 +88,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.signIn(account.name, password)
         }
 
-        if(!preference.getBoolean("startpage_hide", false)) {
+        val startpageClosed = viewModel.startpageClosed.value ?: false
+        if(!preference.getBoolean("startpage_hide", false) && !startpageClosed) {
             startActivity(Intent(this, StartActivity::class.java))
+            viewModel.setStartpageClosed()
         }
 
     }
