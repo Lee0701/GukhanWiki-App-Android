@@ -1,11 +1,17 @@
 package io.github.lee0701.gukhanwiki.android.view.view
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,6 +39,9 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var renderer: WebViewRenderer
 
+    private var fabExpanded: Boolean = true
+    private val fabMenus: List<View> by lazy { listOf(binding.fabEdit, binding.fabHistory) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
@@ -58,6 +67,14 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Handler(Looper.getMainLooper()).post {
+            initialFabAnimation()
+        }
+        binding.fabExpand.setOnClickListener {
+            fabAnimation(fabExpanded).start()
+            fabExpanded = !fabExpanded
+        }
 
         binding.fabEdit.setOnClickListener {
             val title = viewModel.title.value ?: return@setOnClickListener
@@ -119,6 +136,28 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
     override fun onStartActivity(intent: Intent) {
         startActivity(intent)
+    }
+
+    private fun fabAnimation(expanded: Boolean, duration: Int = 200): Animator {
+        val animations = fabMenus.flatMap { fab ->
+            val translationYValue = if(!expanded) binding.fabExpand.y - fab.y else 0f
+            val scaleValue = if(!expanded) 0f else 1f
+            val translationY = ObjectAnimator.ofFloat(fab, "translationY", translationYValue)
+            val scaleX = ObjectAnimator.ofFloat(fab, "scaleX", scaleValue)
+            val scaleY = ObjectAnimator.ofFloat(fab, "scaleY", scaleValue)
+            listOf(translationY, scaleX, scaleY)
+        }
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(animations)
+        animatorSet.duration = duration.toLong()
+        animatorSet.interpolator = DecelerateInterpolator()
+        return animatorSet
+    }
+
+    private fun initialFabAnimation() {
+        val animatorSet = AnimatorSet()
+        animatorSet.playSequentially(fabAnimation(true), fabAnimation(false))
+        animatorSet.start()
     }
 
     override fun onDestroyView() {
