@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import retrofit2.HttpException
@@ -19,8 +20,15 @@ class ViewPageViewModel: ViewModel() {
     private val _content = MutableLiveData<Loadable<String?>>()
     val content: LiveData<Loadable<String?>> = _content
 
+    fun updatePage(html: String) {
+        val page = content.value
+        if(page is Loadable.Loaded) {
+            _content.postValue(Loadable.Loaded(data = html))
+        }
+    }
+
     fun loadPage(path: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
             try {
                 val response = GukhanWikiApi.actionApiService.parse(page = path)
