@@ -37,9 +37,14 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         renderer = WebViewRenderer(requireContext(), this)
-        val argTitle = arguments?.getString("title")
-        if(argTitle != null) viewModel.loadPage(argTitle)
-        else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
+        val content = savedInstanceState?.getString("content")
+        if(content == null) {
+            val argTitle = arguments?.getString("title")
+            if(argTitle != null) viewModel.loadPage(argTitle)
+            else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
+        } else {
+            viewModel.updatePage(content)
+        }
     }
 
     override fun onCreateView(
@@ -85,6 +90,12 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val content = viewModel.content.value
+        if(content is Loadable.Loaded) outState.putString("content", content.data)
     }
 
     override fun onRefresh() {

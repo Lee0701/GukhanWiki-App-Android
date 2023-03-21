@@ -20,6 +20,13 @@ class ViewPageViewModel: ViewModel() {
     private val _content = MutableLiveData<Loadable<String?>>()
     val content: LiveData<Loadable<String?>> = _content
 
+    fun updatePage(html: String) {
+        val page = content.value
+        if(page is Loadable.Loaded) {
+            _content.postValue(Loadable.Loaded(data = html))
+        }
+    }
+
     fun loadPage(path: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
