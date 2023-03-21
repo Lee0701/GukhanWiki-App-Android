@@ -25,12 +25,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-    private val preference: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+    private lateinit var preference: SharedPreferences
 
     private var selectedAccountIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preference = PreferenceManager.getDefaultSharedPreferences(this)
+
+        if(!preference.getBoolean("startpage_hide", false)) {
+            startActivity(Intent(this, StartActivity::class.java))
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

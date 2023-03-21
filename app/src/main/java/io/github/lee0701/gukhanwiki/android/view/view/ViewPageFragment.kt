@@ -8,15 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
@@ -40,6 +39,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         renderer = WebViewRenderer(requireContext(), this)
         val argTitle = arguments?.getString("title")
         if(argTitle != null) viewModel.loadPage(argTitle)
+        else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
     }
 
     override fun onCreateView(

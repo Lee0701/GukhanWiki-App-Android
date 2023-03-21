@@ -7,6 +7,7 @@
     <string name="action_edit">편집</string>
     <string name="action_submit">전송</string>
     <string name="action_start">시작하기</string>
+    <string name="action_hide_afterwards">다시 표시하지 않기</string>
     <string name="action_save">저장</string>
     <string name="action_signin">로그인</string>
     <string name="action_join">가입하기</string>
