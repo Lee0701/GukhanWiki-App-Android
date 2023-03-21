@@ -20,6 +20,13 @@ class MainViewModel: ViewModel() {
     private val _snackbarMessage = MutableLiveData<Event<String>>()
     val snackbarMessage: LiveData<Event<String>> get() = _snackbarMessage
 
+    private val _startpageClosed = MutableLiveData<Boolean>()
+    val startpageClosed: LiveData<Boolean> = _startpageClosed
+
+    fun setStartpageClosed() {
+        _startpageClosed.postValue(true)
+    }
+
     fun updateTitle(title: String) {
         _title.postValue(title)
     }
