@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -25,11 +26,23 @@ class ViewPageViewModel: ViewModel() {
                 val response = GukhanWikiApi.actionApiService.parse(page = path)
                 val title = response.parse?.title
                 val content = response.parse?.text?.text
-                if(content == null) {
-                    _content.postValue(Loadable.Error(java.lang.RuntimeException("Result text is null")))
+                if(response.error?.get("code") == "pagecannotexist") {
+                    val clientContent = GukhanWikiApi.clientService.index(title = path)
+                    val doc = Jsoup.parse(clientContent)
+                    val mainContent = doc.select("#content").first()
+                    if(mainContent != null) {
+                        doc.body().remove()
+                        doc.body().appendChild(mainContent)
+                    }
+                    _title.postValue(path)
+                    _content.postValue(Loadable.Loaded(doc.html()))
                 } else {
-                    _title.postValue(title ?: path)
-                    _content.postValue(Loadable.Loaded(content))
+                    if(content == null) {
+                        _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
+                    } else {
+                        _title.postValue(title ?: path)
+                        _content.postValue(Loadable.Loaded(content))
+                    }
                 }
             } catch(ex: IOException) {
                 _content.postValue(Loadable.Error(ex))
