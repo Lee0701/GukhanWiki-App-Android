@@ -34,7 +34,7 @@ class EditPageViewModel: ViewModel() {
                 val response = GukhanWikiApi.actionApiService.parse(page = title, prop = "wikitext", section = section)
                 val content = response.parse?.wikiText
                 if(content?.wikiText == null) {
-                    _page.postValue(Loadable.Error(java.lang.RuntimeException("Result text is null")))
+                    _page.postValue(Loadable.Error(RuntimeException("Result text is null")))
                 } else {
                     _page.postValue(Loadable.Loaded(
                         Page(

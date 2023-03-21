@@ -37,7 +37,7 @@ class MainViewModel: ViewModel() {
             if(csrfToken == null) _signInResult.postValue(Loadable.Error(RuntimeException("Token error.")))
             else {
                 val response = GukhanWikiApi.actionApiService.logout(token = csrfToken)
-                if(response.error != null) _signInResult.postValue(Loadable.Error(java.lang.RuntimeException(response.error["*"])))
+                if(response.error != null) _signInResult.postValue(Loadable.Error(RuntimeException(response.error["*"])))
                 else _signInResult.postValue(Loadable.Loaded(null))
                 _signInResult.postValue(Loadable.Loaded(null))
             }

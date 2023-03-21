@@ -27,8 +27,8 @@ class ConfirmEditViewModel: ViewModel() {
                 section = page.section.orEmpty()
             )
 
-            val docs = Jsoup.parse(content)
-            val editForm = docs.select("#editform").first()
+            val doc = Jsoup.parse(content)
+            val editForm = doc.select("#editform").first()
 
             val textBox = editForm?.select("#editform #wpTextbox1")?.first()
             textBox?.text(page.wikiText)
@@ -37,10 +37,10 @@ class ConfirmEditViewModel: ViewModel() {
             summaryBox?.attr("value", summary)
 
             if(editForm != null) {
-                docs.body().remove()
-                docs.body().appendChild(editForm)
+                doc.body().remove()
+                doc.body().appendChild(editForm)
             }
-            _html.postValue(Loadable.Loaded(docs.html()))
+            _html.postValue(Loadable.Loaded(doc.html()))
         }
     }
 
