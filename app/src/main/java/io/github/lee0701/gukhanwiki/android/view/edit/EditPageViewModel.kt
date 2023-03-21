@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.api.action.EditResponse
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -21,10 +20,6 @@ class EditPageViewModel: ViewModel() {
         if(page is Loadable.Loaded) {
             _page.postValue(page.copy(data = page.data.copy(text)))
         }
-    }
-
-    fun restorePage(page: Page) {
-        _page.postValue(Loadable.Loaded(page))
     }
 
     fun loadPageSource(title: String, section: String?) {
@@ -52,6 +47,10 @@ class EditPageViewModel: ViewModel() {
                 _page.postValue(Loadable.Error(ex))
             }
         }
+    }
+
+    fun restorePageSource(page: Page) {
+        _page.postValue(Loadable.Loaded(page))
     }
 
 }

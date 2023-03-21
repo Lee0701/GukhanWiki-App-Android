@@ -52,4 +52,8 @@ class ViewPageViewModel: ViewModel() {
         }
     }
 
+    fun restorePage(content: String) {
+        _content.postValue(Loadable.Loaded(content))
+    }
+
 }
