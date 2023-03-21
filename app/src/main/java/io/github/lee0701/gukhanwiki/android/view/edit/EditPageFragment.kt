@@ -31,7 +31,7 @@ class EditPageFragment: Fragment() {
             } else {
                 savedInstanceState.getSerializable("page")
             } as Page?
-            if(page != null) viewModel.restorePage(page)
+            if(page != null) viewModel.restorePageSource(page)
         } else {
             val argTitle = arguments?.getString("title")
             val argSection = arguments?.getString("section", null)
