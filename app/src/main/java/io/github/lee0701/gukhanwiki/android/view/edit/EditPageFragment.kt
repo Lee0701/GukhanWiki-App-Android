@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -35,6 +37,18 @@ class EditPageFragment: Fragment() {
             val argSection = arguments?.getString("section", null)
             if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.msg_confirm_discard_edit)
+                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
+                    findNavController().navigateUp()
+                }
+                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
+                }
+                .show()
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
