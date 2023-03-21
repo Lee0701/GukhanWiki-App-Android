@@ -16,6 +16,17 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
+    fun updatePageText(text: String) {
+        val page = page.value
+        if(page is Loadable.Loaded) {
+            _page.postValue(page.copy(data = page.data.copy(text)))
+        }
+    }
+
+    fun restorePage(page: Page) {
+        _page.postValue(Loadable.Loaded(page))
+    }
+
     fun loadPageSource(title: String, section: String?) {
         viewModelScope.launch {
             _page.postValue(Loadable.Loading())

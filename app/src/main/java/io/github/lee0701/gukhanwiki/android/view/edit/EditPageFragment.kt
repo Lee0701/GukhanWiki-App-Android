@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +23,29 @@ class EditPageFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val argTitle = arguments?.getString("title")
-        val argSection = arguments?.getString("section", null)
-        if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        if(savedInstanceState != null) {
+            val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState.getSerializable("page", Page::class.java)
+            } else {
+                savedInstanceState.getSerializable("page")
+            } as Page?
+            if(page != null) viewModel.restorePage(page)
+        } else {
+            val argTitle = arguments?.getString("title")
+            val argSection = arguments?.getString("section", null)
+            if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        }
     }
-    
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val page = viewModel.page.value
+        val text = binding.editContent.text.toString()
+        if(page is Loadable.Loaded) {
+            outState.putSerializable("page", page.data.copy(wikiText = text))
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,22 +76,24 @@ class EditPageFragment: Fragment() {
                     activityViewModel.updateTitle(page.data.title)
                     binding.editContent.setText(page.data.wikiText)
                     binding.editContent.visibility = View.VISIBLE
-
-                    binding.fab.setOnClickListener {
-                        hideAllLayers()
-                        binding.loadingIndicator.root.visibility = View.VISIBLE
-                        binding.editContent.isEnabled = false
-                        binding.fab.isEnabled = false
-                        val newPage = page.data.copy(wikiText = binding.editContent.text.toString())
-                        val args = Bundle().apply {
-                            putSerializable("page", newPage)
-                        }
-                        findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
-                    }
                 }
             }
         }
 
+        binding.fab.setOnClickListener {
+            hideAllLayers()
+            val page = viewModel.page.value
+            if(page is Loadable.Loaded) {
+                binding.loadingIndicator.root.visibility = View.VISIBLE
+                binding.editContent.isEnabled = false
+                binding.fab.isEnabled = false
+                val newPage = page.data.copy(wikiText = binding.editContent.text.toString())
+                val args = Bundle().apply {
+                    putSerializable("page", newPage)
+                }
+                findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
+            }
+        }
     }
 
     override fun onDestroyView() {
