@@ -40,7 +40,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         val content = savedInstanceState?.getString("content")
         if(content == null) {
             val argTitle = arguments?.getString("title")
-            if(argTitle != null) viewModel.loadPage(argTitle)
+            val argAction = arguments?.getString("action")
+            if(argTitle != null) viewModel.loadPage(argTitle, argAction)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
         } else {
             viewModel.updatePage(content)
@@ -58,12 +59,21 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fab.setOnClickListener {
+        binding.fabEdit.setOnClickListener {
             val title = viewModel.title.value ?: return@setOnClickListener
             val args = Bundle().apply {
                 putString("title", title)
             }
             findNavController().navigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
+        }
+
+        binding.fabHistory.setOnClickListener {
+            val title = viewModel.title.value ?: return@setOnClickListener
+            val args = Bundle().apply {
+                putString("title", title)
+                putString("action", "history")
+            }
+            findNavController().navigate(R.id.action_ViewPageFragment_self, args)
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener(this)

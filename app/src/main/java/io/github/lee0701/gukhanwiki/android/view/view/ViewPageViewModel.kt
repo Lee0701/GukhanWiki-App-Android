@@ -27,15 +27,15 @@ class ViewPageViewModel: ViewModel() {
         }
     }
 
-    fun loadPage(path: String) {
+    fun loadPage(path: String, action: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
             try {
                 val response = GukhanWikiApi.actionApiService.parse(page = path)
                 val title = response.parse?.title
                 val content = response.parse?.text?.text
-                if(response.error?.get("code") == "pagecannotexist") {
-                    val clientContent = GukhanWikiApi.clientService.index(title = path)
+                if(response.error?.get("code") == "pagecannotexist" || action == "history") {
+                    val clientContent = GukhanWikiApi.clientService.index(title = path, action = action)
                     val doc = Jsoup.parse(clientContent)
                     val mainContent = doc.select("#content").first()
                     if(mainContent != null) {
