@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.api
 
 import io.github.lee0701.gukhanwiki.android.api.action.*
+import okhttp3.MultipartBody
 import retrofit2.http.*
 
 interface GukhanWikiActionApiService {
@@ -26,6 +27,19 @@ interface GukhanWikiActionApiService {
         @Query("baserevid") baseRevId: Int? = null,
         @Field("token") token: String? = null,
         @Field("text") text: String,
+    ): EditResponse
+
+    @Multipart
+    @POST("/api.php")
+    suspend fun editMultipart(
+        @Part action: MultipartBody.Part = MultipartBody.Part.createFormData("action", "edit"),
+        @Part format: MultipartBody.Part = MultipartBody.Part.createFormData("format", "json"),
+        @Part title: MultipartBody.Part? = null,
+        @Part section: MultipartBody.Part? = null,
+        @Part summary: MultipartBody.Part? = null,
+        @Part baseRevId: MultipartBody.Part? = null,
+        @Part token: MultipartBody.Part? = null,
+        @Part text: MultipartBody.Part,
     ): EditResponse
 
     @GET("/api.php")

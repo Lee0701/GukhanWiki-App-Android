@@ -84,11 +84,17 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             if(response is Loadable.Error) {
                 val page = viewModel.page.value
                 if(page is Loadable.Loaded) {
-                    val args = Bundle().apply {
-                        putSerializable("page", page.data)
-                        putString("summary", binding.summary.text.toString())
+                    if(response.exception.message == "captcha") {
+                        val args = Bundle().apply {
+                            putSerializable("page", page.data)
+                            putString("summary", binding.summary.text.toString())
+                        }
+                        findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)
+                    } else {
+                        activityViewModel.displayMessage(response.exception.message.orEmpty())
                     }
-                    findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)
+                } else {
+                    activityViewModel.displayMessage(response.exception.message.orEmpty())
                 }
             } else if(response is Loadable.Loaded) {
                 findNavController().popBackStack(R.id.ViewPageFragment, false)

@@ -4,6 +4,7 @@ import android.os.Build
 import io.github.lee0701.gukhanwiki.android.BuildConfig
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -28,6 +29,7 @@ object GukhanWikiApi {
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
     private val okHttpClient = OkHttpClient.Builder()
+        .protocols(listOf(Protocol.HTTP_1_1))
         .cookieJar(JavaNetCookieJar(CookieManager()))
         .build()
 

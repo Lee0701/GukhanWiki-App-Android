@@ -14,4 +14,12 @@ data class EditResult(
     @SerializedName("oldrevid") val oldRevId: Int? = null,
     @SerializedName("newrevid") val newRevId: Int? = null,
     @SerializedName("newtimestamp") val newTimeStamp: String? = null,
+    val captcha: Captcha? = null,
+)
+
+data class Captcha(
+    val type: String? = null,
+    val mime: String? = null,
+    val key: String? = null,
+    val error: String? = null,
 )

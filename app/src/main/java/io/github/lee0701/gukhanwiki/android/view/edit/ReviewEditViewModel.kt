@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import retrofit2.HttpException
 
 class ReviewEditViewModel: ViewModel() {
@@ -38,22 +39,33 @@ class ReviewEditViewModel: ViewModel() {
             _result.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
-                val response = GukhanWikiApi.actionApiService.edit(
-                    token = csrfToken,
-                    title = page.title,
-                    summary = summary,
-                    section = page.section,
-                    baseRevId = page.revId,
-                    text = page.wikiText,
+                val response = GukhanWikiApi.actionApiService.editMultipart(
+                    title = MultipartBody.Part.createFormData("title", page.title),
+                    summary = summary?.let { MultipartBody.Part.createFormData("summary", it) },
+                    section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
+                    baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
+                    token = csrfToken?.let { MultipartBody.Part.createFormData("token", it) },
+                    text = MultipartBody.Part.Companion.createFormData("text", page.wikiText),
                 )
                 val result = response.edit
-                if(result  != null && result.result == "Success") _result.postValue(Loadable.Loaded(
-                    page.copy(
-                        revId = result.newRevId,
-                        wikiText = page.wikiText
-                    )
-                ))
-                else _result.postValue(Loadable.Error(RuntimeException(response.edit?.result)))
+                if(result != null) {
+                    if(result.result == "Success") {
+                        _result.postValue(Loadable.Loaded(
+                            page.copy(
+                                revId = result.newRevId,
+                                wikiText = page.wikiText
+                            )
+                        ))
+                    } else if(result.captcha?.error != null) {
+                        _result.postValue(Loadable.Error(RuntimeException("captcha")))
+                    } else {
+                        _result.postValue(Loadable.Error(RuntimeException(result.result)))
+                    }
+                } else {
+                    val errorCode = response.error?.get("code")
+                    if(errorCode != null) _result.postValue(Loadable.Error(RuntimeException(errorCode)))
+                    else _result.postValue(Loadable.Error(RuntimeException("null")))
+                }
             } catch(ex: HttpException) {
                 ex.printStackTrace()
                 _result.postValue(Loadable.Error(ex))
