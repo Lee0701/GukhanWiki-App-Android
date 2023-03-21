@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -44,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -79,18 +81,18 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_ViewPageFragment, args)
         }
 
-        if(savedInstanceState == null) {
-            selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
-            val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
-            val password = account?.let { AccountHelper.getPassword(it) }
-            if(account != null && password != null) {
-                viewModel.signIn(account.name, password)
-            }
-
-            if(!preference.getBoolean("startpage_hide", false)) {
-                startActivity(Intent(this, StartActivity::class.java))
-            }
+        selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
+        val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
+        val password = account?.let { AccountHelper.getPassword(it) }
+        if(account != null && password != null) {
+            viewModel.signIn(account.name, password)
         }
+
+        if(!preference.getBoolean("startpage_hide", false)) {
+            startActivity(Intent(this, StartActivity::class.java))
+        }
+
+        println(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

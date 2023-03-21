@@ -25,39 +25,9 @@ class EditPageFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(savedInstanceState != null) {
-            val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                savedInstanceState.getSerializable("page", Page::class.java)
-            } else {
-                savedInstanceState.getSerializable("page")
-            } as Page?
-            if(page != null) viewModel.restorePage(page)
-        } else {
-            val argTitle = arguments?.getString("title")
-            val argSection = arguments?.getString("section", null)
-            if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            AlertDialog.Builder(requireContext())
-                .setMessage(R.string.msg_confirm_discard_edit)
-                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
-                    findNavController().navigateUp()
-                }
-                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
-                }
-                .show()
-        }
-
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val page = viewModel.page.value
-        val text = binding.editContent.text.toString()
-        if(page is Loadable.Loaded) {
-            outState.putSerializable("page", page.data.copy(wikiText = text))
-        }
+        val argTitle = arguments?.getString("title")
+        val argSection = arguments?.getString("section", null)
+        if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
     }
 
     override fun onCreateView(
@@ -108,6 +78,18 @@ class EditPageFragment: Fragment() {
                 findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.msg_confirm_discard_edit)
+                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
+                    findNavController().navigateUp()
+                }
+                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
+                }
+                .show()
+        }
+
     }
 
     override fun onDestroyView() {
