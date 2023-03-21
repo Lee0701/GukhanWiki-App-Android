@@ -1,10 +1,13 @@
 package io.github.lee0701.gukhanwiki.android.auth
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityAuthenticationBinding
 
 class AuthenticationActivity : AppCompatActivity() {
@@ -25,6 +28,11 @@ class AuthenticationActivity : AppCompatActivity() {
             val username = binding.inputUsername.text.toString()
             val password = binding.inputPassword.text.toString()
             viewModel.signIn(username, password)
+        }
+
+        binding.join.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(GukhanWikiApi.DOC_URL.toString() + "Special:CreateAccount"))
+            startActivity(intent)
         }
 
         viewModel.signedInAccount.observe(this) { signedInAccount ->

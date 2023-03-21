@@ -14,6 +14,14 @@
         android:layout_gravity="center_vertical"
         android:paddingHorizontal="@dimen/margin_large">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/title"
+            android:adjustViewBounds="true"
+            android:layout_marginVertical="@dimen/margin_large" />
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/input_username"
             android:inputType="text"
@@ -46,7 +54,6 @@
                 app:backgroundTint="@color/green_500"
                 app:backgroundTintMode="src_over" />
 
-<!--
             <Button
                 android:id="@+id/join"
                 android:text="@string/action_join"
@@ -54,7 +61,6 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="@color/blue_500"
                 app:backgroundTintMode="src_over" />
--->
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
