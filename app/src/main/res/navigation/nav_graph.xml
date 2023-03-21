@@ -107,7 +107,8 @@
             app:enterAnim="@anim/slide_from_right"
             app:exitAnim="@anim/slide_to_left_with_fade"
             app:popEnterAnim="@anim/slide_from_left_with_fade"
-            app:popExitAnim="@anim/slide_to_right" />
+            app:popExitAnim="@anim/slide_to_right"
+            app:popUpTo="@id/editPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/confirmEditFragment"
