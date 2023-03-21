@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+
+    private val preference: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
     private var selectedAccountIndex: Int = 0
 
@@ -74,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.action_global_ViewPageFragment, args)
         }
 
+        selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
         val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
         val password = account?.let { AccountHelper.getPassword(it) }
         if(account != null && password != null) {
@@ -104,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                         val password = AccountHelper.getPassword(account)
                         if(password != null) viewModel.signIn(account.name, password)
                         selectedAccountIndex = index
+                        preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
                     }
                 }, {
                     val intent = Intent(this, AuthenticationActivity::class.java)
