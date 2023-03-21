@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.api.action.EditResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,19 +16,15 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
-    fun updatePageText(text: String) {
+    fun updatePageSource(text: String) {
         val page = page.value
         if(page is Loadable.Loaded) {
-            _page.postValue(page.copy(data = page.data.copy(text)))
+            _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
         }
     }
 
-    fun restorePage(page: Page) {
-        _page.postValue(Loadable.Loaded(page))
-    }
-
     fun loadPageSource(title: String, section: String?) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _page.postValue(Loadable.Loading())
             try {
                 val response = GukhanWikiApi.actionApiService.parse(page = title, prop = "wikitext", section = section)

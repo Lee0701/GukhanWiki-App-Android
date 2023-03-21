@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -25,9 +27,15 @@ class EditPageFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val argTitle = arguments?.getString("title")
-        val argSection = arguments?.getString("section", null)
-        if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        val content = savedInstanceState?.getString("content")
+        if(content == null) {
+            val argTitle = arguments?.getString("title")
+            val argSection = arguments?.getString("section", null)
+            if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        } else {
+            viewModel.updatePageSource(content)
+        }
+
     }
 
     override fun onCreateView(
@@ -56,16 +64,14 @@ class EditPageFragment: Fragment() {
                 }
                 is Loadable.Loaded -> {
                     binding.editContent.visibility = View.VISIBLE
-
                     activityViewModel.updateTitle(page.data.title)
-                    binding.editContent.setText(page.data.wikiText)
-                    binding.editContent.visibility = View.VISIBLE
+                    if(binding.editContent.toString() != page.data.wikiText)
+                        binding.editContent.setText(page.data.wikiText)
                 }
             }
         }
 
         binding.fab.setOnClickListener {
-            hideAllLayers()
             val page = viewModel.page.value
             if(page is Loadable.Loaded) {
                 binding.loadingIndicator.root.visibility = View.VISIBLE
@@ -92,15 +98,14 @@ class EditPageFragment: Fragment() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("content", binding.editContent.text.toString())
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun hideAllLayers() {
-        binding.loadingIndicator.root.visibility = View.GONE
-        binding.errorIndicator.root.visibility = View.GONE
-        binding.editContent.visibility = View.GONE
     }
 
 }
