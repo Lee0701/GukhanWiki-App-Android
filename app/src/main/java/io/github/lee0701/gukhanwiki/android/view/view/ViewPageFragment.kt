@@ -12,6 +12,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
@@ -23,7 +24,7 @@ import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ViewPageFragment : Fragment(), WebViewClient.Listener {
+class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentViewPageBinding? = null
     private val binding get() = _binding!!
@@ -60,6 +61,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener {
             findNavController().navigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
         }
 
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
+
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.updateTitle(title)
         }
@@ -67,6 +70,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener {
             binding.loadingIndicator.root.visibility = View.GONE
             binding.errorIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
+            binding.swipeRefreshLayout.isRefreshing = false
             when(content) {
                 is Loadable.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
@@ -81,6 +85,11 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener {
                 }
             }
         }
+    }
+
+    override fun onRefresh() {
+        val title = viewModel.title.value ?: return
+        viewModel.loadPage(title)
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {
