@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -40,13 +39,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        viewModel.message.observe(this) { msg ->
-            if(msg != null) {
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
-                viewModel.clearMessage()
-            }
-        }
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
@@ -57,20 +49,29 @@ class MainActivity : AppCompatActivity() {
             this.supportActionBar?.title = title
         }
 
+        viewModel.snackbarMessage.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
         viewModel.signInResult.observe(this) { result ->
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
                     val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
-                    viewModel.displayMessage(msg)
+//                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                    viewModel.showSnackbar(msg)
                 }
                 is Loadable.Loaded -> {
                     if(result.data == null) {
                         val msg = resources.getString(R.string.msg_signout_success)
-                        viewModel.displayMessage(msg)
+//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.showSnackbar(msg)
                     } else {
                         val msg = resources.getString(R.string.msg_signin_success, result.data.username)
-                        viewModel.displayMessage(msg)
+//                        Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                        viewModel.showSnackbar(msg)
                     }
                 }
             }
