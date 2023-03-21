@@ -6,6 +6,7 @@
     <string name="action_search">Search</string>
     <string name="action_edit">Edit</string>
     <string name="action_start">Start</string>
+    <string name="action_hide_afterwards">Don\'t show again</string>
     <string name="action_submit">Submit</string>
     <string name="action_save">Save</string>
     <string name="action_signin">Sign in</string>

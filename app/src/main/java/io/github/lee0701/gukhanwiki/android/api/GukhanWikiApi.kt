@@ -28,6 +28,8 @@ object GukhanWikiApi {
     val CLIENT_URL = URL(PROTOCOL, HOST, "/")
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
+    const val MAIN_PAGE_TITLE = "國漢大百科:大門"
+
     private val okHttpClient = OkHttpClient.Builder()
         .protocols(listOf(Protocol.HTTP_1_1))
         .cookieJar(JavaNetCookieJar(WebviewCookieHandler()))
