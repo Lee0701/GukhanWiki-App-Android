@@ -83,6 +83,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         viewModel.result.observe(viewLifecycleOwner) { response ->
             if(response is Loadable.Error) {
                 val page = viewModel.page.value
+                val message = response.exception.message.orEmpty()
                 if(page is Loadable.Loaded) {
                     if(response.exception.message == "captcha") {
                         val args = Bundle().apply {
@@ -91,10 +92,10 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                         }
                         findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)
                     } else {
-                        activityViewModel.displayMessage(response.exception.message.orEmpty())
+                        activityViewModel.displayMessage(resources.getString(R.string.msg_edit_error, message))
                     }
                 } else {
-                    activityViewModel.displayMessage(response.exception.message.orEmpty())
+                    activityViewModel.displayMessage(resources.getString(R.string.msg_edit_error, message))
                 }
             } else if(response is Loadable.Loaded) {
                 findNavController().popBackStack(R.id.ViewPageFragment, false)
