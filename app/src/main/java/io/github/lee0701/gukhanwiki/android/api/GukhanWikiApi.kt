@@ -2,6 +2,7 @@ package io.github.lee0701.gukhanwiki.android.api
 
 import android.os.Build
 import io.github.lee0701.gukhanwiki.android.BuildConfig
+import io.github.lee0701.gukhanwiki.android.view.WebviewCookieHandler
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -10,7 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.io.InputStream
-import java.net.CookieManager
 import java.net.URL
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -30,7 +30,7 @@ object GukhanWikiApi {
 
     private val okHttpClient = OkHttpClient.Builder()
         .protocols(listOf(Protocol.HTTP_1_1))
-        .cookieJar(JavaNetCookieJar(CookieManager()))
+        .cookieJar(JavaNetCookieJar(WebviewCookieHandler()))
         .build()
 
     private val restRetrofit: Retrofit by lazy {
