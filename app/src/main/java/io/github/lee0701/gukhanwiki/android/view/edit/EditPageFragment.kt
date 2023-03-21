@@ -1,14 +1,11 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.os.Build
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -81,11 +78,12 @@ class EditPageFragment: Fragment() {
                 val args = Bundle().apply {
                     putSerializable("page", newPage)
                 }
+                viewModel.updatePage(page = newPage)
                 findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             AlertDialog.Builder(requireContext())
                 .setMessage(R.string.msg_confirm_discard_edit)
                 .setPositiveButton(R.string.action_discard_edit) { _, _ ->

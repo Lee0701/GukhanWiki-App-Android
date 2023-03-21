@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,11 +17,18 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
+    private val _bundle = MutableLiveData<Bundle?>()
+    val bundle: LiveData<Bundle?> = _bundle
+
     fun updatePageSource(text: String) {
         val page = page.value
         if(page is Loadable.Loaded) {
             _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
         }
+    }
+
+    fun updatePage(page: Page) {
+        _page.postValue(Loadable.Loaded(data = page))
     }
 
     fun loadPageSource(title: String, section: String?) {
