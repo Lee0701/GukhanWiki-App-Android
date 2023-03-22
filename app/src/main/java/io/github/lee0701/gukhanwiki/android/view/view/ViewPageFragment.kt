@@ -44,7 +44,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private lateinit var renderer: WebViewRenderer
 
     private var fabExpanded: Boolean = false
-    private val fabMenus: List<View> get() = listOf(binding.fabEdit, binding.fabHistory)
+    private val fabMenus: List<View> get() = listOfNotNull(_binding?.fabEdit, _binding?.fabHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
