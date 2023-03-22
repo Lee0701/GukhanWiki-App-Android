@@ -20,6 +20,9 @@ class ViewPageViewModel: ViewModel() {
     private val _content = MutableLiveData<Loadable<String?>>()
     val content: LiveData<Loadable<String?>> = _content
 
+    private val _hideFab = MutableLiveData<Boolean>()
+    val hideFab: LiveData<Boolean> = _hideFab
+
     fun updatePage(html: String) {
         val page = content.value
         if(page is Loadable.Loaded) {
@@ -44,12 +47,14 @@ class ViewPageViewModel: ViewModel() {
                     }
                     _title.postValue(path)
                     _content.postValue(Loadable.Loaded(doc.html()))
+                    _hideFab.postValue(true)
                 } else {
                     if(content == null) {
                         _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
                     } else {
                         _title.postValue(title ?: path)
                         _content.postValue(Loadable.Loaded(content))
+                        _hideFab.postValue(false)
                     }
                 }
             } catch(ex: IOException) {
