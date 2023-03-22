@@ -1,4 +1,4 @@
-package io.github.lee0701.gukhanwiki.android.view.edit
+package io.github.lee0701.gukhanwiki.android.api.action
 
 import java.io.Serializable
 

@@ -15,8 +15,11 @@ import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.Page
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 class ReviewEditFragment: Fragment(), WebViewClient.Listener {
@@ -32,7 +35,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        webViewRenderer = WebViewRenderer(requireContext(), this)
+        webViewRenderer = PageWebViewRenderer(requireContext())
         val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable("page", Page::class.java)
         } else {
@@ -69,7 +72,15 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    webViewRenderer.render(binding.webView, response.data)
+                    val html = webViewRenderer.render(response.data)
+                    binding.webView.webViewClient = WebViewClient(this)
+                    binding.webView.loadDataWithBaseURL(
+                        GukhanWikiApi.DOC_URL.toString(),
+                        html,
+                        "text/html",
+                        "UTF-8",
+                        null,
+                    )
                 }
             }
         }

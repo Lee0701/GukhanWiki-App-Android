@@ -5,7 +5,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +25,7 @@ import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 /**
@@ -47,7 +47,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        renderer = WebViewRenderer(requireContext(), this)
+        renderer = PageWebViewRenderer(requireContext())
         val content = savedInstanceState?.getString("content")
         if(content == null) {
             val argTitle = arguments?.getString("title")
@@ -101,6 +101,10 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
         binding.swipeRefreshLayout.setOnRefreshListener(this)
 
+        viewModel.hideFab.observe(viewLifecycleOwner) { hide ->
+            binding.fabGroup.visibility = if(!hide) View.VISIBLE else View.GONE
+        }
+
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.updateTitle(title)
         }
@@ -118,8 +122,16 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                     binding.errorIndicator.text.text = content.exception.message
                 }
                 is Loadable.Loaded -> {
-                    renderer.render(binding.webView, content.data.orEmpty())
                     binding.webView.visibility = View.VISIBLE
+                    val html = renderer.render(content.data.orEmpty())
+                    binding.webView.webViewClient = WebViewClient(this)
+                    binding.webView.loadDataWithBaseURL(
+                        GukhanWikiApi.DOC_URL.toString(),
+                        html,
+                        "text/html",
+                        "UTF-8",
+                        null,
+                    )
                 }
             }
         }
