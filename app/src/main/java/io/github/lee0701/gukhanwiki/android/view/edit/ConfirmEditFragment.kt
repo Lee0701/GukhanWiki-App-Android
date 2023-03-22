@@ -70,9 +70,10 @@ class ConfirmEditFragment: Fragment() {
         } else {
             arguments?.getSerializable("page") as Page
         }
+        val content = arguments?.getString("content").orEmpty()
         val summary = arguments?.getString("summary").orEmpty()
         if(page != null) {
-            viewModel.showConfirmation(page, summary)
+            viewModel.showConfirmation(page, content, summary)
         }
     }
 

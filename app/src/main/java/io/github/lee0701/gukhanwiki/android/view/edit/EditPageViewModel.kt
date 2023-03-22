@@ -1,10 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.os.Bundle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.api.action.Page
@@ -18,19 +14,11 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
-    private val _content = MutableLiveData<String>()
-    val content: LiveData<String> = _content
+    private val _content = MutableLiveData<Loadable<String>>()
+    val content: LiveData<Loadable<String>> = _content
 
-    fun updatePageSource(text: String) {
-        _content.postValue(text)
-//        val page = page.value
-//        if(page is Loadable.Loaded) {
-//            _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
-//        }
-    }
-
-    fun updatePage(page: Page) {
-        _page.postValue(Loadable.Loaded(data = page))
+    fun update(content: String) {
+        _content.postValue(Loadable.Loaded(content))
     }
 
     fun loadPageSource(title: String, section: String?) {
@@ -42,11 +30,10 @@ class EditPageViewModel: ViewModel() {
                 if(content?.wikiText == null) {
                     _page.postValue(Loadable.Error(RuntimeException("Result text is null")))
                 } else {
-                    _content.postValue(content.wikiText.orEmpty())
+                    _content.postValue(Loadable.Loaded(content.wikiText))
                     _page.postValue(Loadable.Loaded(
                         Page(
                             title = response.parse.title ?: title,
-                            wikiText = content.wikiText,
                             section = section,
                             revId = response.parse.revId,
                         )
@@ -59,10 +46,6 @@ class EditPageViewModel: ViewModel() {
                 _page.postValue(Loadable.Error(ex))
             }
         }
-    }
-
-    fun restorePageSource(page: Page) {
-        _page.postValue(Loadable.Loaded(page))
     }
 
 }

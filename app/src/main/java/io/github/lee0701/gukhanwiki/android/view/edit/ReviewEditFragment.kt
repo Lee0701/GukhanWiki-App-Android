@@ -36,13 +36,28 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         webViewRenderer = PageWebViewRenderer(requireContext())
-        val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("page", Page::class.java)
+
+        val content = savedInstanceState?.getString("content")
+        if(content != null) {
+            viewModel.updateContent(content)
         } else {
-            arguments?.getSerializable("page") as Page
+            val page = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getSerializable("page", Page::class.java)
+            } else {
+                arguments?.getSerializable("page") as Page
+            }
+            val newContent = arguments?.getString("content").orEmpty()
+            if(page != null) {
+                viewModel.reviewEdit(page, newContent)
+            }
         }
-        if(page != null) {
-            viewModel.reviewEdit(page)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val content = viewModel.content.value
+        if(content is Loadable.Loaded) {
+            outState.putString("content", content.data)
         }
     }
 
@@ -87,18 +102,21 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
-            if(page is Loadable.Loaded)
-                viewModel.updatePage(page.data, binding.summary.text?.toString().orEmpty())
+            val content = viewModel.content.value
+            if(page is Loadable.Loaded && content is Loadable.Loaded)
+                viewModel.updatePage(page.data, content.data, binding.summary.text?.toString().orEmpty())
         }
 
         viewModel.result.observe(viewLifecycleOwner) { response ->
             if(response is Loadable.Error) {
                 val page = viewModel.page.value
+                val content = viewModel.content.value
                 val message = response.exception.message.orEmpty()
-                if(page is Loadable.Loaded) {
+                if(page is Loadable.Loaded && content is Loadable.Loaded) {
                     if(response.exception.message == "captcha") {
                         val args = Bundle().apply {
                             putSerializable("page", page.data)
+                            putString("content", content.data)
                             putString("summary", binding.summary.text.toString())
                         }
                         findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)

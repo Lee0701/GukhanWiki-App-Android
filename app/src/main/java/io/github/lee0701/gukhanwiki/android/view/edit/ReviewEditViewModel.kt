@@ -17,17 +17,21 @@ class ReviewEditViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
+    private val _content = MutableLiveData<Loadable<String>>()
+    val content: LiveData<Loadable<String>> = _content
+
     private val _html = MutableLiveData<Loadable<String>>()
     val html: LiveData<Loadable<String>> = _html
 
     private val _result = MutableLiveData<Loadable<Page>>()
     val result: LiveData<Loadable<Page>> = _result
 
-    fun reviewEdit(page: Page) {
-        viewModelScope.launch {
+    fun reviewEdit(page: Page, content: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             _page.postValue(Loadable.Loaded(page))
+            _content.postValue(Loadable.Loaded(content))
             val response = GukhanWikiApi.actionApiService.parse(
-                text = page.wikiText,
+                text = content,
             )
             val result = response.parse?.text?.text
             if(result != null) {
@@ -36,7 +40,11 @@ class ReviewEditViewModel: ViewModel() {
         }
     }
 
-    fun updatePage(page: Page, summary: String?) {
+    fun updateContent(content: String) {
+        _content.postValue(Loadable.Loaded(content))
+    }
+
+    fun updatePage(page: Page, content: String, summary: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             _result.postValue(Loadable.Loading())
             try {
@@ -47,7 +55,7 @@ class ReviewEditViewModel: ViewModel() {
                     section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
                     baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
                     token = csrfToken?.let { MultipartBody.Part.createFormData("token", it) },
-                    text = MultipartBody.Part.Companion.createFormData("text", page.wikiText),
+                    text = MultipartBody.Part.Companion.createFormData("text", content),
                 )
                 val result = response.edit
                 if(result != null) {
@@ -55,7 +63,6 @@ class ReviewEditViewModel: ViewModel() {
                         _result.postValue(Loadable.Loaded(
                             page.copy(
                                 revId = result.newRevId,
-                                wikiText = page.wikiText
                             )
                         ))
                     } else if(result.captcha?.error != null) {
