@@ -12,13 +12,12 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
         android:textSize="20sp"
-        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        tools:text="Autocomplete Item" />
+        tools:text="@string/label_autocomplete_item" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/go_to"
         android:text="@string/action_goto"
         android:layout_width="wrap_content"
