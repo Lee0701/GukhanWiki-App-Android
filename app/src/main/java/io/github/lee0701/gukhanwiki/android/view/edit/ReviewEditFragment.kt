@@ -103,10 +103,10 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                         }
                         findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)
                     } else {
-//                        activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
+                        activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
                     }
                 } else {
-//                    activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
+                    activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
                 }
             } else if(response is Loadable.Loaded) {
                 findNavController().popBackStack(R.id.ViewPageFragment, false)
