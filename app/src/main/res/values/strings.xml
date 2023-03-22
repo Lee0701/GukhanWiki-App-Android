@@ -74,4 +74,6 @@
     <string name="pref_ruby_position_side">Side</string>
     <string name="pref_ruby_position_top">Top</string>
 
+    <string name="label_autocomplete_item">Autocomplete item</string>
+
 </resources>
