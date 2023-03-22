@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:elevation="16dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="?colorPrimaryVariant"
         android:paddingHorizontal="@dimen/margin_small"
-        android:paddingVertical="@dimen/margin_medium"
-        android:background="@color/gray_50">
+        android:paddingVertical="@dimen/margin_medium">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/select_account"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,7 +34,7 @@
             android:layout_marginHorizontal="@dimen/margin_small"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_add_circle_24"
-            android:tint="@color/black"
+            android:tint="?colorOnPrimary"
             android:background="?selectableItemBackground" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -44,7 +45,7 @@
             android:layout_marginHorizontal="@dimen/margin_small"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_logout_24"
-            android:tint="@color/black"
+            android:tint="?colorOnPrimary"
             android:background="?selectableItemBackground" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -55,6 +56,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
+        android:background="?colorPrimary"
         tools:listitem="@layout/listitem_account"
         tools:itemCount="10" />
 

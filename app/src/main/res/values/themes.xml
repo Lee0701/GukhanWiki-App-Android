@@ -24,6 +24,7 @@
         <item name="checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
 
         <item name="materialAlertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.GukhanWikiAppAndroid.BottomSheetDialog</item>
 
         <item name="preferenceStyle">@style/Theme.GukhanWikiAppAndroid.Preference</item>
         <item name="preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
@@ -86,6 +87,12 @@
 
     <style name="Theme.GukhanWikiAppAndroid.Preference.Category" parent="Preference.Category">
         <item name="android:textColor">@color/gray_700</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/gray_50</item>
+        <item name="colorOnPrimary">@color/black</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.WikiPage">
