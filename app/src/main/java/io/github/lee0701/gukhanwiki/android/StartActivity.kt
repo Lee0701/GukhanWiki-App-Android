@@ -7,14 +7,13 @@ import io.github.lee0701.gukhanwiki.android.databinding.ActivityStartBinding
 
 class StartActivity : AppCompatActivity() {
 
-    private var _binding: ActivityStartBinding? = null
-    val binding: ActivityStartBinding get() = _binding!!
+    private var binding: ActivityStartBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val preference = PreferenceManager.getDefaultSharedPreferences(this)
-        _binding = ActivityStartBinding.inflate(layoutInflater)
-
+        val binding = ActivityStartBinding.inflate(layoutInflater)
+        this.binding = binding
         supportActionBar?.title = ""
 
         binding.checkboxHide.setOnCheckedChangeListener { _, checked ->
@@ -30,6 +29,6 @@ class StartActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        binding = null
     }
 }

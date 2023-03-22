@@ -16,8 +16,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentSearchResultBind
 
 class SearchResultFragment: Fragment() {
 
-    private var _binding: FragmentSearchResultBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentSearchResultBinding? = null
     private val viewModel: SearchResultViewModel by viewModels()
 
     private val adapter = SearchResultAdapter { position, item -> onItemClicked(position, item) }
@@ -34,12 +33,14 @@ class SearchResultFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        val binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = binding ?: return
 
         binding.recyclerView.apply {
             this.adapter = this@SearchResultFragment.adapter
@@ -70,7 +71,7 @@ class SearchResultFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     private fun onItemClicked(position: Int, item: SearchResultItem) {
