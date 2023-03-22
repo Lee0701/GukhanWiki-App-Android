@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.HttpException
@@ -22,7 +23,8 @@ class ReviewEditViewModel: ViewModel() {
     val result: LiveData<Loadable<Page>> = _result
 
     fun reviewEdit(page: Page) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            _html.postValue(Loadable.Loading())
             _page.postValue(Loadable.Loaded(page))
             val response = GukhanWikiApi.actionApiService.parsePost(
                 text = page.wikiText,
