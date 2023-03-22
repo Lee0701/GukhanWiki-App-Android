@@ -18,6 +18,17 @@ interface GukhanWikiActionApiService {
 
     @FormUrlEncoded
     @POST("/api.php")
+    suspend fun parsePost(
+        @Field("action") action: String = "parse",
+        @Field("format") format: String = "json",
+        @Field("text") text: String? = null,
+        @Field("page") page: String? = null,
+        @Field("prop") prop: String? = null,
+        @Field("section") section: String? = null,
+    ): ParseResponse
+
+    @FormUrlEncoded
+    @POST("/api.php")
     suspend fun edit(
         @Query("action") action: String = "edit",
         @Query("format") format: String = "json",
