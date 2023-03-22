@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -32,7 +33,6 @@ class EditPageFragment: Fragment() {
         } else {
             viewModel.updatePageSource(content)
         }
-
     }
 
     override fun onCreateView(
@@ -46,6 +46,9 @@ class EditPageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val content = savedInstanceState?.getString("content")
+        if(content != null) binding.editContent.setText(content)
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
             binding.loadingIndicator.root.visibility = View.GONE
@@ -62,8 +65,8 @@ class EditPageFragment: Fragment() {
                 is Loadable.Loaded -> {
                     binding.editContent.visibility = View.VISIBLE
                     activityViewModel.updateTitle(page.data.title)
-                    if(binding.editContent.toString() != page.data.wikiText)
-                        binding.editContent.setText(page.data.wikiText)
+                    if(binding.editContent.toString() != viewModel.content.value)
+                        binding.editContent.setText(viewModel.content.value)
                 }
             }
         }
@@ -83,6 +86,10 @@ class EditPageFragment: Fragment() {
             }
         }
 
+        binding.editContent.addTextChangedListener { editable ->
+            viewModel.updatePageSource(editable.toString())
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             AlertDialog.Builder(requireContext())
                 .setMessage(R.string.msg_confirm_discard_edit)
@@ -98,7 +105,8 @@ class EditPageFragment: Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("content", binding.editContent.text.toString())
+        val content = viewModel.content.value
+        if(content != null) outState.putString("content", content)
     }
 
     override fun onDestroyView() {

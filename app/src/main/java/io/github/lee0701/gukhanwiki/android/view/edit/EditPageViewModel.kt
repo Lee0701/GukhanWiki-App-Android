@@ -18,14 +18,15 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
-    private val _bundle = MutableLiveData<Bundle?>()
-    val bundle: LiveData<Bundle?> = _bundle
+    private val _content = MutableLiveData<String>()
+    val content: LiveData<String> = _content
 
     fun updatePageSource(text: String) {
-        val page = page.value
-        if(page is Loadable.Loaded) {
-            _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
-        }
+        _content.postValue(text)
+//        val page = page.value
+//        if(page is Loadable.Loaded) {
+//            _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
+//        }
     }
 
     fun updatePage(page: Page) {
@@ -41,6 +42,7 @@ class EditPageViewModel: ViewModel() {
                 if(content?.wikiText == null) {
                     _page.postValue(Loadable.Error(RuntimeException("Result text is null")))
                 } else {
+                    _content.postValue(content.wikiText.orEmpty())
                     _page.postValue(Loadable.Loaded(
                         Page(
                             title = response.parse.title ?: title,
