@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -39,8 +41,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var renderer: WebViewRenderer
 
-    private var fabExpanded: Boolean = true
-    private val fabMenus: List<View> by lazy { listOf(binding.fabEdit, binding.fabHistory) }
+    private var fabExpanded: Boolean = false
+    private val fabMenus: List<View> get() = listOf(binding.fabEdit, binding.fabHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,12 +70,16 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fabExpanded = true
         Handler(Looper.getMainLooper()).post {
-            initialFabAnimation()
+            initialFabAnimation().start()
+            binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_edit_24))
         }
         binding.fabExpand.setOnClickListener {
             fabAnimation(fabExpanded).start()
             fabExpanded = !fabExpanded
+            val drawableId = if(fabExpanded) R.drawable.baseline_edit_24 else R.drawable.baseline_close_24
+            binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(requireContext(), drawableId))
         }
 
         binding.fabEdit.setOnClickListener {
@@ -154,10 +160,10 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         return animatorSet
     }
 
-    private fun initialFabAnimation() {
+    private fun initialFabAnimation(): Animator {
         val animatorSet = AnimatorSet()
         animatorSet.playSequentially(fabAnimation(true), fabAnimation(false))
-        animatorSet.start()
+        return animatorSet
     }
 
     override fun onDestroyView() {
