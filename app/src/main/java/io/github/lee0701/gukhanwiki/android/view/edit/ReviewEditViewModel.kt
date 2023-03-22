@@ -30,7 +30,8 @@ class ReviewEditViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _page.postValue(Loadable.Loaded(page))
             _content.postValue(Loadable.Loaded(content))
-            val response = GukhanWikiApi.actionApiService.parse(
+            _html.postValue(Loadable.Loading())
+            val response = GukhanWikiApi.actionApiService.parsePost(
                 text = content,
             )
             val result = response.parse?.text?.text
