@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityAuthenticationBinding
 
@@ -40,6 +41,13 @@ class AuthenticationActivity : AppCompatActivity() {
             AccountHelper.addAccount(signedInAccount.username, signedInAccount.password)
             setResult(Activity.RESULT_OK)
             finish()
+        }
+
+        viewModel.alert.observe(this) { message ->
+            if(message != null) {
+                val str = resources.getString(R.string.msg_signin_failed, message)
+                binding.alertWindow.text = str
+            }
         }
 
     }

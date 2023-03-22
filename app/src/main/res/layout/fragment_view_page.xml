@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,6 +26,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/margin_fab"
                     android:paddingVertical="@dimen/margin_medium"
                     android:paddingHorizontal="@dimen/margin_small">
 
@@ -51,17 +53,45 @@
 
     </FrameLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/fab_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/margin_medium"
-        app:srcCompat="@drawable/baseline_edit_24"
-        app:tint="@color/white"
-        app:backgroundTint="?attr/colorPrimaryVariant"
-        android:contentDescription="@string/action_edit"/>
+        android:layout_marginBottom="@dimen/margin_medium">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_history_24"
+            android:contentDescription="@string/action_history"
+            android:layout_margin="@dimen/margin_small"
+            android:tint="@color/white"
+            android:backgroundTint="?attr/colorPrimaryVariant" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_edit_24"
+            android:contentDescription="@string/action_edit"
+            android:layout_margin="@dimen/margin_small"
+            android:tint="@color/white"
+            android:backgroundTint="?attr/colorPrimaryVariant" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:src="@drawable/baseline_close_24"
+            android:tint="@color/white"
+            android:backgroundTint="?attr/colorPrimaryVariant" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

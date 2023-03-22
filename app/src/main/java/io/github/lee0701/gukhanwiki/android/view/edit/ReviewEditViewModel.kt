@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.Page
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -16,18 +17,21 @@ class ReviewEditViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
+    private val _content = MutableLiveData<Loadable<String>>()
+    val content: LiveData<Loadable<String>> = _content
+
     private val _html = MutableLiveData<Loadable<String>>()
     val html: LiveData<Loadable<String>> = _html
 
     private val _result = MutableLiveData<Loadable<Page>>()
     val result: LiveData<Loadable<Page>> = _result
 
-    fun reviewEdit(page: Page) {
+    fun reviewEdit(page: Page, content: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _html.postValue(Loadable.Loading())
             _page.postValue(Loadable.Loaded(page))
-            val response = GukhanWikiApi.actionApiService.parsePost(
-                text = page.wikiText,
+            _content.postValue(Loadable.Loaded(content))
+            val response = GukhanWikiApi.actionApiService.parse(
+                text = content,
             )
             val result = response.parse?.text?.text
             if(result != null) {
@@ -36,8 +40,12 @@ class ReviewEditViewModel: ViewModel() {
         }
     }
 
-    fun updatePage(page: Page, summary: String?) {
-        viewModelScope.launch {
+    fun updateContent(content: String) {
+        _content.postValue(Loadable.Loaded(content))
+    }
+
+    fun updatePage(page: Page, content: String, summary: String?) {
+        viewModelScope.launch(Dispatchers.IO) {
             _result.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
@@ -47,7 +55,7 @@ class ReviewEditViewModel: ViewModel() {
                     section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
                     baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
                     token = csrfToken?.let { MultipartBody.Part.createFormData("token", it) },
-                    text = MultipartBody.Part.Companion.createFormData("text", page.wikiText),
+                    text = MultipartBody.Part.Companion.createFormData("text", content),
                 )
                 val result = response.edit
                 if(result != null) {
@@ -55,7 +63,6 @@ class ReviewEditViewModel: ViewModel() {
                         _result.postValue(Loadable.Loaded(
                             page.copy(
                                 revId = result.newRevId,
-                                wikiText = page.wikiText
                             )
                         ))
                     } else if(result.captcha?.error != null) {
