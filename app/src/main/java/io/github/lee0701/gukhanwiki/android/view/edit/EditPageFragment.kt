@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
@@ -93,7 +94,8 @@ class EditPageFragment: Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            AlertDialog.Builder(requireContext())
+
+            MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.msg_confirm_discard_edit)
                 .setPositiveButton(R.string.action_discard_edit) { _, _ ->
                     findNavController().navigateUp()
