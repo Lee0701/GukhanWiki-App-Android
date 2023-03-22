@@ -23,8 +23,7 @@ import java.net.URL
 
 class ConfirmEditFragment: Fragment() {
 
-    private var _binding: FragmentConfirmEditBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentConfirmEditBinding? = null
     private val viewModel: ConfirmEditViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
@@ -82,12 +81,14 @@ class ConfirmEditFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentConfirmEditBinding.inflate(inflater, container, false)
+        val binding = FragmentConfirmEditBinding.inflate(inflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = binding ?: return
 
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.webViewClient = webViewClient
@@ -121,7 +122,7 @@ class ConfirmEditFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
 }

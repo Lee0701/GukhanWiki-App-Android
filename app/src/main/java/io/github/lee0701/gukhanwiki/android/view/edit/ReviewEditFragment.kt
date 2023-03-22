@@ -24,8 +24,7 @@ import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
-    private var _binding: FragmentReviewEditBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentReviewEditBinding? = null
     private val viewModel: ReviewEditViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
@@ -34,8 +33,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        webViewRenderer = PageWebViewRenderer(requireContext())
+        val context = context ?: return
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        webViewRenderer = PageWebViewRenderer(context)
 
         val content = savedInstanceState?.getString("content")
         if(content != null) {
@@ -66,12 +66,14 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentReviewEditBinding.inflate(inflater, container, false)
+        val binding = FragmentReviewEditBinding.inflate(inflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = binding ?: return
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE
@@ -141,7 +143,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
 }

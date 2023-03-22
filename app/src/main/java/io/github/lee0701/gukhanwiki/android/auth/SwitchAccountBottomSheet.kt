@@ -27,6 +27,7 @@ class SwitchAccountBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSwitchAccountBinding.inflate(inflater, container, false)
+        val context = context ?: return View(context)
         binding.signOut.setOnClickListener {
             this.onClick(-1, null)
             this.dismiss()
@@ -37,7 +38,7 @@ class SwitchAccountBottomSheet(
             this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
         binding.addAccount.setOnClickListener {
-            val intent = Intent(requireContext(), AuthenticationActivity::class.java)
+            val intent = Intent(context, AuthenticationActivity::class.java)
             startActivity(intent)
             dismiss()
         }

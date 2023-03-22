@@ -19,8 +19,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentSearchBinding
 
 class SearchFragment: Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentSearchBinding? = null
     private val viewModel: SearchViewModel by viewModels()
 
     private val adapter = SearchAutocompleteAdapter { position, item, goto -> onAutocompleteClicked(position, item, goto) }
@@ -34,12 +33,14 @@ class SearchFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        val binding = FragmentSearchBinding.inflate(inflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = binding ?: return
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
         binding.autocompleteList.apply {
@@ -110,7 +111,7 @@ class SearchFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
 }

@@ -1,6 +1,5 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentEditPageBinding
 
 class EditPageFragment: Fragment() {
 
-    private var _binding: FragmentEditPageBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentEditPageBinding? = null
     private val viewModel: EditPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
@@ -38,7 +36,7 @@ class EditPageFragment: Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val content = _binding?.editContent?.text?.toString()
+        val content = binding?.editContent?.text?.toString()
         if(content != null) {
             outState.putString("content", content)
         }
@@ -49,12 +47,15 @@ class EditPageFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEditPageBinding.inflate(layoutInflater, container, false)
+        val binding = FragmentEditPageBinding.inflate(layoutInflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val binding = binding ?: return
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
             when(page) {
@@ -94,8 +95,8 @@ class EditPageFragment: Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-
-            MaterialAlertDialogBuilder(requireContext())
+            val context = context ?: return@addCallback
+            MaterialAlertDialogBuilder(context)
                 .setMessage(R.string.msg_confirm_discard_edit)
                 .setPositiveButton(R.string.action_discard_edit) { _, _ ->
                     findNavController().navigateUp()
@@ -109,7 +110,7 @@ class EditPageFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
 }
