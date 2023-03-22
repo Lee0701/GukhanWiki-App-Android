@@ -17,7 +17,7 @@
 
     <string name="input_username">사용자 이름</string>
     <string name="input_password">비밀번호</string>
-    <string name="input_summary">편집 요약</string>
+    <string name="input_summary">여기에 편집 요약을 적어주세요</string>
 
     <string name="msg_welcome">환영합니다!</string>
     <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s</string>
@@ -35,15 +35,14 @@
     <string name="search_result_fragment_label">검색 결과</string>
     <string name="edit_fragment_label">편집</string>
     <string name="review_edit_fragment_label">편집 검토</string>
-    <string name="authentication_activity_label">로그인</string>
+    <string name="title_authentication_activity">로그인</string>
+    <string name="title_activity_settings">설정</string>
 
     <string name="switch_account_label">계정 전환</string>
     <string name="authenticator_label">國漢大百科</string>
 
     <string name="anonymous">익명</string>
     <string name="select_account">계정 선택</string>
-
-    <string name="title_activity_settings">설정</string>
 
     <string name="pref_ruby_header">한자 독음</string>
     <string name="pref_ruby_enabled_title">한자 독음 표시</string>
