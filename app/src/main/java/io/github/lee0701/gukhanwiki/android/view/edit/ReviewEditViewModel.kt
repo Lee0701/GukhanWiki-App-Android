@@ -24,7 +24,7 @@ class ReviewEditViewModel: ViewModel() {
     fun reviewEdit(page: Page) {
         viewModelScope.launch {
             _page.postValue(Loadable.Loaded(page))
-            val response = GukhanWikiApi.actionApiService.parse(
+            val response = GukhanWikiApi.actionApiService.parsePost(
                 text = page.wikiText,
             )
             val result = response.parse?.text?.text
