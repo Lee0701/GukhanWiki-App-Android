@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.view
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.annotation.RawRes
 import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.R
@@ -15,7 +16,11 @@ class PageWebViewRenderer(
 ): WebViewRenderer {
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private val darkMode = true
+    private val nightMode = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK).let { when(it) {
+        Configuration.UI_MODE_NIGHT_NO -> false
+        Configuration.UI_MODE_NIGHT_YES -> true
+        else -> false
+    } }
 
     override fun render(content: String): String {
         val body = Jsoup.parse(content).body()
@@ -23,11 +28,9 @@ class PageWebViewRenderer(
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
 
-        val arr = context.resources.getStringArray(if(!darkMode) R.array.css_list else R.array.night_css_list)
-        println(arr.toList())
+        val arr = context.resources.getStringArray(if(!nightMode) R.array.css_list else R.array.night_css_list)
         val stylesheets = arr.map { filename ->
             val id = context.resources.getIdentifier(filename, "raw", context.packageName)
-            println("$filename, $id")
             val stream = context.resources.openRawResource(id)
             val data = stream.readBytes()
             stream.close()
