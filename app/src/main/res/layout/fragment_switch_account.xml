@@ -27,12 +27,26 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/add_account"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/margin_small"
+            android:scaleType="fitCenter"
             android:src="@drawable/baseline_add_circle_24"
             android:tint="@color/black"
             android:background="?selectableItemBackground" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/sign_out"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/margin_small"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_logout_24"
+            android:tint="@color/black"
+            android:background="?selectableItemBackground" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView

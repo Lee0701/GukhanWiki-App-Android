@@ -118,17 +118,16 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_accounts -> {
-                val bottomSheet = SwitchAccountBottomSheet({ index, account ->
-                    if(account != null) {
+                val bottomSheet = SwitchAccountBottomSheet { index, account ->
+                    if(index == -1) {
+                        viewModel.signOut()
+                    } else if(account != null) {
                         val password = AccountHelper.getPassword(account)
                         if(password != null) viewModel.signIn(account.name, password)
-                        selectedAccountIndex = index
-                        preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
                     }
-                }, {
-                    val intent = Intent(this, AuthenticationActivity::class.java)
-                    startActivity(intent)
-                })
+                    selectedAccountIndex = index
+                    preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
+                }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
                 bottomSheet.adapter.selectedIndex = selectedAccountIndex
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)

@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.auth
 
 import android.accounts.Account
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentSwitchAccountBin
 
 class SwitchAccountBottomSheet(
     private val onClick: (Int, Account?) -> Unit,
-    private val onAdd: () -> Unit,
 ): BottomSheetDialogFragment() {
 
     val adapter = SwitchAccountAdapter { i, account ->
@@ -27,13 +27,18 @@ class SwitchAccountBottomSheet(
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSwitchAccountBinding.inflate(inflater, container, false)
+        binding.signOut.setOnClickListener {
+            this.onClick(-1, null)
+            this.dismiss()
+        }
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@SwitchAccountBottomSheet.adapter
             this.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
         binding.addAccount.setOnClickListener {
-            onAdd()
+            val intent = Intent(requireContext(), AuthenticationActivity::class.java)
+            startActivity(intent)
             dismiss()
         }
         return binding.root
