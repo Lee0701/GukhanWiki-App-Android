@@ -17,7 +17,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,7 +31,7 @@
             android:layout_height="32dp"
             android:layout_gravity="center"
             android:src="@drawable/baseline_check_24"
-            android:tint="@color/black"
+            android:tint="?colorOnPrimary"
             android:visibility="invisible" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>
