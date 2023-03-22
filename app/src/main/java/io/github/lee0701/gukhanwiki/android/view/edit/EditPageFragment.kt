@@ -94,7 +94,7 @@ class EditPageFragment: Fragment() {
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             val context = context ?: return@addCallback
             MaterialAlertDialogBuilder(context)
                 .setMessage(R.string.msg_confirm_discard_edit)
