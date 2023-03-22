@@ -12,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -162,6 +164,12 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         animatorSet.playTogether(animations)
         animatorSet.duration = duration.toLong()
         animatorSet.interpolator = DecelerateInterpolator()
+        animatorSet.doOnStart {
+            if(expanded) fabMenus.forEach { it.visibility = View.VISIBLE }
+        }
+        animatorSet.doOnEnd {
+            fabMenus.forEach { if(!expanded) it.visibility = View.GONE }
+        }
         return animatorSet
     }
 

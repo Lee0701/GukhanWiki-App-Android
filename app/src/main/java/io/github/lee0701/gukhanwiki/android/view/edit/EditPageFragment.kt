@@ -55,20 +55,6 @@ class EditPageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        findNavController().addOnDestinationChangedListener { controller, destination, arguments ->
-//            val content = viewModel.content.value
-//            if(destination.id == R.id.editPageFragment) {
-//                if(content is Loadable.Loaded) {
-//                    // Save
-//                    _binding?.editContent?.setText(content.data)
-//                }
-//            } else {
-//                // Load
-//                val text = _binding?.editContent?.text?.toString()
-//                if(text != null) viewModel.update(text)
-//            }
-//        }
-
         viewModel.page.observe(viewLifecycleOwner) { page ->
             when(page) {
                 is Loadable.Loading -> {}
