@@ -68,15 +68,12 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         super.onViewCreated(view, savedInstanceState)
 
         fabExpanded = true
-        Handler(Looper.getMainLooper()).post {
-            initialFabAnimation().start()
-            binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_edit_24))
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            initialFabAnimation(true).start()
+        }, 200)
         binding.fabExpand.setOnClickListener {
             fabAnimation(fabExpanded).start()
             fabExpanded = !fabExpanded
-            val drawableId = if(fabExpanded) R.drawable.baseline_edit_24 else R.drawable.baseline_close_24
-            binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(requireContext(), drawableId))
         }
 
         binding.fabEdit.setOnClickListener {
@@ -166,6 +163,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         animatorSet.interpolator = DecelerateInterpolator()
         animatorSet.doOnStart {
             if(expanded) fabMenus.forEach { it.visibility = View.VISIBLE }
+            val drawableId = if(expanded) R.drawable.baseline_close_24 else R.drawable.baseline_edit_24
+            binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(requireContext(), drawableId))
         }
         animatorSet.doOnEnd {
             fabMenus.forEach { if(!expanded) it.visibility = View.GONE }
@@ -173,9 +172,22 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         return animatorSet
     }
 
-    private fun initialFabAnimation(): Animator {
+    private fun initialFabAnimation(first: Boolean): Animator {
         val animatorSet = AnimatorSet()
-        animatorSet.playSequentially(fabAnimation(true), fabAnimation(false))
+        if(first) {
+            animatorSet.playSequentially(fabAnimation(true), fabAnimation(false))
+        } else {
+            val animations = fabMenus.flatMap { fab ->
+                val translationYValue = binding.fabExpand.y - fab.y
+                val scaleValue = 0f
+                val translationY = ObjectAnimator.ofFloat(fab, "translationY", translationYValue)
+                val scaleX = ObjectAnimator.ofFloat(fab, "scaleX", scaleValue)
+                val scaleY = ObjectAnimator.ofFloat(fab, "scaleY", scaleValue)
+                listOf(translationY, scaleX, scaleY)
+            }
+            animatorSet.playTogether(animations)
+            animatorSet.duration = 0
+        }
         return animatorSet
     }
 
