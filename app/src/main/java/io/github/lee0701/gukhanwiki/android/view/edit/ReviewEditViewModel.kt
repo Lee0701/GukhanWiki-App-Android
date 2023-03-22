@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.api.action.Page
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.HttpException
@@ -36,7 +37,7 @@ class ReviewEditViewModel: ViewModel() {
     }
 
     fun updatePage(page: Page, summary: String?) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _result.postValue(Loadable.Loading())
             try {
                 val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
