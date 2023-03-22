@@ -4,14 +4,29 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gray_850</item>
         <item name="colorPrimaryVariant">@color/gray_900</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/gray_200</item>
         <item name="colorSecondaryVariant">@color/gray_500</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="toolbarStyle">@style/Theme.GukhanWikiAppAndroid.Toolbar</item>
+        <item name="actionOverflowButtonStyle">@style/Theme.GukhanWikiAppAndroid.ActionButtonOverflow</item>
+        <item name="floatingActionButtonStyle">@style/Theme.GukhanWikiAppAndroid.FloatingActionButton</item>
+
+        <item name="android:textViewStyle">@style/Theme.GukhanWikiAppAndroid.TextView</item>
+        <item name="editTextStyle">@style/Theme.GukhanWikiAppAndroid.EditText</item>
+        <item name="buttonStyle">@style/Theme.GukhanWikiAppAndroid.Button</item>
+        <item name="materialButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button</item>
+        <item name="checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
+
+        <item name="materialAlertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+
+        <item name="preferenceStyle">@style/Theme.GukhanWikiAppAndroid.Preference</item>
+        <item name="preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.NoActionBar">
@@ -19,9 +34,59 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.GukhanWikiAppAndroid.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="background">?colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.GukhanWikiAppAndroid.ActionButtonOverflow" parent="Widget.Material3.Search.ActionButton.Overflow">
+        <item name="android:src">@drawable/baseline_more_vert_24</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="tint">@color/white</item>
+        <item name="backgroundTint">?colorPrimaryVariant</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">?colorOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="elevation">@dimen/elevation_button</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.TitleLogo">
+        <item name="tint">@color/black</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/gray_700</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="buttonBarButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button.Dialog</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Button.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="rippleColor">@color/white_transparent</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Preference" parent="Preference">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Preference.Category" parent="Preference.Category">
+        <item name="android:textColor">@color/gray_700</item>
+    </style>
 
     <style name="Theme.GukhanWikiAppAndroid.WikiPage">
         <item name="android:textColor">@color/black</item>
