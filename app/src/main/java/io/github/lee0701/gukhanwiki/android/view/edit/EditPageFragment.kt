@@ -24,15 +24,23 @@ class EditPageFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(findNavController().currentDestination?.id != R.id.editPageFragment) return
         val content = savedInstanceState?.getString("content")
-        if(content == null) {
-            val argTitle = arguments?.getString("title")
-            val argSection = arguments?.getString("section", null)
-            if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
+        if(content != null) {
+            viewModel.update(content)
         } else {
-            viewModel.updatePageSource(content)
+            val argTitle = arguments?.getString("title")
+            val argSection = arguments?.getString("section")
+            if(argTitle != null) viewModel.loadPageSource(argTitle, argSection)
         }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val content = _binding?.editContent?.text?.toString()
+        if(content != null) {
+            outState.putString("content", content)
+        }
     }
 
     override fun onCreateView(
@@ -48,37 +56,38 @@ class EditPageFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
-            binding.loadingIndicator.root.visibility = View.GONE
-            binding.errorIndicator.root.visibility = View.GONE
-            binding.editContent.visibility = View.GONE
             when(page) {
-                is Loadable.Loading -> {
-                    binding.loadingIndicator.root.visibility = View.VISIBLE
-                }
+                is Loadable.Loading -> {}
                 is Loadable.Error -> {
-                    binding.errorIndicator.root.visibility = View.VISIBLE
                     binding.errorIndicator.text.text = page.exception.message
                 }
                 is Loadable.Loaded -> {
-                    binding.editContent.visibility = View.VISIBLE
                     activityViewModel.updateTitle(page.data.title)
-                    if(binding.editContent.toString() != page.data.wikiText)
-                        binding.editContent.setText(page.data.wikiText)
                 }
+            }
+        }
+
+        viewModel.content.observe(viewLifecycleOwner) { content ->
+            when(content) {
+                is Loadable.Loaded -> {
+                    binding.editContent.setText(content.data)
+                }
+                else -> {}
             }
         }
 
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
-            if(page is Loadable.Loaded) {
+            val content = viewModel.content.value
+            if(page is Loadable.Loaded && content is Loadable.Loaded) {
                 binding.loadingIndicator.root.visibility = View.VISIBLE
                 binding.editContent.isEnabled = false
                 binding.fab.isEnabled = false
-                val newPage = page.data.copy(wikiText = binding.editContent.text.toString())
+                viewModel.update(binding.editContent.text.toString())
                 val args = Bundle().apply {
-                    putSerializable("page", newPage)
+                    putSerializable("page", page.data)
+                    putString("content", binding.editContent.text.toString())
                 }
-                viewModel.updatePage(page = newPage)
                 findNavController().navigate(R.id.action_editPageFragment_to_reviewEditFragment, args)
             }
         }
@@ -94,11 +103,6 @@ class EditPageFragment: Fragment() {
                 .show()
         }
 
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("content", binding.editContent.text.toString())
     }
 
     override fun onDestroyView() {

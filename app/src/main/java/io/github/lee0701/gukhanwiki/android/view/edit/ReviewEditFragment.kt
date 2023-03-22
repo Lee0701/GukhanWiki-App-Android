@@ -15,8 +15,11 @@ import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.Page
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBinding
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
+import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 class ReviewEditFragment: Fragment(), WebViewClient.Listener {
@@ -32,14 +35,29 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        webViewRenderer = WebViewRenderer(requireContext(), this)
-        val page = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getSerializable("page", Page::class.java)
+        webViewRenderer = PageWebViewRenderer(requireContext())
+
+        val content = savedInstanceState?.getString("content")
+        if(content != null) {
+            viewModel.updateContent(content)
         } else {
-            arguments?.getSerializable("page") as Page
+            val page = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getSerializable("page", Page::class.java)
+            } else {
+                arguments?.getSerializable("page") as Page
+            }
+            val newContent = arguments?.getString("content").orEmpty()
+            if(page != null) {
+                viewModel.reviewEdit(page, newContent)
+            }
         }
-        if(page != null) {
-            viewModel.reviewEdit(page)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val content = viewModel.content.value
+        if(content is Loadable.Loaded) {
+            outState.putString("content", content.data)
         }
     }
 
@@ -69,25 +87,36 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    webViewRenderer.render(binding.webView, response.data)
+                    val html = webViewRenderer.render(response.data)
+                    binding.webView.webViewClient = WebViewClient(this)
+                    binding.webView.loadDataWithBaseURL(
+                        GukhanWikiApi.DOC_URL.toString(),
+                        html,
+                        "text/html",
+                        "UTF-8",
+                        null,
+                    )
                 }
             }
         }
 
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
-            if(page is Loadable.Loaded)
-                viewModel.updatePage(page.data, binding.summary.text?.toString().orEmpty())
+            val content = viewModel.content.value
+            if(page is Loadable.Loaded && content is Loadable.Loaded)
+                viewModel.updatePage(page.data, content.data, binding.summary.text?.toString().orEmpty())
         }
 
         viewModel.result.observe(viewLifecycleOwner) { response ->
             if(response is Loadable.Error) {
                 val page = viewModel.page.value
+                val content = viewModel.content.value
                 val message = response.exception.message.orEmpty()
-                if(page is Loadable.Loaded) {
+                if(page is Loadable.Loaded && content is Loadable.Loaded) {
                     if(response.exception.message == "captcha") {
                         val args = Bundle().apply {
                             putSerializable("page", page.data)
+                            putString("content", content.data)
                             putString("summary", binding.summary.text.toString())
                         }
                         findNavController().navigate(R.id.action_reviewEditFragment_to_confirmEditFragment, args)

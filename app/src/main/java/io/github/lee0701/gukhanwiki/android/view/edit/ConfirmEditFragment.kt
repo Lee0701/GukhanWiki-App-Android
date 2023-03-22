@@ -1,6 +1,5 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.Page
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentConfirmEditBinding
 import java.net.URL
 
@@ -28,9 +28,7 @@ class ConfirmEditFragment: Fragment() {
     private val viewModel: ConfirmEditViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
-    private lateinit var sharedPreferences: SharedPreferences
-
-    private val WebViewClient = object: WebViewClient() {
+    private val webViewClient = object: WebViewClient() {
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(
             view: WebView?,
@@ -72,9 +70,10 @@ class ConfirmEditFragment: Fragment() {
         } else {
             arguments?.getSerializable("page") as Page
         }
+        val content = arguments?.getString("content").orEmpty()
         val summary = arguments?.getString("summary").orEmpty()
         if(page != null) {
-            viewModel.showConfirmation(page, summary)
+            viewModel.showConfirmation(page, content, summary)
         }
     }
 
@@ -91,7 +90,7 @@ class ConfirmEditFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.webView.settings.javaScriptEnabled = true
-        binding.webView.webViewClient = WebViewClient
+        binding.webView.webViewClient = webViewClient
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE

@@ -1,11 +1,9 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.Page
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -16,15 +14,11 @@ class EditPageViewModel: ViewModel() {
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
 
-    fun updatePageSource(text: String) {
-        val page = page.value
-        if(page is Loadable.Loaded) {
-            _page.postValue(Loadable.Loaded(data = page.data.copy(wikiText = text)))
-        }
-    }
+    private val _content = MutableLiveData<Loadable<String>>()
+    val content: LiveData<Loadable<String>> = _content
 
-    fun updatePage(page: Page) {
-        _page.postValue(Loadable.Loaded(data = page))
+    fun update(content: String) {
+        _content.postValue(Loadable.Loaded(content))
     }
 
     fun loadPageSource(title: String, section: String?) {
@@ -36,10 +30,10 @@ class EditPageViewModel: ViewModel() {
                 if(content?.wikiText == null) {
                     _page.postValue(Loadable.Error(RuntimeException("Result text is null")))
                 } else {
+                    _content.postValue(Loadable.Loaded(content.wikiText))
                     _page.postValue(Loadable.Loaded(
                         Page(
                             title = response.parse.title ?: title,
-                            wikiText = content.wikiText,
                             section = section,
                             revId = response.parse.revId,
                         )
@@ -52,10 +46,6 @@ class EditPageViewModel: ViewModel() {
                 _page.postValue(Loadable.Error(ex))
             }
         }
-    }
-
-    fun restorePageSource(page: Page) {
-        _page.postValue(Loadable.Loaded(page))
     }
 
 }
