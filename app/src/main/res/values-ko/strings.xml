@@ -5,6 +5,7 @@
     <string name="action_accounts">계정</string>
     <string name="action_search">검색</string>
     <string name="action_edit">편집</string>
+    <string name="action_history">문서 역사</string>
     <string name="action_submit">전송</string>
     <string name="action_start">시작하기</string>
     <string name="action_hide_afterwards">다시 표시하지 않기</string>
@@ -24,6 +25,7 @@
     <string name="msg_edit_error">편집을 저장하는 중에 오류가 발생했습니다: %s</string>
     <string name="msg_signin_success">%s 계정으로 로그인했습니다.</string>
     <string name="msg_signout_success">로그아웃했습니다.</string>
+    <string name="msg_signin_failed">로그인에 실패했습니다: %s</string>
     <string name="msg_edit_saved">편집이 저장되었습니다.</string>
     <string name="msg_edit_failed">편집을 저장할 수 없습니다. 이메일 인증 상태를 확인해 주세요.</string>
     <string name="msg_confirm_edit">자동 등록 방지 문제를 풀고 제출해 주세요.</string>
