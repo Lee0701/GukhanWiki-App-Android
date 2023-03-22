@@ -1,6 +1,5 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,9 +15,6 @@ class EditPageViewModel: ViewModel() {
 
     private val _page = MutableLiveData<Loadable<Page>>()
     val page: LiveData<Loadable<Page>> = _page
-
-    private val _bundle = MutableLiveData<Bundle?>()
-    val bundle: LiveData<Bundle?> = _bundle
 
     fun updatePageSource(text: String) {
         val page = page.value
