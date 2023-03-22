@@ -1,0 +1,26 @@
+
+table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+table.wikitable th, table.wikitable td {
+    border: 1px solid #333;
+    background: black;
+    padding: 5px;
+}
+
+table.wikitable th {
+    background: #111;
+}
+
+table.wikitable {
+    margin: 10px 0;
+}
+
+table.infobox {
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    max-width: 26em;
+}
