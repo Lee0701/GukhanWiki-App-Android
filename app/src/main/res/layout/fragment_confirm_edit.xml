@@ -7,28 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".view.view.ViewPageFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingVertical="@dimen/margin_medium"
-            android:paddingHorizontal="@dimen/margin_small">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:text="@string/msg_confirm_edit"
-                android:textColor="@color/black"
-                android:textSize="18sp"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/margin_small" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/margin_medium"
+                android:paddingHorizontal="@dimen/margin_small">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:text="@string/msg_confirm_edit"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_small" />
 
                 <WebView
                     android:id="@+id/web_view"
@@ -37,20 +37,20 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
-                <include
-                    layout="@layout/loading_indicator"
-                    android:id="@+id/loading_indicator"
-                    android:visibility="gone" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <include
-                    layout="@layout/error_indicator"
-                    android:id="@+id/error_indicator"
-                    android:visibility="gone" />
+        </androidx.core.widget.NestedScrollView>
 
-            </FrameLayout>
+        <include
+            layout="@layout/loading_indicator"
+            android:id="@+id/loading_indicator"
+            android:visibility="gone" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        <include
+            layout="@layout/error_indicator"
+            android:id="@+id/error_indicator"
+            android:visibility="gone" />
 
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
