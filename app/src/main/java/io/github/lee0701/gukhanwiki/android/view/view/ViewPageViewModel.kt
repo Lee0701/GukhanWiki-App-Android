@@ -23,13 +23,6 @@ class ViewPageViewModel: ViewModel() {
     private val _hideFab = MutableLiveData<Boolean>()
     val hideFab: LiveData<Boolean> = _hideFab
 
-    fun updatePage(html: String) {
-        val page = content.value
-        if(page is Loadable.Loaded) {
-            _content.postValue(Loadable.Loaded(data = html))
-        }
-    }
-
     fun loadPage(path: String, action: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
