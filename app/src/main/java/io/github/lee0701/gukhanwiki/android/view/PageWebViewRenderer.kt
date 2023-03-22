@@ -1,7 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view
 
 import android.content.Context
-import android.webkit.WebView
 import androidx.annotation.RawRes
 import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.R
@@ -16,15 +15,27 @@ class PageWebViewRenderer(
 ): WebViewRenderer {
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val darkMode = true
 
     override fun render(content: String): String {
         val body = Jsoup.parse(content).body()
         val doc = Document(GukhanWikiApi.DOC_URL.toString())
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
-        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.base))))
-        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.responsive))))
-        doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.wikitable))))
+
+        val arr = context.resources.getStringArray(if(!darkMode) R.array.css_list else R.array.night_css_list)
+        println(arr.toList())
+        val stylesheets = arr.map { filename ->
+            val id = context.resources.getIdentifier(filename, "raw", context.packageName)
+            println("$filename, $id")
+            val stream = context.resources.openRawResource(id)
+            val data = stream.readBytes()
+            stream.close()
+            data.decodeToString()
+        }
+        stylesheets.forEach { stylesheet ->
+            doc.head().appendChild(Element("style").appendChild(DataNode(stylesheet)))
+        }
 
         doc.head().appendChild(Element("style").appendChild(DataNode(loadCustomCss(R.raw.ruby_hide))))
         if(sharedPreferences.getBoolean("ruby_enabled", true)) {
