@@ -1,0 +1,11 @@
+《國漢大百科》를 위한 공식 앱입니다. 편리하게 문서를 열람하거나 수정하실 수 있습니다.
+
+== 공식 앱만의 특장점 ==
+* 웹 버전보다 빠르고 쾌적한 탐색
+* 여러 계정 등록 후 원터치로 전환
+
+== 기타 정보 ==
+* 《國漢大百科》의 웹 버전은 다음 주소에서 확인하실 수 있습니다: https://wiki.xn--9cs231j0ji.xn--p8s937b.net/
+* 《國漢大百科》에 게시된 문서 등 내용은 CC BY-SA 4.0 라이선스로 배포됩니다. 다음 주소에서 확인하실 수 있습니다: https://creativecommons.org/licenses/by-sa/4.0/deed.ko/apps/details?id=io.github.lee0701.converter
+* 앱의 소스코드는 Apache-2.0 라이선스로 공개되어 있습니다. 다음 주소에서 확인하실 수 있습니다: https://github.com/Lee0701/GukhanWiki-App-Android/
+* 《漢字變換器》와 完全히 互換됩니다. 漢字變換器 앱에 관해서는 다음 주소에서 확인하실 수 있습니다: https://play.google.com/store
