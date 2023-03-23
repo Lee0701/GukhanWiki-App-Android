@@ -22,7 +22,7 @@ class SearchFragment: Fragment() {
     private var binding: FragmentSearchBinding? = null
     private val viewModel: SearchViewModel by viewModels()
 
-    private val adapter = SearchAutocompleteAdapter { position, item, goto -> onAutocompleteClicked(position, item, goto) }
+    private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,14 +98,23 @@ class SearchFragment: Fragment() {
         imm?.showSoftInput(binding.searchInput, 0)
     }
 
-    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem, goto: Boolean) {
-        if(goto) {
-            val args = Bundle().apply {
-                putString("title", item.title)
+    private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem) {
+        when(item.action) {
+            SearchAutocompleteItem.Action.GOTO -> {
+                val args = Bundle().apply {
+                    putString("title", item.title)
+                }
+                findNavController().navigate(R.id.action_searchFragment_to_ViewPageFragment, args)
             }
-            findNavController().navigate(R.id.action_searchFragment_to_ViewPageFragment, args)
-        } else {
-            viewModel.autocompleteSelected(item.title)
+            SearchAutocompleteItem.Action.NEW -> {
+                val args = Bundle().apply {
+                    putString("title", item.title)
+                }
+                findNavController().navigate(R.id.action_searchFragment_to_editPageFragment, args)
+            }
+            else -> {
+                viewModel.autocompleteSelected(item.title)
+            }
         }
     }
 

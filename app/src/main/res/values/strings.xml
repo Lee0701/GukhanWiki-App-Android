@@ -14,6 +14,7 @@
     <string name="action_signin">Sign in</string>
     <string name="action_join">Join the wiki</string>
     <string name="action_goto">Go</string>
+    <string name="action_new_doc">New…</string>
     <string name="action_discard_edit">Discard</string>
     <string name="action_keep_editing">Keep editing</string>
 
