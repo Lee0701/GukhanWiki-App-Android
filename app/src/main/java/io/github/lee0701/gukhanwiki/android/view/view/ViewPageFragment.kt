@@ -54,6 +54,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         val argAction = arguments?.getString("action")
         if(argTitle != null) viewModel.loadPage(argTitle, argAction)
         else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
+        activityViewModel.updateTitle(getString(R.string.label_loading))
     }
 
     override fun onCreateView(
@@ -114,6 +115,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Error -> {
+                    activityViewModel.updateTitle(getString(R.string.label_error))
                     binding.errorIndicator.root.visibility = View.VISIBLE
                     binding.errorIndicator.text.text = content.exception.message
                 }
@@ -140,6 +142,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onRefresh() {
         val title = viewModel.title.value ?: return
         viewModel.loadPage(title)
+        activityViewModel.updateTitle(getString(R.string.label_loading))
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {

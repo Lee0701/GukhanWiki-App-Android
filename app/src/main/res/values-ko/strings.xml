@@ -4,6 +4,7 @@
     <string name="action_settings">설정</string>
     <string name="action_accounts">계정</string>
     <string name="action_search">검색</string>
+    <string name="action_open_menu">메뉴 열기</string>
     <string name="action_edit">편집</string>
     <string name="action_history">문서 역사</string>
     <string name="action_submit">전송</string>
@@ -39,6 +40,8 @@
     <string name="review_edit_fragment_label">편집 검토</string>
     <string name="title_authentication_activity">로그인</string>
     <string name="title_activity_settings">설정</string>
+    <string name="label_loading">불러오는 중…</string>
+    <string name="label_error">오류</string>
 
     <string name="switch_account_label">계정 전환</string>
     <string name="authenticator_label">國漢大百科</string>
