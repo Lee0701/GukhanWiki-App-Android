@@ -18,6 +18,11 @@
             android:paddingVertical="@dimen/margin_medium"
             android:paddingHorizontal="@dimen/margin_small">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_preview_alert" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/summary"
                 android:hint="@string/input_summary"
