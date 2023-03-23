@@ -1,11 +1,16 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
 
-    <PreferenceCategory app:title="@string/pref_ruby_header">
+    <PreferenceCategory
+        app:title="@string/pref_ruby_header">
 
         <SwitchPreferenceCompat
             app:key="ruby_enabled"
             app:defaultValue="true"
-            app:title="@string/pref_ruby_enabled_title" />
+            app:title="@string/pref_ruby_enabled_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="ruby_grade"
@@ -13,7 +18,8 @@
             app:entries="@array/pref_ruby_grade_entries"
             app:entryValues="@array/pref_ruby_grade_values"
             app:title="@string/pref_ruby_grade_title"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="ruby_position"
@@ -21,7 +27,29 @@
             app:entries="@array/pref_ruby_position_entries"
             app:entryValues="@array/pref_ruby_position_values"
             app:title="@string/pref_ruby_position_title"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_about_header">
+
+        <Preference
+            app:title="@string/pref_about_app_info_title"
+            app:summary="@string/pref_about_app_info_summary" />
+
+        <io.github.lee0701.gukhanwiki.android.setting.OpenBrowserPreference
+            uri="https://github.com/Lee0701/GukhanWiki-App-Android/blob/main/PRIVACY.md"
+            app:title="@string/pref_about_privacy_policy_title" />
+
+        <io.github.lee0701.gukhanwiki.android.setting.OpenStorePreference
+            uri="https://play.google.com/store/search?q=pub:%E6%9D%8E%EF%BC%81&amp;c=apps"
+            app:title="@string/pref_about_more_apps_title"
+            app:summary="@string/pref_about_more_apps_summary" />
+
+        <io.github.lee0701.gukhanwiki.android.setting.OssLicensesMenuPreference
+            app:title="@string/oss_license_title" />
 
     </PreferenceCategory>
 
