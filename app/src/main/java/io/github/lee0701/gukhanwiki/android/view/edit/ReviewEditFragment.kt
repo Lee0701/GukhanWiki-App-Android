@@ -44,6 +44,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             val page = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arguments?.getSerializable("page", Page::class.java)
             } else {
+                @Suppress("DEPRECATION")
                 arguments?.getSerializable("page") as Page
             }
             val newContent = arguments?.getString("content").orEmpty()

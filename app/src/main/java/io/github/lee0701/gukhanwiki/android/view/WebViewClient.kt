@@ -28,6 +28,8 @@ class WebViewClient(
         }
         return super.shouldOverrideUrlLoading(view, request)
     }
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
     override fun shouldOverrideUrlLoading(
         view: WebView?,
         uri: String?

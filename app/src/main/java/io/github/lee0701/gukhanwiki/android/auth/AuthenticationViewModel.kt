@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.auth
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,7 @@ class AuthenticationViewModel: ViewModel() {
     private val _alert = MutableLiveData<String?>()
     val alert: LiveData<String?> = _alert
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun signIn(username: String, password: String) {
         viewModelScope.launch((Dispatchers.IO)) {
             val response = AccountHelper.signIn(username, password)
@@ -25,7 +27,7 @@ class AuthenticationViewModel: ViewModel() {
                     _alert.postValue(response.exception.message)
                 }
                 is Loadable.Loaded -> {
-                    if(response.data != null) _signedInAccount.postValue(response.data!!)
+                    if(response.data != null) _signedInAccount.postValue(response.data)
                     else _alert.postValue("null")
                     _alert.postValue(null)
                 }
