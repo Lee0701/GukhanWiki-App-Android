@@ -32,7 +32,7 @@
                     android:gravity="top|start"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_fab" />
+                    android:layout_marginBottom="@dimen/margin_fab_space" />
 
             </androidx.core.widget.NestedScrollView>
 
@@ -55,9 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_fab"
+        android:layout_marginRight="@dimen/margin_fab"
+        android:layout_marginBottom="@dimen/margin_fab"
         app:srcCompat="@drawable/baseline_save_as_24"
         app:tint="@color/white"
         app:backgroundTint="?attr/colorPrimaryVariant"
