@@ -7,69 +7,81 @@
     android:layout_height="match_parent"
     tools:context=".auth.AuthenticationActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:paddingHorizontal="@dimen/margin_large">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/title"
-            android:adjustViewBounds="true"
-            android:layout_marginVertical="@dimen/margin_large" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/alert_window"
-            android:textSize="18sp"
-            android:textColor="@color/red_800"
-            android:lines="2"
-            android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/input_username"
-            android:inputType="text"
-            android:hint="@string/input_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_small" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/input_password"
-            android:inputType="textWebPassword"
-            android:hint="@string/input_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_small" />
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:isScrollContainer="false"
+        android:fillViewport="true">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginVertical="@dimen/margin_medium">
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/margin_large">
 
-            <Button
-                android:id="@+id/submit"
-                android:text="@string/action_signin"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="@color/green_500"
-                app:backgroundTintMode="src_over" />
+                android:adjustViewBounds="true"
+                android:src="@drawable/title"
+                android:theme="@style/Theme.GukhanWikiAppAndroid.TitleLogo"
+                android:layout_marginVertical="@dimen/margin_medium" />
 
-            <Button
-                android:id="@+id/join"
-                android:text="@string/action_join"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/alert_window"
+                android:textSize="18sp"
+                android:textColor="@color/red_800"
+                android:lines="2"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/input_username"
+                android:inputType="text"
+                android:hint="@string/input_username"
+                android:imeOptions="flagNoFullscreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="@color/blue_500"
-                app:backgroundTintMode="src_over" />
+                android:layout_marginVertical="@dimen/margin_small" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/input_password"
+                android:inputType="textWebPassword"
+                android:hint="@string/input_password"
+                android:imeOptions="flagNoFullscreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginVertical="@dimen/margin_medium">
+
+                <Button
+                    android:id="@+id/submit"
+                    android:text="@string/action_signin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:backgroundTint="@color/green_500"
+                    app:backgroundTintMode="src_over" />
+
+                <Button
+                    android:id="@+id/join"
+                    android:text="@string/action_join"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:backgroundTint="@color/blue_500"
+                    app:backgroundTintMode="src_over" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
