@@ -2,6 +2,8 @@
 body {
     background: white;
     color: black;
+    /* FloatingActionButton */
+    margin-bottom: 100px;
 }
 
 a {
