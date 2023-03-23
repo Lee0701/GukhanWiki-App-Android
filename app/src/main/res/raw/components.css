@@ -1,0 +1,33 @@
+
+body {
+    background: white;
+    color: black;
+    /* FloatingActionButton */
+    margin-bottom: 100px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.new {
+    color: red;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+blockquote {
+    border: 2px dashed #8884;
+    border-inline-start: 5px solid #222;
+    padding: 10px;
+    background: #8881;
+    text-indent: 0px;
+}
+
+blockquote p {
+    margin: 0px;
+}

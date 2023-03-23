@@ -1,3 +1,15 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_fab">16dp</dimen>
+
+    <dimen name="margin_smaller">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_fab_space">64dp</dimen>
+
+    <dimen name="elevation_button">4dp</dimen>
+
+    <dimen name="line_spacing">12sp</dimen>
+    <dimen name="word_spacing">8sp</dimen>
+    <dimen name="text_size">18sp</dimen>
 </resources>
