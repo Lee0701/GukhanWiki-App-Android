@@ -24,6 +24,9 @@ class ViewPageViewModel: ViewModel() {
     private val _hideFab = MutableLiveData<Boolean>()
     val hideFab: LiveData<Boolean> = _hideFab
 
+    private val _scrollY = MutableLiveData<Int>()
+    val scrollY: LiveData<Int> = _scrollY
+
     fun loadPage(path: String, action: String? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
@@ -57,6 +60,10 @@ class ViewPageViewModel: ViewModel() {
                 _content.postValue(Loadable.Error(ex))
             }
         }
+    }
+
+    fun updateScroll(scrollY: Int) {
+        _scrollY.postValue(scrollY)
     }
 
 }

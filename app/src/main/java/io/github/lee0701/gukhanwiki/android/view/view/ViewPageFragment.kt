@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,15 +18,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
-import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
+import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 
 /**
@@ -39,8 +37,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private val viewModel: ViewPageViewModel by viewModels()
     private val activityViewModel: MainViewModel by activityViewModels()
 
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var renderer: WebViewRenderer
+    private lateinit var webViewRenderer: WebViewRenderer
 
     private var fabExpanded: Boolean = false
     private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabHistory)
@@ -48,12 +45,23 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val context = context ?: return
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        renderer = PageWebViewRenderer(context)
-        val argTitle = arguments?.getString("title")
-        val argAction = arguments?.getString("action")
-        if(argTitle != null) viewModel.loadPage(argTitle, argAction)
-        else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
+        webViewRenderer = PageWebViewRenderer(context)
+        if(viewModel.content.value == null) {
+            val argTitle = arguments?.getString("title")
+            val argAction = arguments?.getString("action")
+            if(argTitle != null) viewModel.loadPage(argTitle, argAction)
+            else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
+        }
+        val scrollY = savedInstanceState?.getInt("scrollY")
+        if(scrollY != null) viewModel.updateScroll(scrollY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val scrollY = binding?.webView?.scrollY
+        if(scrollY != null) {
+            outState.putInt("scrollY", scrollY)
+        }
     }
 
     override fun onCreateView(
@@ -66,12 +74,11 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val binding = binding ?: return
 
         fabExpanded = true
         Handler(Looper.getMainLooper()).postDelayed({
-            initialFabAnimation()?.start()
+            initialFabAnimation().start()
         }, 200)
         binding.fabExpand.setOnClickListener {
             fabAnimation(fabExpanded)?.start()
@@ -121,8 +128,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    val html = renderer.render(content.data.orEmpty())
                     binding.webView.webViewClient = WebViewClient(this)
+                    val html = webViewRenderer.render(content.data.orEmpty())
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.DOC_URL.toString(),
                         html,
@@ -133,10 +140,9 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 }
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+        viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
+            binding.webView.scrollY = scrollY
+        }
     }
 
     override fun onRefresh() {
@@ -145,6 +151,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {
+        viewModel.updateScroll(binding?.webView?.scrollY ?: 0)
         findNavController().navigate(resId, args)
     }
 
@@ -178,8 +185,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         return animatorSet
     }
 
-    private fun initialFabAnimation(): Animator? {
-        val binding = binding ?: return null
+    private fun initialFabAnimation(): Animator {
         val animatorSet = AnimatorSet()
         animatorSet.playSequentially(fabAnimation(true), fabAnimation(false))
         return animatorSet

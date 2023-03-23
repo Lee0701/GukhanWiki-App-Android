@@ -47,17 +47,13 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration.Builder().setFallbackOnNavigateUpListener(listener).build()
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
-        navController.addOnDestinationChangedListener(object: NavController.OnDestinationChangedListener {
-            override fun onDestinationChanged(
-                controller: NavController,
-                destination: NavDestination,
-                arguments: Bundle?
-            ) {
-                val hasTitle = navController.currentBackStackEntry?.arguments?.getString("title") != null
-                if(!hasTitle) binding.toolbar.navigationIcon = null
-                else binding.toolbar.navigationIcon = ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_arrow_back_24)
-            }
-        })
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            val hasTitle =
+                navController.currentBackStackEntry?.arguments?.getString("title") != null
+            if (!hasTitle) binding.toolbar.navigationIcon = null
+            else binding.toolbar.navigationIcon =
+                ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_arrow_back_24)
+        }
 
         viewModel.title.observe(this) { title ->
             this.supportActionBar?.title = title
