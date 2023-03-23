@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.github.lee0701.gukhanwiki.android.databinding.ListitemSearchAutocompleteBinding
 
 class SearchAutocompleteAdapter(
-    private val onClick: (position: Int, item: SearchAutocompleteItem, goto: Boolean) -> Unit
+    private val onClick: (position: Int, item: SearchAutocompleteItem) -> Unit
 ): ListAdapter<SearchAutocompleteItem, SearchAutocompleteAdapter.ItemViewHolder>(ItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -26,21 +26,22 @@ class SearchAutocompleteAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item) { goto -> onClick(position, item, goto) }
+        holder.bind(item) { action -> onClick(position, item) }
     }
 
     class ItemViewHolder(
         itemView: View,
     ): ViewHolder(itemView) {
-        fun bind(item: SearchAutocompleteItem, onClick: (goto: Boolean) -> Unit) {
+        fun bind(item: SearchAutocompleteItem, onClick: (action: SearchAutocompleteItem.Action?) -> Unit) {
             val binding = ListitemSearchAutocompleteBinding.bind(itemView)
             binding.title.text = item.title
-            binding.goTo.visibility = if(item.goto) View.VISIBLE else View.GONE
+            binding.action.visibility = if(item.action != null) View.VISIBLE else View.GONE
+            item.action?.label?.let { binding.action.setText(it) }
             binding.root.setOnClickListener {
-                onClick(false)
+                onClick(null)
             }
-            binding.goTo.setOnClickListener {
-                if(item.goto) onClick(true)
+            binding.action.setOnClickListener {
+                if(item.action != null) onClick(item.action)
             }
         }
     }
