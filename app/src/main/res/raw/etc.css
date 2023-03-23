@@ -1,0 +1,26 @@
+
+.tp_link a:active {
+    color: inherit !important;
+}
+.tp_link a:hover {
+    color: inherit !important;
+}
+.tp_link a:link {
+    color: inherit !important;
+}
+.tp_link a:visited {
+    color: inherit !important;
+}
+
+span.color a {
+    color: inherit !important;
+}
+
+.column-2 > ul { column-count: 2; }
+.column-3 > ul { column-count: 3; }
+.column-4 > ul { column-count: 4; }
+.column-5 > ul { column-count: 5; }
+.column-6 > ul { column-count: 6; }
+@media (max-width: 640px) {
+	[class^="column-"] > ul { column-count: 2 !important; }
+}

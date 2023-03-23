@@ -1,0 +1,11 @@
+
+span.mw-editsection {
+    float: right;
+    font-size: 1rem;
+}
+
+@media screen and (max-width:520px) {
+    .tright, .floatright {
+        float: none;
+    }
+}

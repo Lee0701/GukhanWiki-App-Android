@@ -1,30 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/StartFragment">
+    app:startDestination="@id/ViewPageFragment">
 
     <fragment
-        android:id="@+id/PageViewFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.PageViewFragment"
-        tools:layout="@layout/fragment_page_view">
+        android:id="@+id/ViewPageFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.view.ViewPageFragment"
+        tools:layout="@layout/fragment_view_page">
 
         <action
-            android:id="@+id/action_PageViewFragment_to_StartFragment"
-            app:destination="@id/StartFragment" />
+            android:id="@+id/action_ViewPageFragment_self"
+            app:destination="@id/ViewPageFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
         <action
-            android:id="@+id/action_PageViewFragment_self"
-            app:destination="@id/PageViewFragment" />
+            android:id="@+id/action_ViewPageFragment_self_noanim"
+            app:destination="@id/ViewPageFragment" />
+        <action
+            android:id="@+id/action_ViewPageFragment_to_editPageFragment"
+            app:destination="@id/editPageFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
-        android:id="@+id/StartFragment"
-        android:name="io.github.lee0701.gukhanwiki.android.StartFragment"
-        android:label="@string/start_fragment_label"
-        tools:layout="@layout/fragment_start">
-
+        android:id="@+id/searchResultFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.search.SearchResultFragment"
+        android:label="@string/search_result_fragment_label"
+        tools:layout="@layout/fragment_search_result" >
         <action
-            android:id="@+id/action_StartFragment_to_PageViewFragment"
-            app:destination="@id/PageViewFragment" />
+            android:id="@+id/action_searchResultFragment_to_ViewPageFragment"
+            app:destination="@id/ViewPageFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.search.SearchFragment"
+        android:label="@string/search_fragment_label"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultFragment"
+            app:destination="@id/searchResultFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_ViewPageFragment"
+            app:destination="@id/ViewPageFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_searchFragment"
+        app:destination="@id/searchFragment"
+        app:enterAnim="@anim/slide_from_right"
+        app:exitAnim="@anim/slide_to_left_with_fade"
+        app:popEnterAnim="@anim/slide_from_left_with_fade"
+        app:popExitAnim="@anim/slide_to_right" />
+    <action
+        android:id="@+id/action_global_ViewPageFragment"
+        app:destination="@id/ViewPageFragment"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/editPageFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.EditPageFragment"
+        android:label="@string/edit_fragment_label"
+        tools:layout="@layout/fragment_edit_page" >
+        <action
+            android:id="@+id/action_editPageFragment_to_reviewEditFragment"
+            app:destination="@id/reviewEditFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewEditFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.ReviewEditFragment"
+        android:label="@string/review_edit_fragment_label" >
+        <action
+            android:id="@+id/action_reviewEditFragment_to_confirmEditFragment"
+            app:destination="@id/confirmEditFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left_with_fade"
+            app:popEnterAnim="@anim/slide_from_left_with_fade"
+            app:popExitAnim="@anim/slide_to_right"
+            app:popUpTo="@id/editPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmEditFragment"
+        android:name="io.github.lee0701.gukhanwiki.android.view.edit.ConfirmEditFragment"
+        android:label="ConfirmEditFragment" />
 </navigation>

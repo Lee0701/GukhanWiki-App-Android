@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">國漢大百科</string>
+
+    <string name="action_settings">설정</string>
+    <string name="action_accounts">계정</string>
+    <string name="action_search">검색</string>
+    <string name="action_open_menu">메뉴 열기</string>
+    <string name="action_edit">편집</string>
+    <string name="action_history">문서 역사</string>
+    <string name="action_submit">전송</string>
+    <string name="action_start">시작하기</string>
+    <string name="action_hide_afterwards">다시 표시하지 않기</string>
+    <string name="action_save">저장</string>
+    <string name="action_signin">로그인</string>
+    <string name="action_join">가입하기</string>
+    <string name="action_goto">이동</string>
+    <string name="action_discard_edit">편집 취소</string>
+    <string name="action_keep_editing">계속 편집하기</string>
+
+    <string name="input_username">사용자 이름</string>
+    <string name="input_password">비밀번호</string>
+    <string name="input_summary">여기에 편집 요약을 적어주세요</string>
+
+    <string name="msg_welcome">환영합니다!</string>
+    <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s</string>
+    <string name="msg_edit_error">편집을 저장하는 중에 오류가 발생했습니다: %s</string>
+    <string name="msg_signin_success">%s 계정으로 로그인했습니다.</string>
+    <string name="msg_signout_success">로그아웃했습니다.</string>
+    <string name="msg_signin_failed">로그인에 실패했습니다: %s</string>
+    <string name="msg_edit_saved">편집이 저장되었습니다.</string>
+    <string name="msg_edit_failed">편집을 저장할 수 없습니다. 이메일 인증 상태를 확인해 주세요.</string>
+    <string name="msg_confirm_edit">자동 등록 방지 문제를 풀고 제출해 주세요.</string>
+    <string name="msg_confirm_discard_edit">현재 편집을 취소하시겠습니까?</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="start_fragment_label">國漢大百科</string>
+    <string name="search_fragment_label">검색</string>
+    <string name="search_result_fragment_label">검색 결과</string>
+    <string name="edit_fragment_label">편집</string>
+    <string name="review_edit_fragment_label">편집 검토</string>
+    <string name="title_authentication_activity">로그인</string>
+    <string name="title_activity_settings">설정</string>
+    <string name="label_loading">불러오는 중…</string>
+    <string name="label_error">오류</string>
+
+    <string name="switch_account_label">계정 전환</string>
+    <string name="authenticator_label">國漢大百科</string>
+
+    <string name="anonymous">익명</string>
+    <string name="select_account">계정 선택</string>
+
+    <string name="pref_ruby_header">한자 독음</string>
+    <string name="pref_ruby_enabled_title">한자 독음 표시</string>
+    <string name="pref_ruby_grade_title">독음을 표시할 최소 급수</string>
+    <string name="pref_ruby_position_title">독음 표시 위치</string>
+
+    <string name="pref_ruby_grade_80">8급</string>
+    <string name="pref_ruby_grade_72">7급II</string>
+    <string name="pref_ruby_grade_70">7급</string>
+    <string name="pref_ruby_grade_62">6급II</string>
+    <string name="pref_ruby_grade_60">6급</string>
+    <string name="pref_ruby_grade_52">5급II</string>
+    <string name="pref_ruby_grade_50">5급</string>
+    <string name="pref_ruby_grade_42">4급II</string>
+    <string name="pref_ruby_grade_40">4급</string>
+    <string name="pref_ruby_grade_32">3급II</string>
+    <string name="pref_ruby_grade_30">3급</string>
+    <string name="pref_ruby_grade_20">2급</string>
+    <string name="pref_ruby_grade_10">1급</string>
+    <string name="pref_ruby_grade_0">특급</string>
+    <string name="pref_ruby_grade_none">비표시</string>
+
+    <string name="pref_ruby_position_side">측면</string>
+    <string name="pref_ruby_position_top">상단</string>
+
+</resources>

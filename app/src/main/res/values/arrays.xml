@@ -1,0 +1,64 @@
+<resources>
+    <string-array name="pref_ruby_grade_entries">
+        <item>@string/pref_ruby_grade_80</item>
+        <item>@string/pref_ruby_grade_72</item>
+        <item>@string/pref_ruby_grade_70</item>
+        <item>@string/pref_ruby_grade_62</item>
+        <item>@string/pref_ruby_grade_60</item>
+        <item>@string/pref_ruby_grade_52</item>
+        <item>@string/pref_ruby_grade_50</item>
+        <item>@string/pref_ruby_grade_42</item>
+        <item>@string/pref_ruby_grade_40</item>
+        <item>@string/pref_ruby_grade_32</item>
+        <item>@string/pref_ruby_grade_30</item>
+        <item>@string/pref_ruby_grade_20</item>
+        <item>@string/pref_ruby_grade_10</item>
+        <item>@string/pref_ruby_grade_0</item>
+        <item>@string/pref_ruby_grade_none</item>
+    </string-array>
+
+    <string-array name="pref_ruby_grade_values">
+        <item>80</item>
+        <item>72</item>
+        <item>70</item>
+        <item>62</item>
+        <item>60</item>
+        <item>52</item>
+        <item>50</item>
+        <item>42</item>
+        <item>40</item>
+        <item>32</item>
+        <item>30</item>
+        <item>20</item>
+        <item>10</item>
+        <item>0</item>
+        <item>none</item>
+    </string-array>
+
+    <string-array name="pref_ruby_position_entries">
+        <item>@string/pref_ruby_position_side</item>
+        <item>@string/pref_ruby_position_top</item>
+    </string-array>
+
+    <string-array name="pref_ruby_position_values">
+        <item>side</item>
+        <item>top</item>
+    </string-array>
+
+    <string-array name="css_list">
+        <item>components</item>
+        <item>hlist</item>
+        <item>responsive</item>
+        <item>wikitable</item>
+        <item>etc</item>
+    </string-array>
+
+    <string-array name="night_css_list">
+        <item>components_night</item>
+        <item>hlist</item>
+        <item>responsive</item>
+        <item>wikitable_night</item>
+        <item>etc</item>
+    </string-array>
+
+</resources>
