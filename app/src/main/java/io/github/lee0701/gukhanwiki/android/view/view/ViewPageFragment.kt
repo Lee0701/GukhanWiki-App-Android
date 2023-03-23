@@ -90,6 +90,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
             val args = Bundle().apply {
                 putString("title", title)
             }
+            saveScrollY()
             findNavController().navigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
         }
 
@@ -99,6 +100,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 putString("title", title)
                 putString("action", "history")
             }
+            saveScrollY()
             findNavController().navigate(R.id.action_ViewPageFragment_self, args)
         }
 
@@ -151,12 +153,16 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {
-        viewModel.updateScroll(binding?.webView?.scrollY ?: 0)
+        saveScrollY()
         findNavController().navigate(resId, args)
     }
 
     override fun onStartActivity(intent: Intent) {
         startActivity(intent)
+    }
+
+    private fun saveScrollY() {
+        viewModel.updateScroll(binding?.webView?.scrollY ?: 0)
     }
 
     private fun fabAnimation(expanded: Boolean, duration: Int = 200): Animator? {
