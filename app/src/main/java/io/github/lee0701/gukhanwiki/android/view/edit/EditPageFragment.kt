@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view.edit
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -96,14 +97,7 @@ class EditPageFragment: Fragment() {
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             val context = context ?: return@addCallback
-            MaterialAlertDialogBuilder(context)
-                .setMessage(R.string.msg_confirm_discard_edit)
-                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
-                    findNavController().navigateUp()
-                }
-                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
-                }
-                .show()
+            showAlertDialog(context) { findNavController().navigateUp() }
         }
 
     }
@@ -111,6 +105,20 @@ class EditPageFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    companion object {
+        fun showAlertDialog(context: Context, onDiscard: () -> Unit) {
+            MaterialAlertDialogBuilder(context)
+                .setMessage(R.string.msg_confirm_discard_edit)
+                .setPositiveButton(R.string.action_discard_edit) { _, _ ->
+                    onDiscard()
+                }
+                .setNegativeButton(R.string.action_keep_editing) { _, _ ->
+                }
+                .show()
+        }
+
     }
 
 }

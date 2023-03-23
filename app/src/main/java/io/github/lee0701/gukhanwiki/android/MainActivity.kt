@@ -20,6 +20,7 @@ import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
 import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
+import io.github.lee0701.gukhanwiki.android.view.edit.EditPageFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -121,6 +122,16 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return when (item.itemId) {
+            android.R.id.home -> {
+                if(navController.currentDestination?.id == R.id.editPageFragment) {
+                    EditPageFragment.showAlertDialog(this) {
+                        navController.navigateUp()
+                    }
+                    true
+                } else {
+                    super.onOptionsItemSelected(item)
+                }
+            }
             R.id.action_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
