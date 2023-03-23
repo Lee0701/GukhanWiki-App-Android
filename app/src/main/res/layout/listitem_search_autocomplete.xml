@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        tools:text="@string/label_autocomplete_item" />
+        tools:text="Autocomplete item" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/go_to"

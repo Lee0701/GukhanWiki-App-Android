@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,10 +57,6 @@ class ViewPageViewModel: ViewModel() {
                 _content.postValue(Loadable.Error(ex))
             }
         }
-    }
-
-    fun restorePage(content: String) {
-        _content.postValue(Loadable.Loaded(content))
     }
 
 }
