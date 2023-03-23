@@ -1,4 +1,6 @@
-.idea/
+/.idea/
+/app/development/
+/app/production/
 
 *.iml
 .gradle
