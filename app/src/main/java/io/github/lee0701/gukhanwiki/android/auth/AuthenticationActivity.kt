@@ -21,7 +21,7 @@ class AuthenticationActivity : AppCompatActivity() {
         binding = ActivityAuthenticationBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        binding.inputPassword.setOnEditorActionListener { v, actionId, event ->
+        binding.inputPassword.setOnEditorActionListener { _, _, _ ->
             binding.submit.performClick()
         }
 

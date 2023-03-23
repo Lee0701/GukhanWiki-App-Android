@@ -40,6 +40,8 @@ class ConfirmEditFragment: Fragment() {
             return super.shouldOverrideUrlLoading(view, request)
         }
 
+        @Suppress("DEPRECATION")
+        @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(view: WebView?, strUrl: String?): Boolean {
             if(view != null && strUrl != null) {
                 val url = URL(strUrl)
@@ -61,6 +63,7 @@ class ConfirmEditFragment: Fragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

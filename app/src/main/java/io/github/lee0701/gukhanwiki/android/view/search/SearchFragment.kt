@@ -63,12 +63,12 @@ class SearchFragment: Fragment() {
             findNavController().navigate(R.id.action_searchFragment_to_searchResultFragment, args)
         }
 
-        binding.searchInput.setOnEditorActionListener { v, id, event ->
+        binding.searchInput.setOnEditorActionListener { _, _, _ ->
             gotoSearch(binding.searchInput.text.toString())
             true
         }
 
-        binding.searchInput.setOnKeyListener { v, keyCode, event ->
+        binding.searchInput.setOnKeyListener { _, keyCode, _ ->
             if(keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
                 gotoSearch(binding.searchInput.text.toString())
                 true

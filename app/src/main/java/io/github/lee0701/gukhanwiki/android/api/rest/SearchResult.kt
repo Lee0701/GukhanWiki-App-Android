@@ -23,6 +23,7 @@ data class SearchResult(
         return SearchAutocompleteItem(id = id, title = title)
     }
 
+    @Suppress("DEPRECATION")
     fun toSearchResultItem(): SearchResultItem {
         val thumbnail = thumbnail?.let {
             val stream = GukhanWikiApi.getImageAsStream(it.url)
