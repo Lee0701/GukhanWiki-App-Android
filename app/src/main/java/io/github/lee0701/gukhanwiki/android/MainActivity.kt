@@ -8,16 +8,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
-import io.github.lee0701.gukhanwiki.android.auth.AuthenticationActivity
 import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 
@@ -41,8 +43,21 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        val listener = AppBarConfiguration.OnNavigateUpListener { navController.navigateUp() }
+        appBarConfiguration = AppBarConfiguration.Builder().setFallbackOnNavigateUpListener(listener).build()
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
+
+        navController.addOnDestinationChangedListener(object: NavController.OnDestinationChangedListener {
+            override fun onDestinationChanged(
+                controller: NavController,
+                destination: NavDestination,
+                arguments: Bundle?
+            ) {
+                val hasTitle = navController.currentBackStackEntry?.arguments?.getString("title") != null
+                if(!hasTitle) binding.toolbar.navigationIcon = null
+                else binding.toolbar.navigationIcon = ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_arrow_back_24)
+            }
+        })
 
         viewModel.title.observe(this) { title ->
             this.supportActionBar?.title = title
