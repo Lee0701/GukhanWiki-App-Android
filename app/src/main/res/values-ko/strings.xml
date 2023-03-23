@@ -74,4 +74,12 @@
     <string name="pref_ruby_position_side">측면</string>
     <string name="pref_ruby_position_top">상단</string>
 
+    <string name="pref_about_header">정보</string>
+    <string name="pref_about_app_info_title">國漢大百科 공식 앱</string>
+    <string name="pref_about_app_info_summary">개발자 연락처: hgl1002@naver.com</string>
+    <string name="pref_about_privacy_policy_title">개인정보처리방침</string>
+    <string name="pref_about_more_apps_title">앱 더보기</string>
+    <string name="pref_about_more_apps_summary">개발자의 다른 앱을 확인해 보세요</string>
+    <string name="pref_about_oss_licenses_title">오픈소스 라이선스</string>
+
 </resources>
