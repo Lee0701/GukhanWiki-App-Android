@@ -79,6 +79,13 @@
     <action
         android:id="@+id/action_global_ViewPageFragment"
         app:destination="@id/ViewPageFragment"
+        app:enterAnim="@anim/slide_from_right"
+        app:exitAnim="@anim/slide_to_left_with_fade"
+        app:popEnterAnim="@anim/slide_from_left_with_fade"
+        app:popExitAnim="@anim/slide_to_right" />
+    <action
+        android:id="@+id/action_global_ViewPageFragment_clearStack"
+        app:destination="@id/ViewPageFragment"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
     <fragment

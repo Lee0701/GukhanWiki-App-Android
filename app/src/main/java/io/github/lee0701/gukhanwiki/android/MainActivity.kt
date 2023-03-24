@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         if(action != null && path != null) {
             val decoded = GukhanWikiApi.decodeUriComponent(path).removePrefix(GukhanWikiApi.DOC_PATH)
             val args = Bundle().apply { putString("title", decoded) }
-            navController.navigate(R.id.action_global_ViewPageFragment, args)
+            navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
         }
 
         selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
