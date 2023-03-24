@@ -2,6 +2,7 @@
     <string name="app_name">國漢大百科</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_recent_changes">Recent changes</string>
     <string name="action_accounts">Accounts</string>
     <string name="action_search">Search</string>
     <string name="action_open_menu">Open Menu</string>
