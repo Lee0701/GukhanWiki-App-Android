@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.edit.EditPageFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -37,12 +37,12 @@
             </androidx.core.widget.NestedScrollView>
 
             <include
-                layout="@layout/loading_indicator"
+                layout="@layout/indicator_loading"
                 android:id="@+id/loading_indicator"
                 android:visibility="gone" />
 
             <include
-                layout="@layout/error_indicator"
+                layout="@layout/indicator_error"
                 android:id="@+id/error_indicator"
                 android:visibility="gone" />
 
