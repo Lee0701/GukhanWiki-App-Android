@@ -7,6 +7,8 @@
     <string name="action_open_menu">Open Menu</string>
     <string name="action_edit">Edit</string>
     <string name="action_history">Edit history</string>
+    <string name="action_create_page">Create page</string>
+    <string name="action_talk">Discussion</string>
     <string name="action_start">Start</string>
     <string name="action_hide_afterwards">Don\'t show again</string>
     <string name="action_submit">Submit</string>
@@ -32,6 +34,7 @@
     <string name="msg_edit_failed">Edit failed. Did you verify your email?</string>
     <string name="msg_confirm_edit">Please solve the CAPTCHA and submit.</string>
     <string name="msg_confirm_discard_edit">Do you want to discard the current edit?</string>
+    <string name="msg_page_not_found">Page not found.</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>

@@ -23,12 +23,12 @@
             tools:visibility="visible" />
 
         <include
-            layout="@layout/loading_indicator"
+            layout="@layout/indicator_loading"
             android:id="@+id/loading_indicator"
             android:visibility="gone" />
 
         <include
-            layout="@layout/error_indicator"
+            layout="@layout/indicator_error"
             android:id="@+id/error_indicator"
             android:visibility="gone" />
 

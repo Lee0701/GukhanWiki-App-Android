@@ -7,6 +7,7 @@
     <string name="action_open_menu">메뉴 열기</string>
     <string name="action_edit">편집</string>
     <string name="action_history">문서 역사</string>
+    <string name="action_talk">토론</string>
     <string name="action_submit">전송</string>
     <string name="action_start">시작하기</string>
     <string name="action_hide_afterwards">다시 표시하지 않기</string>

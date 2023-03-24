@@ -40,7 +40,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private lateinit var webViewRenderer: WebViewRenderer
 
     private var fabExpanded: Boolean = false
-    private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabHistory)
+    private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabTalk, binding?.fabHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,9 +113,18 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.updateTitle(title)
         }
+
+        binding.missingPageIndicator.createPage.setOnClickListener {
+            val args = Bundle().apply {
+                putString("title", arguments?.getString("title"))
+            }
+            onNavigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
+        }
+
         viewModel.content.observe(viewLifecycleOwner) { content ->
             binding.loadingIndicator.root.visibility = View.GONE
             binding.errorIndicator.root.visibility = View.GONE
+            binding.missingPageIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
             binding.swipeRefreshLayout.isRefreshing = false
             when(content) {
@@ -124,9 +133,13 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Error -> {
-                    activityViewModel.updateTitle(getString(R.string.label_error))
-                    binding.errorIndicator.root.visibility = View.VISIBLE
-                    binding.errorIndicator.text.text = content.exception.message
+                    if(content.exception.message == "missingtitle") {
+                        binding.missingPageIndicator.root.visibility = View.VISIBLE
+                    } else {
+                        activityViewModel.updateTitle(getString(R.string.label_error))
+                        binding.errorIndicator.root.visibility = View.VISIBLE
+                        binding.errorIndicator.text.text = content.exception.message
+                    }
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
@@ -142,6 +155,16 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 }
             }
         }
+
+        viewModel.associatedPage.observe(viewLifecycleOwner) { title ->
+            binding.fabTalk.setOnClickListener {
+                val args = Bundle().apply {
+                    putString("title", title)
+                }
+                findNavController().navigate(R.id.action_ViewPageFragment_self, args)
+            }
+        }
+
         viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
             binding.webView.scrollY = scrollY
         }

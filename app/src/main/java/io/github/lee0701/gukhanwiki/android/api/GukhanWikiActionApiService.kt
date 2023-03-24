@@ -7,6 +7,15 @@ import retrofit2.http.*
 interface GukhanWikiActionApiService {
 
     @GET("/api.php")
+    suspend fun info(
+        @Query("action") action: String = "query",
+        @Query("format") format: String = "json",
+        @Query("prop") prop: String = "info",
+        @Query("titles") titles: String? = null,
+        @Query("inprop") inprop: String? = null,
+    ): InfoResponse
+
+    @GET("/api.php")
     suspend fun parse(
         @Query("action") action: String = "parse",
         @Query("format") format: String = "json",
