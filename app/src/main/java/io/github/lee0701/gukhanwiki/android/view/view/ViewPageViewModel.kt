@@ -37,11 +37,22 @@ class ViewPageViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _content.postValue(Loadable.Loading())
             try {
-                val response = GukhanWikiApi.actionApiService.parse(page = path)
-                if(response.error != null) {
-                    errorPage(path, action, response)
-                } else {
-                    contentPage(path, action, response)
+                when(action) {
+                    "history" -> {
+                        val response = GukhanWikiApi.clientService.index(action = action, title = path)
+                        val content = renderer.render(response)
+                        _title.postValue(path)
+                        _content.postValue(Loadable.Loaded(content))
+                        _hideFab.postValue(true)
+                    }
+                    else -> {
+                        val response = GukhanWikiApi.actionApiService.parse(page = path)
+                        if(response.error != null) {
+                            errorPage(path, action, response)
+                        } else {
+                            contentPage(path, action, response)
+                        }
+                    }
                 }
             } catch(ex: IOException) {
                 _content.postValue(Loadable.Error(ex))

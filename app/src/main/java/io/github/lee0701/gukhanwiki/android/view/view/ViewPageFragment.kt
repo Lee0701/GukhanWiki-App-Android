@@ -85,25 +85,6 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
             fabExpanded = !fabExpanded
         }
 
-        binding.fabEdit.setOnClickListener {
-            val title = viewModel.title.value ?: return@setOnClickListener
-            val args = Bundle().apply {
-                putString("title", title)
-            }
-            saveScrollY()
-            findNavController().navigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
-        }
-
-        binding.fabHistory.setOnClickListener {
-            val title = viewModel.title.value ?: return@setOnClickListener
-            val args = Bundle().apply {
-                putString("title", title)
-                putString("action", "history")
-            }
-            saveScrollY()
-            findNavController().navigate(R.id.action_ViewPageFragment_self, args)
-        }
-
         binding.swipeRefreshLayout.setOnRefreshListener(this)
 
         viewModel.hideFab.observe(viewLifecycleOwner) { hide ->
@@ -112,13 +93,30 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.updateTitle(title)
-        }
 
-        binding.missingPageIndicator.createPage.setOnClickListener {
-            val args = Bundle().apply {
-                putString("title", arguments?.getString("title"))
+            binding.fabEdit.setOnClickListener {
+                val args = Bundle().apply {
+                    putString("title", title)
+                }
+                saveScrollY()
+                findNavController().navigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
             }
-            onNavigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
+
+            binding.fabHistory.setOnClickListener {
+                val args = Bundle().apply {
+                    putString("title", title)
+                    putString("action", "history")
+                }
+                onNavigate(R.id.action_ViewPageFragment_self, args)
+            }
+
+            binding.missingPageIndicator.createPage.setOnClickListener {
+                val args = Bundle().apply {
+                    putString("title", title)
+                }
+                onNavigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
+            }
+
         }
 
         viewModel.content.observe(viewLifecycleOwner) { content ->
