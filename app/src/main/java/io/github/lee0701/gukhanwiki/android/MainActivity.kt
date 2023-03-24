@@ -132,9 +132,12 @@ class MainActivity : AppCompatActivity() {
                     super.onOptionsItemSelected(item)
                 }
             }
-            R.id.action_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+            R.id.action_search -> {
+                if(navController.currentDestination?.id == R.id.searchFragment) {
+                    navController.navigateUp()
+                } else {
+                    navController.navigate(R.id.action_global_searchFragment)
+                }
                 true
             }
             R.id.action_accounts -> {
@@ -153,12 +156,16 @@ class MainActivity : AppCompatActivity() {
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)
                 true
             }
-            R.id.action_search -> {
-                if(navController.currentDestination?.id == R.id.searchFragment) {
-                    navController.navigateUp()
-                } else {
-                    navController.navigate(R.id.action_global_searchFragment)
+            R.id.action_recent_changes -> {
+                val args = Bundle().apply {
+                    putString("title", "Special:RecentChanges")
                 }
+                navController.navigate(R.id.action_global_ViewPageFragment, args)
+                true
+            }
+            R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
