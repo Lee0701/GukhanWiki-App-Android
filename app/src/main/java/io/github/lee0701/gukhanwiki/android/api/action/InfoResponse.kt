@@ -16,4 +16,5 @@ data class InfoPageResult(
     @SerializedName("pageid") val pageId: Int? = null,
     @SerializedName("text") val text: ParseResultText? = null,
     @SerializedName("associatedpage") val associatedPage: String? = null,
+    @SerializedName("displaytitle") val displayTitle: String? = null,
 )
