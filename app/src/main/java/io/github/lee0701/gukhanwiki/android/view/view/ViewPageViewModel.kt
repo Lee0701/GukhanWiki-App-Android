@@ -80,15 +80,18 @@ class ViewPageViewModel: ViewModel() {
     }
 
     private suspend fun errorPage(path: String, action: String?, response: ParseResponse) {
+        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path)
+        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
+
         val code = response.error?.get("code")
         if(code == "pagecannotexist" || action == "history") {
             val content = GukhanWikiApi.clientService.index(title = path, action = action)
             val renderedContent = renderer.render(content)
-            _title.postValue(path)
+            _title.postValue(title ?: path)
             _content.postValue(Loadable.Loaded(renderedContent))
             _hideFab.postValue(true)
         } else {
-            _title.postValue(path)
+            _title.postValue(title ?: path)
             _content.postValue(Loadable.Error(RuntimeException(code)))
         }
     }
