@@ -26,7 +26,7 @@ class SearchAutocompleteAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item) { action -> onClick(position, item) }
+        holder.bind(item) { onClick(position, item) }
     }
 
     class ItemViewHolder(
