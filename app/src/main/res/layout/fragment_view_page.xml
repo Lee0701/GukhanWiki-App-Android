@@ -53,14 +53,14 @@
         android:orientation="vertical"
         android:layout_marginEnd="@dimen/margin_fab"
         android:layout_marginRight="@dimen/margin_fab"
-        android:paddingBottom="@dimen/margin_fab"
+        android:layout_marginBottom="@dimen/margin_fab"
         android:clipToPadding="false">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_between_fabs"
             app:srcCompat="@drawable/baseline_history_24"
             android:contentDescription="@string/action_history" />
 
@@ -68,7 +68,7 @@
             android:id="@+id/fab_talk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_small"
+            android:layout_marginVertical="@dimen/margin_between_fabs"
             app:srcCompat="@drawable/baseline_message_24"
             android:contentDescription="@string/action_history" />
 
@@ -76,7 +76,7 @@
             android:id="@+id/fab_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_small"
+            android:layout_marginVertical="@dimen/margin_between_fabs"
             app:srcCompat="@drawable/baseline_edit_24"
             android:contentDescription="@string/action_edit" />
 
@@ -84,7 +84,7 @@
             android:id="@+id/fab_expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_between_fabs"
             app:srcCompat="@drawable/baseline_close_24"
             android:contentDescription="@string/action_open_menu" />
 
