@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/margin_between_fabs"
             app:srcCompat="@drawable/baseline_message_24"
-            android:contentDescription="@string/action_history" />
+            android:contentDescription="@string/action_talk" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_edit"
