@@ -27,7 +27,11 @@
         <item name="bottomSheetDialogTheme">@style/Theme.GukhanWikiAppAndroid.BottomSheetDialog</item>
 
         <item name="preferenceStyle">@style/Theme.GukhanWikiAppAndroid.Preference</item>
+        <item name="android:preferenceStyle">@style/Theme.GukhanWikiAppAndroid.Preference</item>
         <item name="preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
+        <item name="android:preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
+        <item name="preferenceScreenStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Screen</item>
+        <item name="android:preferenceScreenStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Screen</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.NoActionBar">
@@ -84,10 +88,16 @@
 
     <style name="Theme.GukhanWikiAppAndroid.Preference" parent="Preference">
         <item name="android:textColor">@color/black</item>
+        <item name="iconSpaceReserved">false</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Preference.Category" parent="Preference.Category">
         <item name="android:textColor">@color/gray_700</item>
+        <item name="iconSpaceReserved">false</item>
+    </style>
+
+    <style name="Theme.GukhanWikiAppAndroid.Preference.Screen" parent="Preference.PreferenceScreen">
+        <item name="iconSpaceReserved">false</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
