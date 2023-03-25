@@ -1,0 +1,23 @@
+
+#catlinks {
+    border: 1px solid #333;
+    background: #111;
+    margin: 16px 0px;
+    padding: 8px 16px;
+}
+#catlinks li {
+    display: inline;
+}
+#catlinks ul {
+    display: inline;
+    padding: 0;
+}
+#catlinks li:after {
+    content: " · ";
+}
+#catlinks li:last-child:after {
+    content: none;
+}
+#mw-hidden-catlinks {
+    display: none;
+}
