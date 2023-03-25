@@ -35,7 +35,7 @@ android {
             buildConfigField 'String', 'DOC_PATH', "\"${properties.getProperty("api.doc-path")}\""
             manifestPlaceholders = [
                     hostName: "${properties.getProperty("api.host")}",
-                    altHostName: "wiki.韓國語.漢字.net",
+                    altHostName: "${properties.getProperty("api.host")}",
             ]
             resValue "bool", "altHostEnabled", "false"
         }
