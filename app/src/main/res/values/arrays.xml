@@ -50,6 +50,7 @@
         <item>hlist</item>
         <item>responsive</item>
         <item>wikitable</item>
+        <item>catlinks</item>
         <item>etc</item>
     </string-array>
 
@@ -58,6 +59,7 @@
         <item>hlist</item>
         <item>responsive</item>
         <item>wikitable_night</item>
+        <item>catlinks_night</item>
         <item>etc</item>
     </string-array>
 
