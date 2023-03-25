@@ -39,16 +39,16 @@
             app:title="@string/pref_about_app_info_title"
             app:summary="@string/pref_about_app_info_summary" />
 
-        <io.github.lee0701.gukhanwiki.android.setting.OpenBrowserPreference
+        <io.github.lee0701.gukhanwiki.android.settings.OpenBrowserPreference
             uri="https://github.com/Lee0701/GukhanWiki-App-Android/blob/main/PRIVACY.md"
             app:title="@string/pref_about_privacy_policy_title" />
 
-        <io.github.lee0701.gukhanwiki.android.setting.OpenStorePreference
+        <io.github.lee0701.gukhanwiki.android.settings.OpenStorePreference
             uri="https://play.google.com/store/search?q=pub:%E6%9D%8E%EF%BC%81&amp;c=apps"
             app:title="@string/pref_about_more_apps_title"
             app:summary="@string/pref_about_more_apps_summary" />
 
-        <io.github.lee0701.gukhanwiki.android.setting.OssLicensesMenuPreference
+        <io.github.lee0701.gukhanwiki.android.settings.OssLicensesMenuPreference
             app:title="@string/oss_license_title" />
 
     </PreferenceCategory>
