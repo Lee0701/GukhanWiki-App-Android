@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: app/build/outputs/bundle/productionRelease/app-release.aab
+          path: app/build/outputs/bundle/productionRelease/app-production-release.aab.aab
 
       - name: Create service_account.json
         id: createServiceAccount
@@ -59,6 +59,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: io.github.lee0701.gukhanwiki.android
-          releaseFiles: app/build/outputs/bundle/productionRelease/app-release.aab
+          releaseFiles: app/build/outputs/bundle/productionRelease/app-production-release.aab.aab
           track: internal
           status: completed
