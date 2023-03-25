@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.SeonbiApiService
 import io.github.lee0701.gukhanwiki.android.api.action.Page
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +37,8 @@ class ReviewEditViewModel: ViewModel() {
             )
             val result = response.parse?.text?.text
             if(result != null) {
-                _html.postValue(Loadable.Loaded(result))
+                val seonbiResult = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(result)).resultHtml ?: result
+                _html.postValue(Loadable.Loaded(seonbiResult))
             }
         }
     }

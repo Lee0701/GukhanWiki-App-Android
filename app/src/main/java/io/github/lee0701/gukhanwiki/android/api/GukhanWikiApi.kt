@@ -21,10 +21,12 @@ object GukhanWikiApi {
     const val HOST = BuildConfig.API_HOST
     const val REST_BASE_PATH = BuildConfig.REST_BASE_PATH
     const val ACTION_BASE_PATH = BuildConfig.ACTION_BASE_PATH
+    const val SEONBI_BASE_PATH = BuildConfig.SEONBI_BASE_PATH
     const val DOC_PATH = BuildConfig.DOC_PATH
 
     val REST_API_URL = URL(PROTOCOL, HOST, REST_BASE_PATH)
     val ACTION_API_URL = URL(PROTOCOL, HOST, ACTION_BASE_PATH)
+    val SEONBI_API_URL = URL(PROTOCOL, HOST, ACTION_BASE_PATH)
     val CLIENT_URL = URL(PROTOCOL, HOST, "/")
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
@@ -67,6 +69,17 @@ object GukhanWikiApi {
     }
     val clientService: GukhanWikiClientService by lazy {
         clientRetrofit.create(GukhanWikiClientService::class.java)
+    }
+    private val seonbiRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(SEONBI_API_URL)
+            .client(okHttpClient)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    val seonbiService: SeonbiApiService by lazy {
+        seonbiRetrofit.create(SeonbiApiService::class.java)
     }
 
     fun getImageAsStream(url: String): InputStream? {
