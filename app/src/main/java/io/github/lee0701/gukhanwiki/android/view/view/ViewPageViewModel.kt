@@ -68,13 +68,18 @@ class ViewPageViewModel: ViewModel() {
         val associatedPage = infoResponse.query?.pages?.values?.firstOrNull()?.associatedPage
         if(associatedPage != null) _associatedPage.postValue(associatedPage!!)
 
+//        val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, prop = "categories")
+//        val categories = categoryResponse.parse?.categories?.filter { it.hidden != null }?.mapNotNull { it.name } ?: emptyList()
+        val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, prop = "categorieshtml")
+        val categories = categoryResponse.parse?.categoriesHtml?.html.orEmpty()
+
         val title = response.parse?.title
         val content = response.parse?.text?.text
         if(content == null) {
             _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
         } else {
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Loaded(content))
+            _content.postValue(Loadable.Loaded(content + categories))
             _hideFab.postValue(false)
         }
     }

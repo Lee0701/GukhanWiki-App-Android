@@ -13,6 +13,8 @@ data class ParseResult(
     @SerializedName("revid") val revId: Int? = null,
     @SerializedName("text") val text: ParseResultText? = null,
     @SerializedName("wikitext") val wikiText: ParseResultWikiText? = null,
+    @SerializedName("categories") val categories: List<ParseResultCategory>? = null,
+    @SerializedName("categorieshtml") val categoriesHtml: ParseResultCategoriesHtml? = null,
 )
 
 data class ParseResultWikiText(
@@ -21,4 +23,14 @@ data class ParseResultWikiText(
 
 data class ParseResultText(
     @SerializedName("*") val text: String? = null,
+)
+
+data class ParseResultCategory(
+    @SerializedName("sortkey") val sortKey: String? = null,
+    @SerializedName("hidden") val hidden: String? = null,
+    @SerializedName("*") val name: String? = null,
+)
+
+data class ParseResultCategoriesHtml(
+    @SerializedName("*") val html: String? = null,
 )
