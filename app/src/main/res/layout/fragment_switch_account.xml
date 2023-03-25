@@ -33,8 +33,8 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/margin_small"
             android:scaleType="fitCenter"
-            android:src="@drawable/baseline_add_circle_24"
-            android:tint="?colorOnPrimary"
+            app:srcCompat="@drawable/baseline_add_circle_24"
+            app:tint="?colorOnPrimary"
             android:background="?selectableItemBackground" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -44,8 +44,8 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/margin_small"
             android:scaleType="fitCenter"
-            android:src="@drawable/baseline_logout_24"
-            android:tint="?colorOnPrimary"
+            app:srcCompat="@drawable/baseline_logout_24"
+            app:tint="?colorOnPrimary"
             android:background="?selectableItemBackground" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -39,7 +39,7 @@
                 android:layout_height="32dp"
                 android:layout_margin="@dimen/margin_small"
                 android:layout_gravity="center"
-                android:src="@drawable/baseline_cancel_24"
+                app:srcCompat="@drawable/baseline_cancel_24"
                 android:background="?selectableItemBackground"
                 android:scaleType="fitCenter" />
 

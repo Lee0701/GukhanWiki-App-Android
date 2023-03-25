@@ -18,7 +18,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/title"
-            android:src="@drawable/title"
+            app:srcCompat="@drawable/title"
             android:adjustViewBounds="true"
             android:theme="@style/Theme.GukhanWikiAppAndroid.TitleLogo"
             android:layout_width="match_parent"

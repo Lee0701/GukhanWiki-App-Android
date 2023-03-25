@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/title"
+                app:srcCompat="@drawable/title"
                 android:theme="@style/Theme.GukhanWikiAppAndroid.TitleLogo"
                 android:layout_marginVertical="@dimen/margin_medium" />
 
@@ -36,6 +36,7 @@
                 android:textColor="@color/red_800"
                 android:lines="2"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
