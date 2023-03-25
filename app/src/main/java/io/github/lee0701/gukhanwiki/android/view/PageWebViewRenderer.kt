@@ -29,6 +29,8 @@ class PageWebViewRenderer(
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
 
+        doc.head().appendChild(Element("script").appendChild(DataNode(loadCustomJs(R.raw.module))))
+
         val textSize = sharedPreferences.getString("display_text_size", "1.0")?.toFloat() ?: 1.0f
         val fabMargin = if(this.fabMargin) 100 else 0
         val inlineCss = """
@@ -43,10 +45,7 @@ class PageWebViewRenderer(
         val arr = context.resources.getStringArray(if(!nightMode) R.array.css_list else R.array.night_css_list)
         val stylesheets = arr.map { filename ->
             val id = context.resources.getIdentifier(filename, "raw", context.packageName)
-            val stream = context.resources.openRawResource(id)
-            val data = stream.readBytes()
-            stream.close()
-            data.decodeToString()
+            loadCustomCss(id)
         }
         stylesheets.forEach { stylesheet ->
             doc.head().appendChild(Element("style").appendChild(DataNode(stylesheet)))
@@ -77,6 +76,13 @@ class PageWebViewRenderer(
     }
 
     private fun loadCustomCss(@RawRes id: Int): String {
+        val stream = context.resources.openRawResource(id)
+        val data = stream.readBytes()
+        stream.close()
+        return data.decodeToString()
+    }
+
+    private fun loadCustomJs(@RawRes id: Int): String {
         val stream = context.resources.openRawResource(id)
         val data = stream.readBytes()
         stream.close()

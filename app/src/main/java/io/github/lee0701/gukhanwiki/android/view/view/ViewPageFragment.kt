@@ -186,8 +186,15 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onCiteClicked(id: Int) {
         val title = getString(R.string.footnote, id)
         val html = webViewRendererWithoutFabMargin.render(references[id] ?: return).html()
-        val bottomSheet = FootnoteBottomSheet(title, html)
+        val bottomSheet = FootnoteBottomSheet(title, html) { gotoRef(id) }
         bottomSheet.show(childFragmentManager, FootnoteBottomSheet.TAG)
+    }
+
+    private fun gotoRef(id: Int) {
+        val webView = binding?.webView ?: return
+        val suffix = "cite_note-$id"
+        val url = "javascript:scrollToElement(\"$suffix\");"
+        webView.loadUrl(url)
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {

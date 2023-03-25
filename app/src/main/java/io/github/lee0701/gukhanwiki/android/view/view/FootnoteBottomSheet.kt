@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.view.view
 
+import android.accounts.Account
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentFootnoteBinding
 class FootnoteBottomSheet(
     val title: String,
     val content: String,
+    private val onClick: () -> Unit,
 ): BottomSheetDialogFragment() {
 
     private var binding: FragmentFootnoteBinding? = null
@@ -35,6 +37,7 @@ class FootnoteBottomSheet(
             "UTF-8",
             null,
         )
+        binding.gotoText.setOnClickListener { onClick() }
     }
 
     override fun onDestroy() {

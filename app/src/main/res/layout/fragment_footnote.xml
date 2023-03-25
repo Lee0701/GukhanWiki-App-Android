@@ -28,6 +28,17 @@
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="@dimen/margin_medium" />
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/goto_text"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/margin_small"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/baseline_read_more_24"
+            app:tint="?colorOnPrimary"
+            android:background="?selectableItemBackground" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <WebView
