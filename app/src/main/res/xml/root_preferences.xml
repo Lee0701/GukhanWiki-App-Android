@@ -8,7 +8,7 @@
 
         <ListPreference
             app:key="display_text_size"
-            app:defaultValue="18"
+            app:defaultValue="1.1"
             app:entries="@array/pref_display_text_size_entries"
             app:entryValues="@array/pref_display_text_size_values"
             app:title="@string/pref_display_text_size_title"
