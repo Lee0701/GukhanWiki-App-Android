@@ -41,7 +41,7 @@ class ViewPageViewModel: ViewModel() {
                 when(action) {
                     "history" -> {
                         val response = GukhanWikiApi.clientService.index(action = action, title = path)
-                        val content = renderer.render(response)
+                        val content = renderer.render(response).html()
                         _title.postValue(path)
                         _content.postValue(Loadable.Loaded(content))
                         _hideFab.postValue(true)
@@ -95,7 +95,7 @@ class ViewPageViewModel: ViewModel() {
         val code = response.error?.get("code")
         if(code == "pagecannotexist" || action == "history") {
             val content = GukhanWikiApi.clientService.index(title = path, action = action)
-            val renderedContent = renderer.render(content)
+            val renderedContent = renderer.render(content).html()
             _title.postValue(title ?: path)
             _content.postValue(Loadable.Loaded(renderedContent))
             _hideFab.postValue(true)

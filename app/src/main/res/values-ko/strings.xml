@@ -54,6 +54,7 @@
 
     <string name="anonymous">익명</string>
     <string name="select_account">계정 선택</string>
+    <string name="footnote">각주 #%d</string>
 
 
     <string name="pref_display_header">화면 표시</string>
