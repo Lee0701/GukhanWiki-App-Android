@@ -33,7 +33,11 @@ android {
             buildConfigField 'String', 'REST_BASE_PATH', "\"${properties.getProperty("api.rest-base-path")}\""
             buildConfigField 'String', 'ACTION_BASE_PATH', "\"${properties.getProperty("api.action-base-path")}\""
             buildConfigField 'String', 'DOC_PATH', "\"${properties.getProperty("api.doc-path")}\""
-            manifestPlaceholders = [hostName: "${properties.getProperty("api.host")}"]
+            manifestPlaceholders = [
+                    hostName: "${properties.getProperty("api.host")}",
+                    altHostName: "wiki.韓國語.漢字.net",
+            ]
+            resValue "bool", "altHostEnabled", "false"
         }
         production {
             dimension "server"
@@ -42,7 +46,11 @@ android {
             buildConfigField 'String', 'REST_BASE_PATH', "\"/rest.php/v1/\""
             buildConfigField 'String', 'ACTION_BASE_PATH', "\"/api.php/\""
             buildConfigField 'String', 'DOC_PATH', "\"/wiki/\""
-            manifestPlaceholders = [hostName: "wiki.xn--9cs231j0ji.xn--p8s937b.net"]
+            manifestPlaceholders = [
+                    hostName: "wiki.xn--9cs231j0ji.xn--p8s937b.net",
+                    altHostName: "wiki.韓國語.漢字.net",
+            ]
+            resValue "bool", "altHostEnabled", "true"
         }
     }
     buildTypes {

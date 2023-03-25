@@ -21,26 +21,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GukhanWikiAppAndroid"
         tools:targetApi="31">
+
         <activity
             android:name=".StartActivity"
             android:exported="false" />
+
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.GukhanWikiAppAndroid"
             android:label="@string/title_activity_settings" />
+
         <activity
             android:name=".auth.AuthenticationActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_authentication_activity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.GukhanWikiAppAndroid.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -55,6 +59,34 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <activity-alias
+            android:name=".MainActivityAlias"
+            android:targetActivity=".MainActivity"
+            android:enabled="@bool/altHostEnabled"
+            android:exported="true"
+            android:theme="@style/Theme.GukhanWikiAppAndroid.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${hostName}"
+                    android:pathPrefix="/wiki"
+                    android:scheme="https" />
+                <data
+                    android:host="${altHostName}"
+                    android:pathPrefix="/wiki"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity-alias>
 
         <service
             android:name=".auth.AuthenticatorService"
