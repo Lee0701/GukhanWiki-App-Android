@@ -55,6 +55,15 @@
     <string name="anonymous">익명</string>
     <string name="select_account">계정 선택</string>
 
+
+    <string name="pref_display_header">화면 표시</string>
+    <string name="pref_display_text_size_title">글자 크기</string>
+    <string name="pref_display_text_size_smaller">더 작게</string>
+    <string name="pref_display_text_size_small">작게</string>
+    <string name="pref_display_text_size_medium">보통</string>
+    <string name="pref_display_text_size_large">크게</string>
+    <string name="pref_display_text_size_larger">더 크게</string>
+
     <string name="pref_ruby_header">한자 독음</string>
     <string name="pref_ruby_enabled_title">한자 독음 표시</string>
     <string name="pref_ruby_grade_title">독음을 표시할 최소 급수</string>

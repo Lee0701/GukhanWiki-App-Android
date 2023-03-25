@@ -58,6 +58,14 @@
     <string name="account_type" translatable="false">io.github.lee0701.gukhanwiki.android</string>
 
 
+    <string name="pref_display_header">Display</string>
+    <string name="pref_display_text_size_title">Text size</string>
+    <string name="pref_display_text_size_smaller">Smaller</string>
+    <string name="pref_display_text_size_small">Small</string>
+    <string name="pref_display_text_size_medium">Medium</string>
+    <string name="pref_display_text_size_large">Large</string>
+    <string name="pref_display_text_size_larger">Larger</string>
+
     <string name="pref_ruby_header">Ruby</string>
     <string name="pref_ruby_enabled_title">Display ruby (Hanja reading)</string>
     <string name="pref_ruby_grade_title">Minimal grade for ruby display</string>
