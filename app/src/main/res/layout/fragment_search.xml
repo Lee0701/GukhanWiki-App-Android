@@ -24,6 +24,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/search_input"
                 android:inputType="text"
+                android:hint="@string/label_search"
                 android:maxLines="1"
                 android:padding="@dimen/margin_small"
                 android:layout_width="0dp"
@@ -35,6 +36,7 @@
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/search_clear"
+                android:contentDescription="@string/action_clear"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_margin="@dimen/margin_small"
