@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.action.CategoryMembersItem
 import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
 import io.github.lee0701.gukhanwiki.android.view.SimplePageRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
@@ -68,10 +69,13 @@ class ViewPageViewModel: ViewModel() {
         val associatedPage = infoResponse.query?.pages?.values?.firstOrNull()?.associatedPage
         if(associatedPage != null) _associatedPage.postValue(associatedPage!!)
 
-//        val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, prop = "categories")
-//        val categories = categoryResponse.parse?.categories?.filter { it.hidden != null }?.mapNotNull { it.name } ?: emptyList()
         val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, prop = "categorieshtml")
         val categories = categoryResponse.parse?.categoriesHtml?.html.orEmpty()
+
+        val categoryMembers = getCategoryMembers(path)
+        val categoryMembersContent =
+            if(categoryMembers.isEmpty()) ""
+            else "<ul>" + categoryMembers.joinToString("") { formatCategoryMember(it) } + "</ul>"
 
         val title = response.parse?.title
         val content = response.parse?.text?.text
@@ -79,7 +83,7 @@ class ViewPageViewModel: ViewModel() {
             _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
         } else {
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Loaded(content + categories))
+            _content.postValue(Loadable.Loaded(content + categoryMembersContent + categories))
             _hideFab.postValue(false)
         }
     }
@@ -103,6 +107,24 @@ class ViewPageViewModel: ViewModel() {
 
     fun updateScroll(scrollY: Int) {
         _scrollY.postValue(scrollY)
+    }
+
+    private suspend fun getCategoryMembers(path: String): List<CategoryMembersItem> {
+        var cmContinue: String? = null
+        val result = mutableListOf<CategoryMembersItem>()
+        do {
+            val categoryMembersResponse = GukhanWikiApi.actionApiService.categoryMembers(
+                cmTitle = path, cmLimit = 20, cmContinue = cmContinue)
+            cmContinue = categoryMembersResponse.queryContinue?.cmContinue
+            result += categoryMembersResponse.result?.categoryMembers ?: emptyList()
+        } while(cmContinue != null)
+        return result
+    }
+
+    private fun formatCategoryMember(item: CategoryMembersItem): String {
+        val title = item.title ?: return ""
+        val url = GukhanWikiApi.DOC_URL.toString() + GukhanWikiApi.encodeUriComponent(title)
+        return "<li><a href=\"$url\">$title</a></li>"
     }
 
 }
