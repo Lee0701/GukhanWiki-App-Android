@@ -38,6 +38,8 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     private val activityViewModel: MainViewModel by activityViewModels()
 
     private lateinit var webViewRenderer: WebViewRenderer
+    private lateinit var webViewRendererWithoutFabMargin: WebViewRenderer
+    private val references: MutableMap<Int, String> = mutableMapOf()
 
     private var fabExpanded: Boolean = false
     private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabTalk, binding?.fabHistory)
@@ -46,6 +48,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         super.onCreate(savedInstanceState)
         val context = context ?: return
         webViewRenderer = PageWebViewRenderer(context)
+        webViewRendererWithoutFabMargin = PageWebViewRenderer(context, false)
         if(viewModel.content.value == null) {
             val argTitle = arguments?.getString("title")
             val argAction = arguments?.getString("action")
@@ -142,7 +145,14 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
                     binding.webView.webViewClient = WebViewClient(this)
-                    val html = webViewRenderer.render(content.data.orEmpty())
+                    val rendered = webViewRenderer.render(content.data.orEmpty())
+                    rendered.select("li[id^=\"cite_note-\"]").forEach { item ->
+                        val href = item.select("span.mw-cite-backlink > a")
+                        val html = item.select("span.reference-text").html()
+                        val id = href.attr("href").removePrefix("#cite_ref-").toIntOrNull()
+                        if(id != null) references += id to html
+                    }
+                    val html = rendered.html()
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.DOC_URL.toString(),
                         html,
@@ -171,6 +181,13 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onRefresh() {
         val title = viewModel.title.value ?: return
         viewModel.loadPage(title)
+    }
+
+    override fun onCiteClicked(id: Int) {
+        val title = getString(R.string.footnote, id)
+        val html = webViewRendererWithoutFabMargin.render(references[id] ?: return).html()
+        val bottomSheet = FootnoteBottomSheet(title, html)
+        bottomSheet.show(childFragmentManager, FootnoteBottomSheet.TAG)
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {

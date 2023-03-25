@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element
 
 class PageWebViewRenderer(
     private val context: Context,
+    private val fabMargin: Boolean = true,
 ): WebViewRenderer {
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -22,20 +23,22 @@ class PageWebViewRenderer(
         else -> false
     } }
 
-    override fun render(content: String): String {
+    override fun render(content: String): Document {
         val body = Jsoup.parse(content).body()
         val doc = Document(GukhanWikiApi.DOC_URL.toString())
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
 
         val textSize = sharedPreferences.getString("display_text_size", "1.0")?.toFloat() ?: 1.0f
-
-        val textSizeCss = """
+        val fabMargin = if(this.fabMargin) 100 else 0
+        val inlineCss = """
             body {
                 font-size: ${textSize}rem;
+                /* FloatingActionButton */
+                margin-bottom: ${fabMargin}px;
             }
         """.trimIndent()
-        doc.head().appendChild(Element("style").appendChild(DataNode(textSizeCss)))
+        doc.head().appendChild(Element("style").appendChild(DataNode(inlineCss)))
 
         val arr = context.resources.getStringArray(if(!nightMode) R.array.css_list else R.array.night_css_list)
         val stylesheets = arr.map { filename ->
@@ -62,7 +65,15 @@ class PageWebViewRenderer(
             }
             doc.head().appendChild(Element("style").appendChild(DataNode(rubyShow.joinToString("\n"))))
         }
-        return doc.html()
+
+        // Cite note processing (they would be intercepted on click to display the reference as bottom sheet)
+        doc.select("a[href^=\"#cite_note-\"]").forEach { a ->
+            val attr = a.attr("href")
+            val value = "/" + attr.removePrefix("#")
+            a.attr("href", value)
+        }
+
+        return doc
     }
 
     private fun loadCustomCss(@RawRes id: Int): String {
