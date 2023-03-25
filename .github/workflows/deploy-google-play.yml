@@ -20,6 +20,18 @@ jobs:
           distribution: 'adopt' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Generate build number
+        id: buildnumber
+        uses: onyxmueller/build-tag-number@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump version code
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{ steps.buildnumber.outputs.build_number }}
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
