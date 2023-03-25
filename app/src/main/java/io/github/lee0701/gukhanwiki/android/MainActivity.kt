@@ -83,14 +83,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val action = intent?.action
-        val path = intent?.data?.path
-        if(action != null && path != null) {
-            val decoded = GukhanWikiApi.decodeUriComponent(path).removePrefix(GukhanWikiApi.DOC_PATH)
-            val args = Bundle().apply { putString("title", decoded) }
-            navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
-        }
-
         selectedAccountIndex = preference.getInt("account_last_used", selectedAccountIndex)
         val account = AccountHelper.getAccounts()?.getOrNull(selectedAccountIndex)
         val password = account?.let { AccountHelper.getPassword(it) }
@@ -98,10 +90,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.signIn(account.name, password)
         }
 
-        val startpageClosed = viewModel.startpageClosed.value ?: false
-        if(!preference.getBoolean("startpage_hide", false) && !startpageClosed) {
-            startActivity(Intent(this, StartActivity::class.java))
-            viewModel.setStartpageClosed()
+        val action = intent?.action
+        val path = intent?.data?.path
+        if(action != null && path != null) {
+            val decoded = GukhanWikiApi.decodeUriComponent(path).removePrefix(GukhanWikiApi.DOC_PATH)
+            val args = Bundle().apply { putString("title", decoded) }
+            navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
+        } else {
+            val startpageClosed = viewModel.startpageClosed.value ?: false
+            if(!preference.getBoolean("startpage_hide", false) && !startpageClosed) {
+                startActivity(Intent(this, StartActivity::class.java))
+                viewModel.setStartpageClosed()
+            }
         }
 
     }
