@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity() {
             val decoded = GukhanWikiApi.decodeUriComponent(path).removePrefix(GukhanWikiApi.DOC_PATH)
             val args = Bundle().apply { putString("title", decoded) }
             navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
+            intent?.action = null
+            intent?.data = null
         } else {
             val startpageClosed = viewModel.startpageClosed.value ?: false
             if(!preference.getBoolean("startpage_hide", false) && !startpageClosed) {
