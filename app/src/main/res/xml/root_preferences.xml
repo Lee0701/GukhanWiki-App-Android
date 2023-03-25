@@ -4,6 +4,19 @@
     app:iconSpaceReserved="false">
 
     <PreferenceCategory
+        app:title="@string/pref_display_header">
+
+        <ListPreference
+            app:key="display_text_size"
+            app:defaultValue="18"
+            app:entries="@array/pref_display_text_size_entries"
+            app:entryValues="@array/pref_display_text_size_values"
+            app:title="@string/pref_display_text_size_title"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:title="@string/pref_ruby_header">
 
         <SwitchPreferenceCompat

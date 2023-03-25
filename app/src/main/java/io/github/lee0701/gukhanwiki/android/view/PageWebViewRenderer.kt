@@ -28,6 +28,16 @@ class PageWebViewRenderer(
         doc.outputSettings(Document.OutputSettings().prettyPrint(false))
         doc.appendChild(body)
 
+        val textSize = sharedPreferences.getString("display_text_size", "1.0")?.toFloat() ?: 1.0f
+
+        println(textSize)
+        val textSizeCss = """
+            body {
+                font-size: ${textSize}rem;
+            }
+        """.trimIndent()
+        doc.head().appendChild(Element("style").appendChild(DataNode(textSizeCss)))
+
         val arr = context.resources.getStringArray(if(!nightMode) R.array.css_list else R.array.night_css_list)
         val stylesheets = arr.map { filename ->
             val id = context.resources.getIdentifier(filename, "raw", context.packageName)
