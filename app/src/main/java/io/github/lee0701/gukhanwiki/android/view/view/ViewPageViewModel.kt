@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Loadable
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.api.SeonbiApiService
 import io.github.lee0701.gukhanwiki.android.api.action.CategoryMembersItem
 import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
 import io.github.lee0701.gukhanwiki.android.view.SimplePageRenderer
@@ -41,7 +42,8 @@ class ViewPageViewModel: ViewModel() {
                 when(action) {
                     "history" -> {
                         val response = GukhanWikiApi.clientService.index(action = action, title = path)
-                        val content = renderer.render(response).html()
+                        val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(response)).resultHtml ?: response
+                        val content = renderer.render(seonbiResultContent).html()
                         _title.postValue(path)
                         _content.postValue(Loadable.Loaded(content))
                         _hideFab.postValue(true)
@@ -82,8 +84,9 @@ class ViewPageViewModel: ViewModel() {
         if(content == null) {
             _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
         } else {
+            val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Loaded(content + categoryMembersContent + categories))
+            _content.postValue(Loadable.Loaded(seonbiResultContent + categoryMembersContent + categories))
             _hideFab.postValue(false)
         }
     }
@@ -95,7 +98,8 @@ class ViewPageViewModel: ViewModel() {
         val code = response.error?.get("code")
         if(code == "pagecannotexist" || action == "history") {
             val content = GukhanWikiApi.clientService.index(title = path, action = action)
-            val renderedContent = renderer.render(content).html()
+            val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
+            val renderedContent = renderer.render(seonbiResultContent).html()
             _title.postValue(title ?: path)
             _content.postValue(Loadable.Loaded(renderedContent))
             _hideFab.postValue(true)
@@ -126,5 +130,18 @@ class ViewPageViewModel: ViewModel() {
         val url = GukhanWikiApi.DOC_URL.toString() + GukhanWikiApi.encodeUriComponent(title)
         return "<li><a href=\"$url\">$title</a></li>"
     }
+
+    private fun getSeonbiConfig(): Map<String, Any> = mapOf(
+        "contentType" to "text/html",
+        "quote" to "CurvedQuotes",
+        "cite" to "AngleQuotes",
+        "arrow" to mapOf<String, Any>(
+            "bidirArrow" to true,
+            "doubleArrow" to true,
+        ),
+        "ellipsis" to true,
+        "emDash" to true,
+        "stop" to "Vertical",
+    )
 
 }
