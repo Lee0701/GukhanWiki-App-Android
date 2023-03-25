@@ -63,6 +63,17 @@ interface GukhanWikiActionApiService {
     ): EditResponse
 
     @GET("/api.php")
+    suspend fun categoryMembers(
+        @Query("action") action: String = "query",
+        @Query("format") format: String = "json",
+        @Query("list") list: String = "categorymembers",
+        @Query("cmcontinue") cmContinue: String? = null,
+        @Query("cmtitle") cmTitle: String? = null,
+        @Query("cmprop") cmProp: String? = null,
+        @Query("cmlimit") cmLimit: Int? = null,
+    ): CategoryMembersResponse
+
+    @GET("/api.php")
     suspend fun retrieveToken(
         @Query("action") action: String = "query",
         @Query("format") format: String = "json",
