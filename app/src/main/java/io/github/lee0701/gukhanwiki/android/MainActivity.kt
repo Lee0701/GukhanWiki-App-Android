@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,6 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.preference.PreferenceManager
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
@@ -176,6 +179,18 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    fun setAppbarShown(shown: Boolean) {
+        val params = binding.contentWrapper.layoutParams as CoordinatorLayout.LayoutParams
+        if(shown) {
+            binding.appbar.visibility = View.VISIBLE
+            params.behavior = AppBarLayout.ScrollingViewBehavior()
+        } else {
+            binding.appbar.visibility = View.GONE
+            params.behavior = null
+        }
+        binding.contentWrapper.requestLayout()
     }
 
 }

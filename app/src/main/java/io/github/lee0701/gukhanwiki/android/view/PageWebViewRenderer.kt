@@ -30,7 +30,6 @@ class PageWebViewRenderer(
 
         val textSize = sharedPreferences.getString("display_text_size", "1.0")?.toFloat() ?: 1.0f
 
-        println(textSize)
         val textSizeCss = """
             body {
                 font-size: ${textSize}rem;
