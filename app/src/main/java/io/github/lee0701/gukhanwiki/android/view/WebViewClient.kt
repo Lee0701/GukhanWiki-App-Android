@@ -28,6 +28,7 @@ class WebViewClient(
         }
         return super.shouldOverrideUrlLoading(view, request)
     }
+
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun shouldOverrideUrlLoading(
@@ -42,7 +43,10 @@ class WebViewClient(
     }
 
     private fun shouldOverrideUrlLoading(url: URL): Boolean {
-        if(isInternalLink(url)) {
+        if(isCiteNote(url)) {
+            onCiteNoteClicked(url)
+            return true
+        } else if(isInternalLink(url)) {
             onInternalLinkClicked(url)
             return true
         } else {
@@ -51,11 +55,24 @@ class WebViewClient(
         }
     }
 
+    private fun isCiteNote(url: URL): Boolean {
+        if(url.host == GukhanWikiApi.DOC_URL.host) {
+            if(url.path.startsWith("/cite_note-")) return true
+        }
+        return false
+    }
+
     private fun isInternalLink(url: URL): Boolean {
         if(url.host == GukhanWikiApi.DOC_URL.host) {
             return true
         }
         return false
+    }
+
+    private fun onCiteNoteClicked(url: URL) {
+        val path = url.path.removePrefix(GukhanWikiApi.DOC_PATH)
+        val id = path.replace("/cite_note-", "")
+        listener.onCiteClicked(id.toInt())
     }
 
     private fun onInternalLinkClicked(url: URL) {
@@ -102,6 +119,7 @@ class WebViewClient(
 
     interface Listener {
         fun onNavigate(@IdRes resId: Int, args: Bundle)
+        fun onCiteClicked(id: Int)
         fun onStartActivity(intent: Intent)
     }
 

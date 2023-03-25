@@ -90,7 +90,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                 }
                 is Loadable.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
-                    val html = webViewRenderer.render(response.data)
+                    val html = webViewRenderer.render(response.data).html()
                     binding.webView.webViewClient = WebViewClient(this)
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.DOC_URL.toString(),
@@ -134,6 +134,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             }
         }
 
+    }
+
+    override fun onCiteClicked(id: Int) {
     }
 
     override fun onNavigate(resId: Int, args: Bundle) {

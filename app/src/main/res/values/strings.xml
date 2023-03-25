@@ -54,6 +54,7 @@
 
     <string name="anonymous">Anonymous</string>
     <string name="select_account">Select account</string>
+    <string name="footnote">Footnote #%d</string>
 
     <string name="account_type" translatable="false">io.github.lee0701.gukhanwiki.android</string>
 
