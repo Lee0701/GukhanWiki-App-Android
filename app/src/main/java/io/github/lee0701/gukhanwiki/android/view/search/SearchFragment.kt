@@ -14,18 +14,35 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import com.google.gson.JsonSyntaxException
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentSearchBinding
+import io.github.lee0701.gukhanwiki.android.history.SearchHistory
+import java.io.File
+import java.io.FileNotFoundException
+import java.util.*
 
 class SearchFragment: Fragment() {
 
     private var binding: FragmentSearchBinding? = null
     private val viewModel: SearchViewModel by viewModels()
 
+    private var searchHistory: SearchHistory? = null
+    private val searchHistoryFile: File by lazy { File(context?.filesDir, "search-history.json") }
     private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try {
+            searchHistory = Gson().fromJson(JsonParser().parse(searchHistoryFile.bufferedReader()), SearchHistory::class.java)
+        } catch(ex: JsonSyntaxException) {
+            ex.printStackTrace()
+            searchHistory = SearchHistory(listOf())
+        } catch(ex: FileNotFoundException) {
+            searchHistory = SearchHistory(listOf())
+        }
     }
 
     override fun onCreateView(
@@ -43,6 +60,8 @@ class SearchFragment: Fragment() {
         val binding = binding ?: return
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
+        searchHistory?.let { viewModel.displayHistory(it) }
+
         binding.autocompleteList.apply {
             this.adapter = this@SearchFragment.adapter
             this.layoutManager = LinearLayoutManager(context)
@@ -51,12 +70,18 @@ class SearchFragment: Fragment() {
 
         binding.searchInput.addTextChangedListener { editable ->
             val text = editable?.toString() ?: return@addTextChangedListener
-            if(text.isBlank()) viewModel.clearAutocomplete()
-            else viewModel.autocompleteSearch(text)
+            if(text.isBlank()) {
+                viewModel.clearAutocomplete()
+                searchHistory?.let { viewModel.displayHistory(it) }
+            } else {
+                viewModel.autocompleteSearch(text)
+            }
         }
 
         fun gotoSearch(text: String) {
             if(text.isBlank()) return
+            appendSearchHistory(text)
+            binding.searchInput.setText("")
             val args = Bundle().apply {
                 putString("query", text)
             }
@@ -85,11 +110,6 @@ class SearchFragment: Fragment() {
             imm?.showSoftInput(binding.searchInput, 0)
         }
 
-        viewModel.title.observe(viewLifecycleOwner) { title ->
-            binding.searchInput.setText(title)
-            binding.searchInput.setSelection(title.length)
-        }
-
         viewModel.autocompleteResult.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
@@ -99,6 +119,8 @@ class SearchFragment: Fragment() {
     }
 
     private fun onAutocompleteClicked(position: Int, item: SearchAutocompleteItem) {
+        appendSearchHistory(item.title)
+        binding?.searchInput?.setText("")
         when(item.action) {
             SearchAutocompleteItem.Action.GOTO -> {
                 val args = Bundle().apply {
@@ -113,13 +135,25 @@ class SearchFragment: Fragment() {
                 findNavController().navigate(R.id.action_searchFragment_to_editPageFragment, args)
             }
             else -> {
-                viewModel.autocompleteSelected(item.title)
+                binding?.searchInput?.setText(item.title)
+                binding?.searchInput?.setSelection(item.title.length)
             }
+        }
+    }
+
+    private fun appendSearchHistory(text: String) {
+        searchHistory = searchHistory?.let { history ->
+            val entries = history.entries.filter { it.title != text } + SearchHistory.Entry(text, Date())
+            history.copy(entries = entries)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        val entries = searchHistory?.entries ?: listOf()
+        val searchHistory = searchHistory?.copy(entries = entries.sortedByDescending { it.date }.take(20))
+        val json = Gson().toJson(searchHistory, SearchHistory::class.java)
+        searchHistoryFile.writeBytes(json.toByteArray())
         binding = null
     }
 

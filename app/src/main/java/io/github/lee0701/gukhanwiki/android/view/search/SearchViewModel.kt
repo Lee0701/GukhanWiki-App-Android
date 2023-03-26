@@ -5,15 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import io.github.lee0701.gukhanwiki.android.history.SearchHistory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SearchViewModel: ViewModel() {
     private var autocompleteJob: Job? = null
-
-    private val _title = MutableLiveData<String>()
-    val title: LiveData<String> = _title
 
     private val _autocompleteResult = MutableLiveData<List<SearchAutocompleteItem>>()
     val autocompleteResult: LiveData<List<SearchAutocompleteItem>> = _autocompleteResult
@@ -32,12 +30,16 @@ class SearchViewModel: ViewModel() {
         }
     }
 
+    fun displayHistory(history: SearchHistory) {
+        val result = history.entries
+            .sortedByDescending { it.date }
+            .map { SearchAutocompleteItem(0, it.title) }
+        _autocompleteResult.postValue(result)
+    }
+
     fun clearAutocomplete() {
         autocompleteJob?.cancel()
         _autocompleteResult.postValue(emptyList())
     }
 
-    fun autocompleteSelected(text: String) {
-        _title.postValue(text)
-    }
 }
