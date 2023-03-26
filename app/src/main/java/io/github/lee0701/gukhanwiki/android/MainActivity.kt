@@ -23,7 +23,10 @@ import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
 import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
+import io.github.lee0701.gukhanwiki.android.history.LastViewedPage
 import io.github.lee0701.gukhanwiki.android.view.edit.EditPageFragment
+import java.io.File
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -109,6 +112,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val file = File(filesDir, LastViewedPage.FILENAME)
+        try {
+            val title = if(file.exists()) file.readBytes().decodeToString() else null
+            if(title != null) {
+                val args = Bundle().apply {
+                    putString("title", title)
+                }
+                navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
+            }
+        } catch(ex: IOException) {
+            ex.printStackTrace()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -193,6 +208,19 @@ class MainActivity : AppCompatActivity() {
             params.behavior = null
         }
         binding.contentWrapper.requestLayout()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val title = viewModel.title.value
+        if(title != null) {
+            val file = File(filesDir, LastViewedPage.FILENAME)
+            try {
+                file.writeBytes(title.encodeToByteArray())
+            } catch(ex: IOException) {
+                ex.printStackTrace()
+            }
+        }
     }
 
 }
