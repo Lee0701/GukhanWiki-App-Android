@@ -37,10 +37,11 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         viewModel.signedInAccount.observe(this) { signedInAccount ->
-            if(signedInAccount.password.isBlank()) return@observe
-            AccountHelper.addAccount(signedInAccount.username, signedInAccount.password)
-            setResult(Activity.RESULT_OK)
-            finish()
+            if(!signedInAccount.password.isNullOrBlank()) {
+                AccountHelper.addAccount(signedInAccount.username, signedInAccount.password)
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
         }
 
         viewModel.alert.observe(this) { message ->
