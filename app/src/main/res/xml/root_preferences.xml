@@ -38,7 +38,7 @@
     <PreferenceCategory
         app:title="@string/pref_ruby_header">
 
-        <SwitchPreferenceCompat
+        <CheckBoxPreference
             app:key="ruby_enabled"
             app:defaultValue="true"
             app:title="@string/pref_ruby_enabled_title"

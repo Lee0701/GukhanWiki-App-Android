@@ -45,6 +45,11 @@ class SwitchAccountBottomSheet(
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        this.dismiss()
+    }
+
     companion object {
         const val TAG = "SwitchAccountBottomSheet"
     }

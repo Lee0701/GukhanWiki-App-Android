@@ -26,6 +26,7 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edit_content"
+                    android:hint="@string/input_content"
                     android:inputType="textMultiLine"
                     android:fontFamily="monospace"
                     android:textAlignment="gravity"

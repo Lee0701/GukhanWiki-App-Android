@@ -37,6 +37,11 @@ class FootnoteBottomSheet(
         )
     }
 
+    override fun onPause() {
+        super.onPause()
+        this.dismiss()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         this.binding = null
