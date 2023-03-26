@@ -95,6 +95,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         }
 
         viewModel.title.observe(viewLifecycleOwner) { title ->
+            activityViewModel.setTempTitle(null)
             activityViewModel.updateTitle(title)
 
             binding.fabEdit.setOnClickListener {
@@ -130,14 +131,14 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
             binding.swipeRefreshLayout.isRefreshing = false
             when(content) {
                 is Loadable.Loading -> {
-                    activityViewModel.updateTitle(getString(R.string.label_loading))
+                    activityViewModel.setTempTitle(getString(R.string.label_loading))
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
                 is Loadable.Error -> {
                     if(content.exception.message == "missingtitle") {
                         binding.missingPageIndicator.root.visibility = View.VISIBLE
                     } else {
-                        activityViewModel.updateTitle(getString(R.string.label_error))
+                        activityViewModel.setTempTitle(getString(R.string.label_error))
                         binding.errorIndicator.root.visibility = View.VISIBLE
                         binding.errorIndicator.text.text = content.exception.message
                     }
