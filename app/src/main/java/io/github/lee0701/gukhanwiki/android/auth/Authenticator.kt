@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Bundle
 
 class Authenticator(
-    private val context: Context
+    private val context: Context,
 ): AbstractAccountAuthenticator(context) {
 
     override fun editProperties(

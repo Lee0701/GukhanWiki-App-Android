@@ -17,8 +17,8 @@ class MainViewModel: ViewModel() {
     private val _tempTitle = MutableLiveData<String?>()
     val tempTitle: LiveData<String?> = _tempTitle
 
-    private val _signInResult = MutableLiveData<Loadable<AccountHelper.SignedInAccount?>>()
-    val signInResult: LiveData<Loadable<AccountHelper.SignedInAccount?>> = _signInResult
+    private val _signedInAccount = MutableLiveData<Loadable<AccountHelper.SignedInAccount?>>()
+    val signedInAccount: LiveData<Loadable<AccountHelper.SignedInAccount?>> = _signedInAccount
 
     private val _snackbarMessage = MutableLiveData<Event<String>>()
     val snackbarMessage: LiveData<Event<String>> get() = _snackbarMessage
@@ -41,20 +41,19 @@ class MainViewModel: ViewModel() {
     fun signIn(username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = AccountHelper.signIn(username, password)
-            _signInResult.postValue(result)
+            _signedInAccount.postValue(result)
         }
     }
 
     fun signOut() {
         viewModelScope.launch(Dispatchers.IO) {
-            _signInResult.postValue(Loadable.Loaded(null))
-            val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
-            if(csrfToken == null) _signInResult.postValue(Loadable.Error(RuntimeException("token")))
-            else {
+            val signInResult = this@MainViewModel.signedInAccount.value
+            val csrfToken = if(signInResult is Loadable.Loaded) signInResult.data?.csrfToken else null
+            if(csrfToken != null) {
                 val response = GukhanWikiApi.actionApiService.logout(token = csrfToken)
-                if(response.error != null) _signInResult.postValue(Loadable.Error(RuntimeException(response.error["*"])))
-                else _signInResult.postValue(Loadable.Loaded(null))
-                _signInResult.postValue(Loadable.Loaded(null))
+                if(response.error != null) _signedInAccount.postValue(Loadable.Error(RuntimeException(response.error["*"])))
+                else _signedInAccount.postValue(Loadable.Loaded(null))
+                _signedInAccount.postValue(Loadable.Loaded(null))
             }
         }
     }

@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.signInResult.observe(this) { result ->
+        viewModel.signedInAccount.observe(this) { result ->
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {

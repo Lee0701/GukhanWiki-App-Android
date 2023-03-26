@@ -106,14 +106,18 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
             val content = viewModel.content.value
-            if(page is Loadable.Loaded && content is Loadable.Loaded)
-                viewModel.updatePage(page.data, content.data, binding.summary.text?.toString().orEmpty())
+            val account = activityViewModel.signedInAccount.value
+            val summary = binding.summary.text?.toString().orEmpty()
+            if(page is Loadable.Loaded && content is Loadable.Loaded && account is Loadable.Loaded) {
+                viewModel.updatePage(page.data, content.data, summary, account.data?.csrfToken)
+            }
         }
 
         viewModel.result.observe(viewLifecycleOwner) { response ->
             if(response is Loadable.Error) {
                 val page = viewModel.page.value
                 val content = viewModel.content.value
+                response.exception.printStackTrace()
                 val message = response.exception.message.orEmpty()
                 if(page is Loadable.Loaded && content is Loadable.Loaded) {
                     if(response.exception.message == "captcha") {
