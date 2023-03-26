@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical"
+            android:layout_marginVertical="@dimen/margin_small"
             android:paddingHorizontal="@dimen/margin_medium">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -50,6 +51,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/search_button"
             android:text="@string/action_search"
+            android:paddingVertical="@dimen/margin_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_large"
