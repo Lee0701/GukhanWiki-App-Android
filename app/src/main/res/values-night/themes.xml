@@ -24,11 +24,18 @@
         <item name="checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
         <item name="android:checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
 
+        <item name="android:alertDialogStyle">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="alertDialogStyle">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="alertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
         <item name="materialAlertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
         <item name="bottomSheetDialogTheme">@style/Theme.GukhanWikiAppAndroid.BottomSheetDialog</item>
 
         <item name="preferenceStyle">@style/Theme.GukhanWikiAppAndroid.Preference</item>
         <item name="preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
+        <item name="android:preferenceCategoryStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Category</item>
+        <item name="preferenceScreenStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Screen</item>
+        <item name="android:preferenceScreenStyle">@style/Theme.GukhanWikiAppAndroid.Preference.Screen</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Toolbar" parent="Widget.MaterialComponents.Toolbar">
@@ -62,6 +69,11 @@
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:windowBackground">@color/gray_850</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="textColorAlertDialogListItem">@color/white</item>
+        <item name="colorControlNormal">@color/gray_500</item>
+        <item name="colorControlActivated">@color/white</item>
         <item name="buttonBarButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button.Dialog</item>
     </style>
 
@@ -70,17 +82,17 @@
         <item name="rippleColor">@color/white_transparent</item>
     </style>
 
+    <style name="Theme.GukhanWikiAppAndroid.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/gray_850</item>
+        <item name="colorPrimaryVariant">@color/gray_900</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
     <style name="Theme.GukhanWikiAppAndroid.Preference" parent="Preference">
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Preference.Category" parent="Preference.Category">
         <item name="android:textColor">@color/gray_50</item>
-    </style>
-
-    <style name="Theme.GukhanWikiAppAndroid.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="colorPrimary">@color/gray_850</item>
-        <item name="colorPrimaryVariant">@color/gray_900</item>
-        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.TitleLogo">
