@@ -19,10 +19,16 @@
 
         <item name="android:textViewStyle">@style/Theme.GukhanWikiAppAndroid.TextView</item>
         <item name="editTextStyle">@style/Theme.GukhanWikiAppAndroid.EditText</item>
+        <item name="android:editTextStyle">@style/Theme.GukhanWikiAppAndroid.EditText</item>
         <item name="buttonStyle">@style/Theme.GukhanWikiAppAndroid.Button</item>
         <item name="materialButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button</item>
         <item name="checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
+        <item name="android:checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
 
+        <item name="android:alertDialogStyle">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="alertDialogStyle">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
+        <item name="alertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
         <item name="materialAlertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
         <item name="bottomSheetDialogTheme">@style/Theme.GukhanWikiAppAndroid.BottomSheetDialog</item>
 
@@ -60,6 +66,7 @@
 
     <style name="Theme.GukhanWikiAppAndroid.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
 
@@ -74,16 +81,21 @@
 
     <style name="Theme.GukhanWikiAppAndroid.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@color/gray_700</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="android:textColorPrimary">@color/white</item>
+    <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="textColorAlertDialogListItem">@color/black</item>
+        <item name="colorControlNormal">@color/gray_500</item>
+        <item name="colorControlActivated">@color/black</item>
         <item name="buttonBarButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button.Dialog</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Button.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/white</item>
-        <item name="rippleColor">@color/white_transparent</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="rippleColor">@color/black_transparent</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Preference" parent="Preference">
@@ -112,7 +124,7 @@
         <item name="buttonStyle">@style/Theme.GukhanWikiAppAndroid.Search.Submit</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.Search.Text" parent="Widget.AppCompat.EditText">
+    <style name="Theme.GukhanWikiAppAndroid.Search.Text" parent="Theme.GukhanWikiAppAndroid.EditText">
         <item name="background">@color/white</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -125,6 +137,7 @@
     <style name="Theme.GukhanWikiAppAndroid.Search.Submit" parent="Widget.AppCompat.Button">
         <item name="background">?selectableItemBackground</item>
         <item name="backgroundTint">@color/black</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
