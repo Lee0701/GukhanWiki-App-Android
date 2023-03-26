@@ -1,6 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.view.search
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -29,27 +31,38 @@ class SearchFragment: Fragment() {
     private var binding: FragmentSearchBinding? = null
     private val viewModel: SearchViewModel by viewModels()
 
+    private var preference: SharedPreferences? = null
+    private var searchHistoryDisabled: Boolean = false
+
     private var searchHistory: SearchHistory? = null
     private val searchHistoryFile: File by lazy { File(context?.filesDir, SearchHistory.FILENAME) }
     private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = context ?: return
+        preference = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
     override fun onResume() {
         super.onResume()
+        preference?.getBoolean("history_disable_search", false)?.let { searchHistoryDisabled = it }
         // Load search history from file, create one if not exists
         try {
             searchHistory = Gson().fromJson(JsonParser().parse(searchHistoryFile.bufferedReader()), SearchHistory::class.java)
         } catch(ex: JsonSyntaxException) {
             ex.printStackTrace()
-            searchHistory = SearchHistory(listOf())
-            searchHistoryFile.createNewFile()
+            searchHistory = null
         } catch(ex: FileNotFoundException) {
+            searchHistory = null
+        }
+
+        if(searchHistory == null) {
             searchHistory = SearchHistory(listOf())
             searchHistoryFile.createNewFile()
         }
+
+        searchHistory?.let { viewModel.displayHistory(it) }
     }
 
     override fun onCreateView(
@@ -66,8 +79,6 @@ class SearchFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-
-        searchHistory?.let { viewModel.displayHistory(it) }
 
         binding.autocompleteList.apply {
             this.adapter = this@SearchFragment.adapter
@@ -149,6 +160,7 @@ class SearchFragment: Fragment() {
     }
 
     private fun appendSearchHistory(text: String) {
+        if(searchHistoryDisabled) return
         searchHistory = searchHistory?.let { history ->
             val entries = history.entries.filter { it.title != text } + SearchHistory.Entry(text, Date())
             history.copy(entries = entries)
