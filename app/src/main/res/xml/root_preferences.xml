@@ -19,8 +19,14 @@
     <PreferenceCategory
         app:title="@string/pref_history_header">
 
+        <SwitchPreferenceCompat
+            app:key="history_disable_search"
+            app:defaultValue="false"
+            app:title="@string/pref_history_disable_search_title"
+            app:summary="@string/pref_history_disable_search_summary" />
+
         <io.github.lee0701.gukhanwiki.android.settings.ClearSearchHistoryPreference
-            app:title="@string/pref_history_clear_search" />
+            app:title="@string/pref_history_clear_search_title" />
     </PreferenceCategory>
 
     <PreferenceCategory

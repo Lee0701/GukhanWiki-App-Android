@@ -1,10 +1,7 @@
 package io.github.lee0701.gukhanwiki.android.settings
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.util.AttributeSet
-import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.lee0701.gukhanwiki.android.R
