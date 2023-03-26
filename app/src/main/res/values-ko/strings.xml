@@ -23,6 +23,8 @@
     <string name="action_clear">입력 내용 지우기</string>
     <string name="action_add_account">새 계정 추가</string>
     <string name="action_signout">로그아웃</string>
+    <string name="action_delete">삭제</string>
+    <string name="action_cancel">취소</string>
 
     <string name="input_username">사용자 이름</string>
     <string name="input_password">비밀번호</string>
@@ -40,6 +42,7 @@
     <string name="msg_confirm_discard_edit">현재 편집을 취소하시겠습니까?</string>
     <string name="msg_page_not_found">페이지를 찾을 수 없습니다.</string>
     <string name="msg_preview_alert"><b>이 화면은 미리보기입니다.</b> 변경 사항은 아직 저장되지 않았습니다!</string>
+    <string name="msg_confirm_clear_search_history">검색 기록을 삭제하시겠습니까?</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
@@ -68,6 +71,9 @@
     <string name="pref_display_text_size_medium">보통</string>
     <string name="pref_display_text_size_large">크게</string>
     <string name="pref_display_text_size_larger">더 크게</string>
+
+    <string name="pref_history_header">기록</string>
+    <string name="pref_history_clear_search">검색 기록 비우기</string>
 
     <string name="pref_ruby_header">한자 독음</string>
     <string name="pref_ruby_enabled_title">한자 독음 표시</string>

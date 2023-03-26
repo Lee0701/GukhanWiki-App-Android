@@ -30,18 +30,25 @@ class SearchFragment: Fragment() {
     private val viewModel: SearchViewModel by viewModels()
 
     private var searchHistory: SearchHistory? = null
-    private val searchHistoryFile: File by lazy { File(context?.filesDir, "search-history.json") }
+    private val searchHistoryFile: File by lazy { File(context?.filesDir, SearchHistory.FILENAME) }
     private val adapter = SearchAutocompleteAdapter { position, item -> onAutocompleteClicked(position, item) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Load search history from file, create one if not exists
         try {
             searchHistory = Gson().fromJson(JsonParser().parse(searchHistoryFile.bufferedReader()), SearchHistory::class.java)
         } catch(ex: JsonSyntaxException) {
             ex.printStackTrace()
             searchHistory = SearchHistory(listOf())
+            searchHistoryFile.createNewFile()
         } catch(ex: FileNotFoundException) {
             searchHistory = SearchHistory(listOf())
+            searchHistoryFile.createNewFile()
         }
     }
 
@@ -153,7 +160,8 @@ class SearchFragment: Fragment() {
         val entries = searchHistory?.entries ?: listOf()
         val searchHistory = searchHistory?.copy(entries = entries.sortedByDescending { it.date }.take(20))
         val json = Gson().toJson(searchHistory, SearchHistory::class.java)
-        searchHistoryFile.writeBytes(json.toByteArray())
+        // If history file does not exist, leave it to clear
+        if(searchHistoryFile.exists()) searchHistoryFile.writeBytes(json.toByteArray())
         binding = null
     }
 

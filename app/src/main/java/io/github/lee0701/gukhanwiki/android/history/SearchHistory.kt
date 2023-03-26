@@ -9,4 +9,8 @@ data class SearchHistory(
         val title: String,
         val date: Date,
     )
+
+    companion object {
+        const val FILENAME = "search-history.json"
+    }
 }
