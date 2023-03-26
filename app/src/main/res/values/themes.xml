@@ -101,6 +101,8 @@
     <style name="Theme.GukhanWikiAppAndroid.Preference" parent="Preference">
         <item name="android:textColor">@color/black</item>
         <item name="iconSpaceReserved">false</item>
+        <item name="allowDividerAbove">true</item>
+        <item name="allowDividerBelow">true</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Preference.Category" parent="Preference.Category">
