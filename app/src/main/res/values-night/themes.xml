@@ -20,7 +20,9 @@
         <item name="android:textViewStyle">@style/Theme.GukhanWikiAppAndroid.TextView</item>
         <item name="buttonStyle">@style/Theme.GukhanWikiAppAndroid.Button</item>
         <item name="editTextStyle">@style/Theme.GukhanWikiAppAndroid.EditText</item>
+        <item name="android:editTextStyle">@style/Theme.GukhanWikiAppAndroid.EditText</item>
         <item name="checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
+        <item name="android:checkboxStyle">@style/Theme.GukhanWikiAppAndroid.Checkbox</item>
 
         <item name="materialAlertDialogTheme">@style/Theme.GukhanWikiAppAndroid.Dialog.Alert</item>
         <item name="bottomSheetDialogTheme">@style/Theme.GukhanWikiAppAndroid.BottomSheetDialog</item>
@@ -45,6 +47,8 @@
 
     <style name="Theme.GukhanWikiAppAndroid.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Button" parent="Widget.MaterialComponents.Button">
@@ -54,6 +58,7 @@
 
     <style name="Theme.GukhanWikiAppAndroid.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@color/gray_50</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Dialog.Alert">
@@ -88,7 +93,7 @@
         <item name="buttonStyle">@style/Theme.GukhanWikiAppAndroid.Search.Submit</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.Search.Text" parent="Widget.AppCompat.EditText">
+    <style name="Theme.GukhanWikiAppAndroid.Search.Text" parent="Theme.GukhanWikiAppAndroid.EditText">
         <item name="background">@color/black</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -100,6 +105,7 @@
     <style name="Theme.GukhanWikiAppAndroid.Search.Submit" parent="Widget.AppCompat.Button">
         <item name="background">?selectableItemBackground</item>
         <item name="backgroundTint">@color/white</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
