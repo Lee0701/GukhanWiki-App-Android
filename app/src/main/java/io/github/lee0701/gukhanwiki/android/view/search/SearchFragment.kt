@@ -46,7 +46,7 @@ class SearchFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        preference?.getBoolean("history_disable_search", false)?.let { searchHistoryDisabled = it }
+        preference?.getBoolean("history_disable_search_history", false)?.let { searchHistoryDisabled = it }
         // Load search history from file, create one if not exists
         try {
             searchHistory = Gson().fromJson(JsonParser().parse(searchHistoryFile.bufferedReader()), SearchHistory::class.java)

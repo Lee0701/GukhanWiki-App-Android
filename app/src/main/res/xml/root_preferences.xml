@@ -20,13 +20,19 @@
         app:title="@string/pref_history_header">
 
         <SwitchPreferenceCompat
-            app:key="history_disable_search"
+            app:key="history_disable_search_history"
             app:defaultValue="false"
-            app:title="@string/pref_history_disable_search_title"
-            app:summary="@string/pref_history_disable_search_summary" />
+            app:title="@string/pref_history_disable_search_history_title"
+            app:summary="@string/pref_history_disable_search_history_summary" />
 
         <io.github.lee0701.gukhanwiki.android.settings.ClearSearchHistoryPreference
-            app:title="@string/pref_history_clear_search_title" />
+            app:title="@string/pref_history_clear_search_history_title" />
+
+        <CheckBoxPreference
+            app:key="history_reload_last_page"
+            app:defaultValue="true"
+            app:title="@string/pref_history_reload_last_page_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
