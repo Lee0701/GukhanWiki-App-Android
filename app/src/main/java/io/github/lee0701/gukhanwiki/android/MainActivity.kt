@@ -117,17 +117,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val file = File(filesDir, LastViewedPage.FILENAME)
-        try {
-            val title = if(file.exists()) file.readBytes().decodeToString() else null
-            if(title != null) {
-                val args = Bundle().apply {
-                    putString("title", title)
+        if(preference.getBoolean("history_reload_last_page", true)) {
+            val file = File(filesDir, LastViewedPage.FILENAME)
+            try {
+                val title = if(file.exists()) file.readBytes().decodeToString() else null
+                if(title != null) {
+                    val args = Bundle().apply {
+                        putString("title", title)
+                    }
+                    navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
                 }
-                navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
+            } catch(ex: IOException) {
+                ex.printStackTrace()
             }
-        } catch(ex: IOException) {
-            ex.printStackTrace()
         }
     }
 
@@ -222,7 +224,11 @@ class MainActivity : AppCompatActivity() {
         if(title != null) {
             val file = File(filesDir, LastViewedPage.FILENAME)
             try {
-                file.writeBytes(title.encodeToByteArray())
+                if(preference.getBoolean("history_reload_last_page", true)) {
+                    file.writeBytes(title.encodeToByteArray())
+                } else {
+                    file.delete()
+                }
             } catch(ex: IOException) {
                 ex.printStackTrace()
             }

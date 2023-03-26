@@ -73,9 +73,10 @@
     <string name="pref_display_text_size_larger">더 크게</string>
 
     <string name="pref_history_header">기록</string>
-    <string name="pref_history_disable_search_title">검색 기록 중지</string>
-    <string name="pref_history_disable_search_summary">검색 내역을 기록하지 않습니다</string>
-    <string name="pref_history_clear_search_title">검색 기록 비우기</string>
+    <string name="pref_history_disable_search_history_title">검색 기록 중지</string>
+    <string name="pref_history_disable_search_history_summary">검색 내역을 기록하지 않습니다</string>
+    <string name="pref_history_clear_search_history_title">검색 기록 비우기</string>
+    <string name="pref_history_reload_last_page_title">종료시 보던 문서 기억하기</string>
 
     <string name="pref_ruby_header">한자 독음</string>
     <string name="pref_ruby_enabled_title">한자 독음 표시</string>
