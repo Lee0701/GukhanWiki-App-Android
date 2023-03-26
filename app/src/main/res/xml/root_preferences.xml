@@ -17,6 +17,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:title="@string/pref_history_header">
+
+        <io.github.lee0701.gukhanwiki.android.settings.ClearSearchHistoryPreference
+            app:title="@string/pref_history_clear_search" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:title="@string/pref_ruby_header">
 
         <SwitchPreferenceCompat
