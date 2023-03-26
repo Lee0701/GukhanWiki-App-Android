@@ -57,11 +57,16 @@ class MainActivity : AppCompatActivity() {
                 navController.currentBackStackEntry?.arguments?.getString("title") != null
             if (!hasTitle) binding.toolbar.navigationIcon = null
             else binding.toolbar.navigationIcon =
-                ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_arrow_back_24)
+                ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_home_24)
         }
 
         viewModel.title.observe(this) { title ->
             this.supportActionBar?.title = title
+        }
+
+        viewModel.tempTitle.observe(this) { tempTitle ->
+            if(tempTitle != null) this.supportActionBar?.title = tempTitle
+            else this.supportActionBar?.title = viewModel.title.value
         }
 
         viewModel.snackbarMessage.observe(this) { event ->
@@ -145,11 +150,12 @@ class MainActivity : AppCompatActivity() {
             android.R.id.home -> {
                 if(navController.currentDestination?.id == R.id.editPageFragment) {
                     EditPageFragment.showAlertDialog(this) {
-                        navController.navigateUp()
+                        navController.navigate(R.id.action_global_ViewPageFragment_clearStack)
                     }
                     true
                 } else {
-                    super.onOptionsItemSelected(item)
+                    navController.navigate(R.id.action_global_ViewPageFragment_clearStack)
+                    true
                 }
             }
             R.id.action_search -> {

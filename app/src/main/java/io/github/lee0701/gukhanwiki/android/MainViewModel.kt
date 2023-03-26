@@ -14,6 +14,9 @@ class MainViewModel: ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
+    private val _tempTitle = MutableLiveData<String?>()
+    val tempTitle: LiveData<String?> = _tempTitle
+
     private val _signInResult = MutableLiveData<Loadable<AccountHelper.SignedInAccount?>>()
     val signInResult: LiveData<Loadable<AccountHelper.SignedInAccount?>> = _signInResult
 
@@ -29,6 +32,10 @@ class MainViewModel: ViewModel() {
 
     fun updateTitle(title: String) {
         _title.postValue(title)
+    }
+
+    fun setTempTitle(title: String?) {
+        _tempTitle.postValue(title)
     }
 
     fun signIn(username: String, password: String) {
