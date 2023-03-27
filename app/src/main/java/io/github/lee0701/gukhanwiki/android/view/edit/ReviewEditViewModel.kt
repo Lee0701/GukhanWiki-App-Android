@@ -47,18 +47,17 @@ class ReviewEditViewModel: ViewModel() {
         _content.postValue(Loadable.Loaded(content))
     }
 
-    fun updatePage(page: Page, content: String, summary: String?, minor: Boolean?) {
+    fun updatePage(page: Page, content: String, summary: String?, minor: Boolean?, csrfToken: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             _result.postValue(Loadable.Loading())
             try {
-                val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
                 val response = GukhanWikiApi.actionApiService.editMultipart(
                     title = MultipartBody.Part.createFormData("title", page.title),
                     summary = summary?.let { MultipartBody.Part.createFormData("summary", it) },
                     section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
                     baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
                     minor = minor?.let { MultipartBody.Part.createFormData("minor", it.toString()) },
-                    token = csrfToken?.let { MultipartBody.Part.createFormData("token", it) },
+                    token = csrfToken.let { MultipartBody.Part.createFormData("token", it ?: "+\\") },
                     text = MultipartBody.Part.Companion.createFormData("text", content),
                 )
                 val result = response.edit
@@ -76,8 +75,7 @@ class ReviewEditViewModel: ViewModel() {
                     }
                 } else {
                     val errorCode = response.error?.get("code")
-                    if(errorCode != null) _result.postValue(Loadable.Error(RuntimeException(errorCode)))
-                    else _result.postValue(Loadable.Error(RuntimeException("null")))
+                    _result.postValue(Loadable.Error(RuntimeException(errorCode)))
                 }
             } catch(ex: HttpException) {
                 ex.printStackTrace()
