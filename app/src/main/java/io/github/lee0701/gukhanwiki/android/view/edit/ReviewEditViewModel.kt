@@ -47,7 +47,7 @@ class ReviewEditViewModel: ViewModel() {
         _content.postValue(Loadable.Loaded(content))
     }
 
-    fun updatePage(page: Page, content: String, summary: String?) {
+    fun updatePage(page: Page, content: String, summary: String?, minor: Boolean?) {
         viewModelScope.launch(Dispatchers.IO) {
             _result.postValue(Loadable.Loading())
             try {
@@ -57,6 +57,7 @@ class ReviewEditViewModel: ViewModel() {
                     summary = summary?.let { MultipartBody.Part.createFormData("summary", it) },
                     section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
                     baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
+                    minor = minor?.let { MultipartBody.Part.createFormData("minor", it.toString()) },
                     token = csrfToken?.let { MultipartBody.Part.createFormData("token", it) },
                     text = MultipartBody.Part.Companion.createFormData("text", content),
                 )

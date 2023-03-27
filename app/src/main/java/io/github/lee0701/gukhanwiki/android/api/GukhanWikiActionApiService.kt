@@ -45,6 +45,7 @@ interface GukhanWikiActionApiService {
         @Query("section") section: String? = null,
         @Query("summary") summary: String? = null,
         @Query("baserevid") baseRevId: Int? = null,
+        @Query("minor") minor: Boolean? = null,
         @Field("token") token: String? = null,
         @Field("text") text: String,
     ): EditResponse
@@ -58,6 +59,7 @@ interface GukhanWikiActionApiService {
         @Part section: MultipartBody.Part? = null,
         @Part summary: MultipartBody.Part? = null,
         @Part baseRevId: MultipartBody.Part? = null,
+        @Part minor: MultipartBody.Part? = null,
         @Part token: MultipartBody.Part? = null,
         @Part text: MultipartBody.Part,
     ): EditResponse
