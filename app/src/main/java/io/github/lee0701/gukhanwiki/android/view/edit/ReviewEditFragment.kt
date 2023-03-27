@@ -106,8 +106,11 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
             val content = viewModel.content.value
-            if(page is Loadable.Loaded && content is Loadable.Loaded)
-                viewModel.updatePage(page.data, content.data, binding.summary.text?.toString().orEmpty())
+            val summary = binding.summary.text?.toString().orEmpty()
+            val minor = binding.minor.isChecked
+            if(page is Loadable.Loaded && content is Loadable.Loaded) {
+                viewModel.updatePage(page.data, content.data, summary, minor)
+            }
         }
 
         viewModel.result.observe(viewLifecycleOwner) { response ->

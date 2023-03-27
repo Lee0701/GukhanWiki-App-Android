@@ -30,6 +30,7 @@
     <string name="input_password">Password</string>
     <string name="input_content">Page content</string>
     <string name="input_summary">Edit summary</string>
+    <string name="input_minor">This is a minor edit</string>
 
     <string name="msg_welcome">Welcome!</string>
     <string name="msg_signin_error">Error while signing in: %s</string>

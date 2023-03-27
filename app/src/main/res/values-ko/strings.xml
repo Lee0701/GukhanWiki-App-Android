@@ -30,6 +30,7 @@
     <string name="input_password">비밀번호</string>
     <string name="input_content">문서 내용</string>
     <string name="input_summary">편집 요약</string>
+    <string name="input_minor">사소한 편집입니다</string>
 
     <string name="msg_welcome">환영합니다!</string>
     <string name="msg_signin_error">로그인 중에 오류가 발생했습니다: %s</string>
