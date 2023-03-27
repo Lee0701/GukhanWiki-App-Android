@@ -108,8 +108,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             val content = viewModel.content.value
             val account = activityViewModel.signedInAccount.value
             val summary = binding.summary.text?.toString().orEmpty()
-            if(page is Loadable.Loaded && content is Loadable.Loaded && account is Loadable.Loaded) {
-                viewModel.updatePage(page.data, content.data, summary, account.data?.csrfToken)
+            if(page is Loadable.Loaded && content is Loadable.Loaded) {
+                if(account is Loadable.Loaded) viewModel.updatePage(page.data, content.data, summary, account.data?.csrfToken)
+                else viewModel.updatePage(page.data, content.data, summary, null)
             }
         }
 
