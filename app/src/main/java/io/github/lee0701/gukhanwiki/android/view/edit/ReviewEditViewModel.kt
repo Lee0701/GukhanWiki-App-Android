@@ -57,10 +57,9 @@ class ReviewEditViewModel: ViewModel() {
                     section = page.section?.let { MultipartBody.Part.createFormData("section", it) },
                     baseRevId = page.revId?.let { MultipartBody.Part.createFormData("baserevid", it.toString()) },
                     text = MultipartBody.Part.Companion.createFormData("text", content),
-                    token = csrfToken.orEmpty().let { MultipartBody.Part.createFormData("token", it) },
+                    token = csrfToken.let { MultipartBody.Part.createFormData("token", it ?: "+\\") },
                 )
                 val result = response.edit
-                println(response)
                 if(result != null) {
                     if(result.result == "Success") {
                         _result.postValue(Loadable.Loaded(
