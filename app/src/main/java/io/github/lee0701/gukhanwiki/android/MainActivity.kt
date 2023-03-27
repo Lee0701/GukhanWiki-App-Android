@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.signInResult.observe(this) { result ->
+        viewModel.signedInAccount.observe(this) { result ->
             when(result) {
                 is Loadable.Loading -> {}
                 is Loadable.Error -> {
@@ -121,7 +121,8 @@ class MainActivity : AppCompatActivity() {
             val file = File(filesDir, LastViewedPage.FILENAME)
             try {
                 val title = if(file.exists()) file.readBytes().decodeToString() else null
-                if(title != null) {
+                val currentTitle = viewModel.title.value
+                if(title != null && title != currentTitle) {
                     val args = Bundle().apply {
                         putString("title", title)
                     }

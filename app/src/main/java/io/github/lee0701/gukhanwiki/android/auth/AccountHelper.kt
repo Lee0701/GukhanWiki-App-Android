@@ -52,12 +52,14 @@ object AccountHelper {
         if(loginResult.error != null) return Loadable.Error(RuntimeException(loginResult.error["*"]))
         if(loginResult.clientLogin?.status != "PASS") return Loadable.Error(RuntimeException(loginResult.clientLogin?.status))
 
-        val account = SignedInAccount(username, password)
+        val csrfToken = GukhanWikiApi.actionApiService.retrieveToken(type = "csrf").query.tokens["csrftoken"]
+        val account = SignedInAccount(username = username, password = password, csrfToken = csrfToken)
         return Loadable.Loaded(account)
     }
 
     data class SignedInAccount(
         val username: String,
-        val password: String,
+        val password: String? = null,
+        val csrfToken: String? = null,
     ): Serializable
 }
