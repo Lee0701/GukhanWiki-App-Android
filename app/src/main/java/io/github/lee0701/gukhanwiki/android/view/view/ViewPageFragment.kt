@@ -7,10 +7,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.Toast
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
@@ -71,7 +73,12 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentViewPageBinding.inflate(inflater, container, false)
+        try {
+            binding = FragmentViewPageBinding.inflate(inflater, container, false)
+        } catch(ex: InflateException) {
+            ex.printStackTrace()
+            Toast.makeText(context, R.string.msg_launch_failed, Toast.LENGTH_LONG).show()
+        }
         return binding?.root ?: View(context)
     }
 
