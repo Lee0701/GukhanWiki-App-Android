@@ -170,15 +170,23 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_accounts -> {
-                val bottomSheet = SwitchAccountBottomSheet { index, account ->
-                    if(index == -1) {
-                        viewModel.signOut()
-                    } else if(account != null) {
-                        val password = AccountHelper.getPassword(account)
-                        if(password != null) viewModel.signIn(account.name, password)
+                val bottomSheet = SwitchAccountBottomSheet { index, account, type ->
+                    if(type == 0) {
+                        if(index == -1) {
+                            viewModel.signOut()
+                        } else if(account != null) {
+                            val password = AccountHelper.getPassword(account)
+                            if(password != null) viewModel.signIn(account.name, password)
+                        }
+                        selectedAccountIndex = index
+                        preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
+                    } else if(type == 1) {
+                        val navController = findNavController(R.id.nav_host_fragment_content_main)
+                        val args = Bundle().apply {
+                            putString("title", "User:${account?.name}")
+                        }
+                        navController.navigate(R.id.action_global_ViewPageFragment, args)
                     }
-                    selectedAccountIndex = index
-                    preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())
                 bottomSheet.adapter.selectedIndex = selectedAccountIndex
