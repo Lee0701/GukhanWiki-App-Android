@@ -48,25 +48,11 @@ class ViewPageViewModel: ViewModel() {
             try {
                 if(isSpecialPage(path)) {
                     _refresh.postValue {
-                        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
-                        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
-
-                        val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
-                        val content = renderer.render(response).html()
-                        _title.postValue(title ?: path)
-                        _content.postValue(Loadable.Loaded(content))
-                        _hideFab.postValue(true)
+                        specialPage(path, action, query)
                     }
                 } else if(action == "history") {
                     _refresh.postValue {
-                        val response = GukhanWikiApi.clientService.index(action = action, title = path, query = query)
-                        val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(
-                            body = SeonbiApiService.Config(response)
-                        ).resultHtml ?: response
-                        val content = renderer.render(seonbiResultContent).html()
-                        _title.postValue(path)
-                        _content.postValue(Loadable.Loaded(content))
-                        _hideFab.postValue(true)
+                        historyPage(path, action, query)
                     }
                 } else {
                     _refresh.postValue {
@@ -84,6 +70,28 @@ class ViewPageViewModel: ViewModel() {
                 _content.postValue(Loadable.Error(ex))
             }
         }
+    }
+
+    private suspend fun specialPage(path: String, action: String?, query: Map<String, String>) {
+        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
+        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
+
+        val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
+        val content = renderer.render(response).html()
+        _title.postValue(title ?: path)
+        _content.postValue(Loadable.Loaded(content))
+        _hideFab.postValue(true)
+    }
+
+    private suspend fun historyPage(path: String, action: String?, query: Map<String, String>) {
+        val response = GukhanWikiApi.clientService.index(action = action, title = path, query = query)
+        val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(
+            body = SeonbiApiService.Config(response)
+        ).resultHtml ?: response
+        val content = renderer.render(seonbiResultContent).html()
+        _title.postValue(path)
+        _content.postValue(Loadable.Loaded(content))
+        _hideFab.postValue(true)
     }
 
     private suspend fun contentPage(path: String, action: String?, response: ParseResponse) {
