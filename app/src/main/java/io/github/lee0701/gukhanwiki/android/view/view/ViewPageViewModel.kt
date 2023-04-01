@@ -54,6 +54,10 @@ class ViewPageViewModel: ViewModel() {
                     _refresh.postValue {
                         historyPage(path, action, query)
                     }
+                } else if("diff" in query) {
+                    _refresh.postValue {
+                        diffPage(path, action, query)
+                    }
                 } else {
                     _refresh.postValue {
                         val response = GukhanWikiApi.actionApiService.parse(page = path, query = query)
@@ -70,6 +74,17 @@ class ViewPageViewModel: ViewModel() {
                 _content.postValue(Loadable.Error(ex))
             }
         }
+    }
+
+    private suspend fun diffPage(path: String, action: String?, query: Map<String, String>) {
+        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
+        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
+
+        val response = GukhanWikiApi.clientService.index(action = action, query = query)
+        val content = renderer.render(response).html()
+        _title.postValue(title ?: path)
+        _content.postValue(Loadable.Loaded(content))
+        _hideFab.postValue(true)
     }
 
     private suspend fun specialPage(path: String, action: String?, query: Map<String, String>) {
