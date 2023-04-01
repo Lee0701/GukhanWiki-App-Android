@@ -83,13 +83,16 @@ class WebViewClient(
                     .split("&").map { it.split("=") }
                     .associate { (key, value) -> key to value }
                 val title = GukhanWikiApi.decodeUriComponent(query["title"] ?: return)
-                when(query["action"]) {
-                    "edit" -> {
-                        onInternalEditLinkClicked(title, query["section"])
+                if(query["action"] == "edit") {
+                    onInternalEditLinkClicked(title, query["section"])
+                } else if(url.host == GukhanWikiApi.CLIENT_URL.host) {
+                    val args = Bundle().apply {
+                        putString("title", title)
+                        query.entries.forEach { (k, v) -> putString(k, v) }
                     }
-                    else -> {
-                        onExternalLinkClicked(url)
-                    }
+                    listener.onNavigate(R.id.action_ViewPageFragment_self, args)
+                } else {
+                    onExternalLinkClicked(url)
                 }
             }
         }

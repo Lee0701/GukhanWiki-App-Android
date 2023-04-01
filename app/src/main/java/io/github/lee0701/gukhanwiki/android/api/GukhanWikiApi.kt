@@ -31,6 +31,7 @@ object GukhanWikiApi {
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
     const val MAIN_PAGE_TITLE = "國漢大百科:大門"
+    val SPECIAL_PAGE_NAMESPACE = setOf("Special", "특수", "特殊")
 
     private val okHttpClient = OkHttpClient.Builder()
         .protocols(listOf(Protocol.HTTP_1_1))
