@@ -134,10 +134,6 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
         }
 
-        viewModel.refresh.observe(viewLifecycleOwner) {
-            viewModel.refresh()
-        }
-
         viewModel.content.observe(viewLifecycleOwner) { content ->
             binding.loadingIndicator.root.visibility = View.GONE
             binding.errorIndicator.root.visibility = View.GONE
@@ -191,6 +187,11 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
         viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
             binding.webView.scrollY = scrollY
+        }
+
+        viewModel.refresh.observe(viewLifecycleOwner) { refresh ->
+            val content = viewModel.content.value
+            if(content !is Loadable.Loaded) viewModel.refresh()
         }
     }
 
