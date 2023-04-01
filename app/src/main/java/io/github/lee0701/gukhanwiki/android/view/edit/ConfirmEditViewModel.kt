@@ -25,7 +25,7 @@ class ConfirmEditViewModel: ViewModel() {
             val response = GukhanWikiApi.clientService.index(
                 action = "edit",
                 title = page.title,
-                section = page.section.orEmpty(),
+                query = mapOf("section" to page.section.orEmpty()),
             )
 
             val doc = Jsoup.parse(response)

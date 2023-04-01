@@ -19,6 +19,14 @@ interface GukhanWikiActionApiService {
     suspend fun parse(
         @Query("action") action: String = "parse",
         @Query("format") format: String = "json",
+        @Query("page") page: String? = null,
+        @QueryMap query: Map<String, String> = mapOf(),
+    ): ParseResponse
+
+    @GET("/api.php")
+    suspend fun parse(
+        @Query("action") action: String = "parse",
+        @Query("format") format: String = "json",
         @Query("text") text: String? = null,
         @Query("page") page: String? = null,
         @Query("prop") prop: String? = null,

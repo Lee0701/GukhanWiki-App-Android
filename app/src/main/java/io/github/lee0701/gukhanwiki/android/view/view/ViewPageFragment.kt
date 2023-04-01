@@ -52,9 +52,13 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         webViewRenderer = PageWebViewRenderer(context)
         webViewRendererWithoutFabMargin = PageWebViewRenderer(context, false)
         if(viewModel.content.value == null) {
-            val argTitle = arguments?.getString("title")
+            val argTitle = arguments?.getString("title")?.let { GukhanWikiApi.decodeUriComponent(it) }
             val argAction = arguments?.getString("action")
-            if(argTitle != null) viewModel.loadPage(argTitle, argAction)
+            val query = arguments?.keySet().orEmpty()
+                .filter { k -> k !in setOf("title", "action") }
+                .mapNotNull { k -> arguments?.getString(k)?.let { v -> k to v } }
+                .toMap()
+            if(argTitle != null) viewModel.loadPage(argTitle, argAction, query)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
         }
         val scrollY = savedInstanceState?.getInt("scrollY")
@@ -130,6 +134,10 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
 
         }
 
+        viewModel.refresh.observe(viewLifecycleOwner) {
+            viewModel.refresh()
+        }
+
         viewModel.content.observe(viewLifecycleOwner) { content ->
             binding.loadingIndicator.root.visibility = View.GONE
             binding.errorIndicator.root.visibility = View.GONE
@@ -187,8 +195,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     }
 
     override fun onRefresh() {
-        val title = viewModel.title.value ?: return
-        viewModel.loadPage(title)
+        viewModel.refresh()
     }
 
     override fun onCiteClicked(id: Int) {
