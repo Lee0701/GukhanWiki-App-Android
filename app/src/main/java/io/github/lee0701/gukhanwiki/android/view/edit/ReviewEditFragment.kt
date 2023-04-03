@@ -13,7 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
@@ -59,7 +59,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val content = viewModel.content.value
-        if(content is Loadable.Loaded) {
+        if(content is Result.Loaded) {
             outState.putString("content", content.data)
         }
     }
@@ -83,14 +83,17 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             binding.errorIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
             when(response) {
-                is Loadable.Error -> {
+                is Result.Error -> {
                     binding.errorIndicator.root.visibility = View.VISIBLE
                     binding.errorIndicator.text.text = response.exception.message
+                    binding.summary.isEnabled = false
+                    binding.minor.isEnabled = false
+                    binding.fab.isEnabled = false
                 }
-                is Loadable.Loading -> {
+                is Result.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
                     val html = webViewRenderer.render(response.data).html()
                     binding.webView.webViewClient = WebViewClient(this)
@@ -111,19 +114,19 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
             val account = activityViewModel.signedInAccount.value
             val summary = binding.summary.text?.toString().orEmpty()
             val minor = if(binding.minor.isChecked) true else null
-            if(page is Loadable.Loaded && content is Loadable.Loaded) {
-                if(account is Loadable.Loaded) viewModel.updatePage(page.data, content.data, summary, minor, account.data?.csrfToken)
+            if(page is Result.Loaded && content is Result.Loaded) {
+                if(account is Result.Loaded) viewModel.updatePage(page.data, content.data, summary, minor, account.data?.csrfToken)
                 else viewModel.updatePage(page.data, content.data, summary, minor, null)
             }
         }
 
         viewModel.result.observe(viewLifecycleOwner) { response ->
-            if(response is Loadable.Error) {
+            if(response is Result.Error) {
                 val page = viewModel.page.value
                 val content = viewModel.content.value
                 response.exception.printStackTrace()
                 val message = response.exception.message.orEmpty()
-                if(page is Loadable.Loaded && content is Loadable.Loaded) {
+                if(page is Result.Loaded && content is Result.Loaded) {
                     if(response.exception.message == "captcha") {
                         val args = Bundle().apply {
                             putSerializable("page", page.data)
@@ -137,7 +140,7 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                 } else {
                     activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
                 }
-            } else if(response is Loadable.Loaded) {
+            } else if(response is Result.Loaded) {
                 setFragmentResult(ViewPageFragment.REQUEST_KEY_EDIT_PAGE, Bundle().apply {
                     putBoolean("success", true)
                 })

@@ -17,8 +17,8 @@ class MainViewModel: ViewModel() {
     private val _tempTitle = MutableLiveData<String?>()
     val tempTitle: LiveData<String?> = _tempTitle
 
-    private val _signedInAccount = MutableLiveData<Loadable<AccountHelper.SignedInAccount?>>()
-    val signedInAccount: LiveData<Loadable<AccountHelper.SignedInAccount?>> = _signedInAccount
+    private val _signedInAccount = MutableLiveData<Result<AccountHelper.SignedInAccount?>>()
+    val signedInAccount: LiveData<Result<AccountHelper.SignedInAccount?>> = _signedInAccount
 
     private val _snackbarMessage = MutableLiveData<Event<String>>()
     val snackbarMessage: LiveData<Event<String>> get() = _snackbarMessage
@@ -48,12 +48,12 @@ class MainViewModel: ViewModel() {
     fun signOut() {
         viewModelScope.launch(Dispatchers.IO) {
             val signInResult = this@MainViewModel.signedInAccount.value
-            val csrfToken = if(signInResult is Loadable.Loaded) signInResult.data?.csrfToken else null
+            val csrfToken = if(signInResult is Result.Loaded) signInResult.data?.csrfToken else null
             if(csrfToken != null) {
                 val response = GukhanWikiApi.actionApiService.logout(token = csrfToken)
-                if(response.error != null) _signedInAccount.postValue(Loadable.Error(RuntimeException(response.error["*"])))
-                else _signedInAccount.postValue(Loadable.Loaded(null))
-                _signedInAccount.postValue(Loadable.Loaded(null))
+                if(response.error != null) _signedInAccount.postValue(Result.Error(RuntimeException(response.error["*"])))
+                else _signedInAccount.postValue(Result.Loaded(null))
+                _signedInAccount.postValue(Result.Loaded(null))
             }
         }
     }

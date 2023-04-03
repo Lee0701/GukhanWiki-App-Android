@@ -22,7 +22,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
@@ -148,11 +148,11 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             binding.webView.visibility = View.GONE
             binding.swipeRefreshLayout.isRefreshing = false
             when(content) {
-                is Loadable.Loading -> {
+                is Result.Loading -> {
                     activityViewModel.setTempTitle(getString(R.string.label_loading))
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
-                is Loadable.Error -> {
+                is Result.Error -> {
                     if(content.exception.message == "missingtitle") {
                         binding.missingPageIndicator.root.visibility = View.VISIBLE
                     } else {
@@ -161,7 +161,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
                         binding.errorIndicator.text.text = content.exception.message
                     }
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     binding.webView.visibility = View.VISIBLE
                     binding.webView.webViewClient = WebViewClient(this)
                     val rendered = webViewRenderer.render(content.data.orEmpty())
@@ -198,7 +198,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
         viewModel.refresh.observe(viewLifecycleOwner) { refresh ->
             val content = viewModel.content.value
-            if(content !is Loadable.Loaded) viewModel.refresh()
+            if(content !is Result.Loaded) viewModel.refresh()
         }
     }
 

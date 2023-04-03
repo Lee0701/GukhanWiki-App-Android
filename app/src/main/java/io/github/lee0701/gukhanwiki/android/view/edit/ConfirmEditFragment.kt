@@ -15,7 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
@@ -108,14 +108,14 @@ class ConfirmEditFragment: Fragment() {
             binding.errorIndicator.root.visibility = View.GONE
             binding.webView.visibility = View.GONE
             when(response) {
-                is Loadable.Error -> {
+                is Result.Error -> {
                     binding.errorIndicator.root.visibility = View.VISIBLE
                     binding.errorIndicator.text.text = response.exception.message
                 }
-                is Loadable.Loading -> {
+                is Result.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     binding.webView.loadDataWithBaseURL(
                         GukhanWikiApi.CLIENT_URL.toString(),
                         response.data,

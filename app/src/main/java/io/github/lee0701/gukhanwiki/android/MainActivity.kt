@@ -76,12 +76,12 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.signedInAccount.observe(this) { result ->
             when(result) {
-                is Loadable.Loading -> {}
-                is Loadable.Error -> {
+                is Result.Loading -> {}
+                is Result.Error -> {
                     val msg = resources.getString(R.string.msg_signin_error, result.exception.message)
                     viewModel.showSnackbar(msg)
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     if(result.data == null) {
                         val msg = resources.getString(R.string.msg_signout_success)
                         viewModel.showSnackbar(msg)
