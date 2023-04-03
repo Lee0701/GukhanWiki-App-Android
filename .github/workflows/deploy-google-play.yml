@@ -46,11 +46,11 @@ jobs:
           versionName: ${{ env.VERSION_NAME }}
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew buildProductionRelease
 
       - name: Build Release AAB
-        id: buildRelease
-        run: ./gradlew bundleRelease
+        id: buildReleaseBundle
+        run: ./gradlew bundleProductionRelease
 
       - name: Sign AAB
         id: sign
