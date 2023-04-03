@@ -53,9 +53,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, _, _ ->
-            val hasTitle =
-                navController.currentBackStackEntry?.arguments?.getString("title") != null
-            if (!hasTitle) binding.toolbar.navigationIcon = null
+            val title = navController.currentBackStackEntry?.arguments?.getString("title")
+            if (title == null || title == GukhanWikiApi.MAIN_PAGE_TITLE) binding.toolbar.navigationIcon = null
             else binding.toolbar.navigationIcon =
                 ContextCompat.getDrawable(this@MainActivity, R.drawable.baseline_home_24)
         }
