@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentSearchResultBinding
 
@@ -53,14 +53,14 @@ class SearchResultFragment: Fragment() {
             binding.errorIndicator.root.visibility = View.GONE
             binding.recyclerView.visibility = View.GONE
             when(result) {
-                is Loadable.Loading -> {
+                is Result.Loading -> {
                     binding.loadingIndicator.root.visibility = View.VISIBLE
                 }
-                is Loadable.Error -> {
+                is Result.Error -> {
                     binding.errorIndicator.root.visibility = View.VISIBLE
                     binding.errorIndicator.text.text = result.exception.message
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     binding.recyclerView.visibility = View.VISIBLE
                     adapter.submitList(result.data)
                 }

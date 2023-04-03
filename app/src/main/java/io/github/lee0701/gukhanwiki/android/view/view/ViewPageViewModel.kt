@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.api.SeonbiApiService
 import io.github.lee0701.gukhanwiki.android.api.action.CategoryMembersItem
 import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
 import io.github.lee0701.gukhanwiki.android.view.SimplePageRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -26,8 +27,8 @@ class ViewPageViewModel: ViewModel() {
     private val _refresh = MutableLiveData<suspend () -> Unit>()
     val refresh: LiveData<suspend () -> Unit> = _refresh
 
-    private val _content = MutableLiveData<Loadable<String?>>()
-    val content: LiveData<Loadable<String?>> = _content
+    private val _content = MutableLiveData<Result<String?>>()
+    val content: LiveData<Result<String?>> = _content
 
     private val _associatedPage = MutableLiveData<String>()
     val associatedPage: LiveData<String> = _associatedPage
@@ -38,13 +39,18 @@ class ViewPageViewModel: ViewModel() {
     private val _scrollY = MutableLiveData<Int>()
     val scrollY: LiveData<Int> = _scrollY
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _content.postValue(Result.Error(throwable))
+        throwable.printStackTrace()
+    }
+
     fun refresh() {
-        viewModelScope.launch(Dispatchers.IO) { refresh.value?.invoke() }
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) { refresh.value?.invoke() }
     }
 
     fun loadPage(path: String, action: String? = null, query: Map<String, String> = mapOf()) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _content.postValue(Loadable.Loading())
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            _content.postValue(Result.Loading())
             try {
                 if(isSpecialPage(path)) {
                     _refresh.postValue {
@@ -69,9 +75,9 @@ class ViewPageViewModel: ViewModel() {
                     }
                 }
             } catch(ex: IOException) {
-                _content.postValue(Loadable.Error(ex))
+                _content.postValue(Result.Error(ex))
             } catch(ex: HttpException) {
-                _content.postValue(Loadable.Error(ex))
+                _content.postValue(Result.Error(ex))
             }
         }
     }
@@ -83,7 +89,7 @@ class ViewPageViewModel: ViewModel() {
         val response = GukhanWikiApi.clientService.index(action = action, query = query)
         val content = renderer.render(response).html()
         _title.postValue(title ?: path)
-        _content.postValue(Loadable.Loaded(content))
+        _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
 
@@ -94,7 +100,7 @@ class ViewPageViewModel: ViewModel() {
         val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
         val content = renderer.render(response).html()
         _title.postValue(title ?: path)
-        _content.postValue(Loadable.Loaded(content))
+        _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
 
@@ -105,7 +111,7 @@ class ViewPageViewModel: ViewModel() {
         ).resultHtml ?: response
         val content = renderer.render(seonbiResultContent).html()
         _title.postValue(path)
-        _content.postValue(Loadable.Loaded(content))
+        _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
 
@@ -126,11 +132,11 @@ class ViewPageViewModel: ViewModel() {
         val title = response.parse?.title
         val content = response.parse?.text?.text
         if(content == null) {
-            _content.postValue(Loadable.Error(RuntimeException("Result text is null")))
+            _content.postValue(Result.Error(RuntimeException("Result text is null")))
         } else {
             val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Loaded(seonbiResultContent + categoryMembersContent + categories))
+            _content.postValue(Result.Loaded(seonbiResultContent + categoryMembersContent + categories))
             _hideFab.postValue(false)
         }
     }
@@ -145,11 +151,11 @@ class ViewPageViewModel: ViewModel() {
             val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
             val renderedContent = renderer.render(seonbiResultContent).html()
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Loaded(renderedContent))
+            _content.postValue(Result.Loaded(renderedContent))
             _hideFab.postValue(true)
         } else {
             _title.postValue(title ?: path)
-            _content.postValue(Loadable.Error(RuntimeException(code)))
+            _content.postValue(Result.Error(RuntimeException(code)))
         }
     }
 

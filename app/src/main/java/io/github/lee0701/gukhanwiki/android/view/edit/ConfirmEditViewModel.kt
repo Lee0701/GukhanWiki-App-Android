@@ -4,24 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.api.action.Page
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 
 class ConfirmEditViewModel: ViewModel() {
 
-    private val _page = MutableLiveData<Loadable<Page>>()
-    val page: LiveData<Loadable<Page>> = _page
+    private val _html = MutableLiveData<Result<String>>()
+    val html: LiveData<Result<String>> = _html
 
-    private val _html = MutableLiveData<Loadable<String>>()
-    val html: LiveData<Loadable<String>> = _html
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _html.postValue(Result.Error(throwable))
+        throwable.printStackTrace()
+    }
 
     fun showConfirmation(page: Page, content: String, summary: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _html.postValue(Loadable.Loading())
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            _html.postValue(Result.Loading())
             val response = GukhanWikiApi.clientService.index(
                 action = "edit",
                 title = page.title,
@@ -41,7 +44,7 @@ class ConfirmEditViewModel: ViewModel() {
                 doc.body().remove()
                 doc.body().appendChild(editForm)
             }
-            _html.postValue(Loadable.Loaded(doc.html()))
+            _html.postValue(Result.Loaded(doc.html()))
         }
     }
 

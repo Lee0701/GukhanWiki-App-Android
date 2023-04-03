@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,11 +20,11 @@ class AuthenticationViewModel: ViewModel() {
         viewModelScope.launch((Dispatchers.IO)) {
             val response = AccountHelper.signIn(username, password)
             when(response) {
-                is Loadable.Loading -> {}
-                is Loadable.Error -> {
+                is Result.Loading -> {}
+                is Result.Error -> {
                     _alert.postValue(response.exception.message)
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     response.data?.let { _signedInAccount.postValue(it) }
                     if(response.data == null) _alert.postValue("null")
                 }

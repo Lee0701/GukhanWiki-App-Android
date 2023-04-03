@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.github.lee0701.gukhanwiki.android.Loadable
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainActivity
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
@@ -63,11 +61,11 @@ class EditPageFragment: Fragment() {
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
             when(page) {
-                is Loadable.Loading -> {}
-                is Loadable.Error -> {
-                    binding.errorIndicator.text.text = page.exception.message
+                is Result.Loading -> {}
+                is Result.Error -> {
+                    activityViewModel.showSnackbar(page.exception.message ?: "")
                 }
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     activityViewModel.updateTitle(page.data.title)
                 }
             }
@@ -75,7 +73,7 @@ class EditPageFragment: Fragment() {
 
         viewModel.content.observe(viewLifecycleOwner) { content ->
             when(content) {
-                is Loadable.Loaded -> {
+                is Result.Loaded -> {
                     binding.editContent.setText(content.data)
                 }
                 else -> {}
@@ -85,8 +83,7 @@ class EditPageFragment: Fragment() {
         binding.fab.setOnClickListener {
             val page = viewModel.page.value
             val content = viewModel.content.value
-            if(page is Loadable.Loaded && content is Loadable.Loaded) {
-                binding.loadingIndicator.root.visibility = View.VISIBLE
+            if(page is Result.Loaded && content is Result.Loaded) {
                 binding.editContent.isEnabled = false
                 binding.fab.isEnabled = false
                 viewModel.update(binding.editContent.text.toString())
