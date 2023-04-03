@@ -30,15 +30,15 @@ jobs:
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_ENV
 
       - name: Get version name from build.gradle
-        run: echo "VERSION_NAME=$(${{ github.workspace }}/gradlew -q printVersionName)" >> $GITHUB_ENV
+        run: echo "BASE_VERSION_NAME=$(${{ github.workspace }}/gradlew -q printVersionName)" >> $GITHUB_ENV
 
       - name: Advance version code
         run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
 
-      - name: Advance version name
-        run: echo "VERSION_NAME=${{ env.VERSION_NAME }}-${{ github.sha }}" >> $GITHUB_ENV
+      - name: Add commit SHA to version name
+        run: echo "VERSION_NAME=${{ env.BASE_VERSION_NAME }}-${{ github.sha }}" >> $GITHUB_ENV
 
-      - name: Override version code
+      - name: Override version name and code
         uses: chkfung/android-version-actions@v1.2.1
         with:
           gradlePath: app/build.gradle
@@ -82,6 +82,13 @@ jobs:
           releaseFiles: app/build/outputs/bundle/productionRelease/app-production-release.aab
           track: internal
           status: completed
+
+      - name: Restore base version name
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle
+          versionCode: ${{ env.VERSION_CODE }}
+          versionName: ${{ env.BASE_VERSION_NAME }}
 
       - name: Push new version information
         uses: ko-Kore/publish@master
