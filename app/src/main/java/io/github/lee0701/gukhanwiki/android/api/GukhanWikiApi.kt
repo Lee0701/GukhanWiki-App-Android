@@ -35,10 +35,18 @@ object GukhanWikiApi {
     const val MAIN_PAGE_TITLE = "國漢大百科:大門"
     val SPECIAL_PAGE_NAMESPACE = setOf("Special", "특수", "特殊")
 
+    private const val CONNECT_TIMEOUT: Long = 10
+    private const val WRITE_TIMEOUT: Long = 10
+    private const val READ_TIMEOUT: Long = 10
+
     private val okHttpClient = OkHttpClient.Builder()
+        .cookieJar(JavaNetCookieJar(WebviewCookieHandler()))
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .protocols(listOf(Protocol.HTTP_1_1))
-        .cookieJar(JavaNetCookieJar(WebviewCookieHandler()))
+        .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+        .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+        .retryOnConnectionFailure(false)
         .build()
 
     private val restRetrofit: Retrofit by lazy {
