@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Result
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,8 +17,13 @@ class AuthenticationViewModel: ViewModel() {
     private val _alert = MutableLiveData<String?>()
     val alert: LiveData<String?> = _alert
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _alert.postValue(throwable.message)
+        throwable.printStackTrace()
+    }
+
     fun signIn(username: String, password: String) {
-        viewModelScope.launch((Dispatchers.IO)) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val response = AccountHelper.signIn(username, password)
             when(response) {
                 is Result.Loading -> {}
