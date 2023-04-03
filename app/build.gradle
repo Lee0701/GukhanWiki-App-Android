@@ -97,10 +97,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
-task printVersionCode {
+tasks.register('printVersionCode') {
     println android.defaultConfig.versionCode
 }
 
-task printVersionName {
+tasks.register('printVersionName') {
     println android.defaultConfig.versionName
 }
