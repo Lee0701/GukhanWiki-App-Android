@@ -18,6 +18,7 @@ import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -33,7 +34,7 @@ import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.OnRefreshListener {
+class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.OnRefreshListener {
 
     private var binding: FragmentViewPageBinding? = null
     private val viewModel: ViewPageViewModel by viewModels()
@@ -49,8 +50,14 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val context = context ?: return
+
         webViewRenderer = PageWebViewRenderer(context)
         webViewRendererWithoutFabMargin = PageWebViewRenderer(context, false)
+
+        setFragmentResultListener(REQUEST_KEY_EDIT_PAGE) { requestKey, bundle ->
+            if(bundle.getBoolean("success")) this.onRefresh()
+        }
+
         if(viewModel.content.value == null) {
             val argTitle = arguments?.getString("title")?.let { GukhanWikiApi.decodeUriComponent(it) }
             val argAction = arguments?.getString("action")
@@ -257,4 +264,7 @@ class ViewPageFragment : Fragment(), WebViewClient.Listener, SwipeRefreshLayout.
         binding = null
     }
 
+    companion object {
+        const val REQUEST_KEY_EDIT_PAGE = "edit_page"
+    }
 }

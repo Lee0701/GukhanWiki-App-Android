@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -21,6 +22,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentReviewEditBindin
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
+import io.github.lee0701.gukhanwiki.android.view.view.ViewPageFragment
 
 class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
@@ -136,6 +138,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
                     activityViewModel.showSnackbar(resources.getString(R.string.msg_edit_error, message))
                 }
             } else if(response is Loadable.Loaded) {
+                setFragmentResult(ViewPageFragment.REQUEST_KEY_EDIT_PAGE, Bundle().apply {
+                    putBoolean("success", true)
+                })
                 findNavController().popBackStack(R.id.ViewPageFragment, false)
             }
         }
