@@ -3,6 +3,7 @@ package io.github.lee0701.gukhanwiki.android.api
 import android.os.Build
 import io.github.lee0701.gukhanwiki.android.BuildConfig
 import io.github.lee0701.gukhanwiki.android.view.WebviewCookieHandler
+import okhttp3.ConnectionPool
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -15,6 +16,7 @@ import java.net.URL
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeUnit
 
 object GukhanWikiApi {
     const val PROTOCOL = BuildConfig.API_PROTOCOL
@@ -34,6 +36,7 @@ object GukhanWikiApi {
     val SPECIAL_PAGE_NAMESPACE = setOf("Special", "특수", "特殊")
 
     private val okHttpClient = OkHttpClient.Builder()
+        .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .protocols(listOf(Protocol.HTTP_1_1))
         .cookieJar(JavaNetCookieJar(WebviewCookieHandler()))
         .build()
