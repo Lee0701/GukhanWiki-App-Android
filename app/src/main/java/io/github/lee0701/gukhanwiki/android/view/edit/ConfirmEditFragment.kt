@@ -12,6 +12,7 @@ import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.github.lee0701.gukhanwiki.android.Loadable
@@ -20,6 +21,7 @@ import io.github.lee0701.gukhanwiki.android.R
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.api.action.Page
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentConfirmEditBinding
+import io.github.lee0701.gukhanwiki.android.view.view.ViewPageFragment
 import java.net.URL
 
 class ConfirmEditFragment: Fragment() {
@@ -57,6 +59,9 @@ class ConfirmEditFragment: Fragment() {
                 .filter { it.size >= 2 }
                 .associate { (key, value) -> key to value }
             if(query["action"] != "edit") {
+                setFragmentResult(ViewPageFragment.REQUEST_KEY_EDIT_PAGE, Bundle().apply {
+                    putBoolean("success", true)
+                })
                 findNavController().popBackStack(R.id.ViewPageFragment, false)
                 return true
             }
