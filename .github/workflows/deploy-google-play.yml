@@ -69,15 +69,19 @@ jobs:
           name: app
           path: app/build/outputs/bundle/productionRelease/app-production-release.aab
 
-      - name: Create service_account.json
-        id: createServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+      - name: Create temp file for storing service_account.json
+        id: createTempFile
+        run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
+
+      - name: Copy service_account.json
+        id: copyServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
 
       - name: Deploy to Play Store
         id: deploy
         uses: r0adkll/upload-google-play@v1.0.19
         with:
-          serviceAccountJson: service_account.json
+          serviceAccountJson: ${{ env.TMP_SERVICE_ACCOUNT_JSON }}
           packageName: io.github.lee0701.gukhanwiki.android
           releaseFiles: app/build/outputs/bundle/productionRelease/app-production-release.aab
           track: internal
