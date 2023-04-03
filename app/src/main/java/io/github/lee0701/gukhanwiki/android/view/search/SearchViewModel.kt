@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.history.SearchHistory
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -15,9 +17,14 @@ class SearchViewModel: ViewModel() {
 
     private val _autocompleteResult = MutableLiveData<List<SearchAutocompleteItem>>()
     val autocompleteResult: LiveData<List<SearchAutocompleteItem>> = _autocompleteResult
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
+
     fun autocompleteSearch(text: String) {
         autocompleteJob?.cancel()
-        autocompleteJob = viewModelScope.launch(Dispatchers.IO) {
+        autocompleteJob = viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val result = GukhanWikiApi.restApiService.autocompletePageTitle(text, 10)
             // 검색결과 맨 위에 보여줄 '입력 내용 그대로' 결과
             val input = listOf(SearchAutocompleteItem(-1, text, SearchAutocompleteItem.Action.NEW))

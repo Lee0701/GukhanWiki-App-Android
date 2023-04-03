@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -19,8 +20,13 @@ class SearchResultViewModel: ViewModel() {
     private val _searchResult = MutableLiveData<Result<List<SearchResultItem>>>()
     val searchResult: LiveData<Result<List<SearchResultItem>>> = _searchResult
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _searchResult.postValue(Result.Error(throwable))
+        throwable.printStackTrace()
+    }
+
     fun search(query: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _searchResult.postValue(Result.Loading())
             try {
                 val result = GukhanWikiApi.restApiService.searchPage(query, 10)

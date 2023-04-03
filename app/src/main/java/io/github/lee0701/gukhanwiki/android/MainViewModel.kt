@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -26,6 +27,11 @@ class MainViewModel: ViewModel() {
     private val _startpageClosed = MutableLiveData<Boolean>()
     val startpageClosed: LiveData<Boolean> = _startpageClosed
 
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _signedInAccount.postValue(Result.Error(throwable))
+        throwable.printStackTrace()
+    }
+
     fun setStartpageClosed() {
         _startpageClosed.postValue(true)
     }
@@ -39,14 +45,14 @@ class MainViewModel: ViewModel() {
     }
 
     fun signIn(username: String, password: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val result = AccountHelper.signIn(username, password)
             _signedInAccount.postValue(result)
         }
     }
 
     fun signOut() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val signInResult = this@MainViewModel.signedInAccount.value
             val csrfToken = if(signInResult is Result.Loaded) signInResult.data?.csrfToken else null
             if(csrfToken != null) {
