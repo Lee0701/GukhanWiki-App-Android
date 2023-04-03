@@ -109,7 +109,9 @@
 
     <string name="pref_about_header">About</string>
     <string name="pref_about_app_info_title">國漢大百科 Official App</string>
-    <string name="pref_about_app_info_summary">Developer contact: hgl1002@naver.com</string>
+    <string name="pref_about_app_info_summary">@string/app_version_name</string>
+    <string name="pref_about_developer_info_title">Developer contact</string>
+    <string name="pref_about_developer_info_summary">hgl1002@naver.com</string>
     <string name="pref_about_privacy_policy_title">Privacy Policy</string>
     <string name="pref_about_more_apps_title">More Apps</string>
     <string name="pref_about_more_apps_summary">Discover more apps from this app\'s developer</string>

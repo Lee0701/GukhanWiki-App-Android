@@ -22,6 +22,8 @@ android {
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+        defaultConfig.resValue("string", "app_version_name", "${versionName}")
     }
 
     flavorDimensions "server"
@@ -38,7 +40,7 @@ android {
                     hostName: "${properties.getProperty("api.host")}",
                     altHostName: "${properties.getProperty("api.host")}",
             ]
-            resValue "bool", "altHostEnabled", "false"
+            resValue("bool", "altHostEnabled", "false")
         }
         production {
             dimension "server"
@@ -52,7 +54,7 @@ android {
                     hostName: "wiki.xn--9cs231j0ji.xn--p8s937b.net",
                     altHostName: "wiki.韓國語.漢字.net",
             ]
-            resValue "bool", "altHostEnabled", "true"
+            resValue("bool", "altHostEnabled", "true")
         }
     }
     buildTypes {
@@ -71,6 +73,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 }
 
 dependencies {
