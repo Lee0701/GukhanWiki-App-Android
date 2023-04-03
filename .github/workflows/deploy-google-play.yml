@@ -36,7 +36,7 @@ jobs:
         run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_ENV
 
       - name: Add commit SHA to version name
-        run: echo "VERSION_NAME=${{ env.BASE_VERSION_NAME }}-${{ github.sha }}" >> $GITHUB_ENV
+        run: echo "VERSION_NAME=${{ env.BASE_VERSION_NAME }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
 
       - name: Override version name and code
         uses: chkfung/android-version-actions@v1.2.1
