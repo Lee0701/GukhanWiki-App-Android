@@ -115,23 +115,24 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, StartActivity::class.java))
                 viewModel.setStartpageClosed()
             }
-        }
 
-        if(preference.getBoolean("history_reload_last_page", true)) {
-            val file = File(filesDir, LastViewedPage.FILENAME)
-            try {
-                val title = if(file.exists()) file.readBytes().decodeToString() else null
-                val currentTitle = viewModel.title.value
-                if(title != null && title != currentTitle) {
-                    val args = Bundle().apply {
-                        putString("title", title)
+            if(preference.getBoolean("history_reload_last_page", true)) {
+                val file = File(filesDir, LastViewedPage.FILENAME)
+                try {
+                    val title = if(file.exists()) file.readBytes().decodeToString() else null
+                    val currentTitle = viewModel.title.value
+                    if(title != null && title != currentTitle) {
+                        val args = Bundle().apply {
+                            putString("title", title)
+                        }
+                        navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
                     }
-                    navController.navigate(R.id.action_global_ViewPageFragment_clearStack, args)
+                } catch(ex: IOException) {
+                    ex.printStackTrace()
                 }
-            } catch(ex: IOException) {
-                ex.printStackTrace()
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
