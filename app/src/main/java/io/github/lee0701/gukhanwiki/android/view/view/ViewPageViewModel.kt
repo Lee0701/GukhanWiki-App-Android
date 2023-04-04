@@ -117,7 +117,7 @@ class ViewPageViewModel: ViewModel() {
         val associatedPage = infoResponse.query?.pages?.values?.firstOrNull()?.associatedPage
         if(associatedPage != null) _associatedPage.postValue(associatedPage!!)
 
-        val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, prop = "categorieshtml")
+        val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, query = mapOf("prop" to "categorieshtml"))
         val categories = categoryResponse.parse?.categoriesHtml?.html.orEmpty()
 
         val categoryMembers = getCategoryMembers(path)

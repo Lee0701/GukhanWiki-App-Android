@@ -23,16 +23,6 @@ interface GukhanWikiActionApiService {
         @QueryMap query: Map<String, String> = mapOf(),
     ): ParseResponse
 
-    @GET("/api.php")
-    suspend fun parse(
-        @Query("action") action: String = "parse",
-        @Query("format") format: String = "json",
-        @Query("text") text: String? = null,
-        @Query("page") page: String? = null,
-        @Query("prop") prop: String? = null,
-        @Query("section") section: String? = null,
-    ): ParseResponse
-
     @FormUrlEncoded
     @POST("/api.php")
     suspend fun parsePost(
@@ -42,6 +32,7 @@ interface GukhanWikiActionApiService {
         @Field("page") page: String? = null,
         @Field("prop") prop: String? = null,
         @Field("section") section: String? = null,
+        @FieldMap field: Map<String, String> = mapOf(),
     ): ParseResponse
 
     @FormUrlEncoded

@@ -31,7 +31,10 @@ class EditPageViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _page.postValue(Result.Loading())
             try {
-                val response = GukhanWikiApi.actionApiService.parse(page = title, prop = "wikitext", section = section)
+                val query = mutableMapOf<String, String>()
+                query += "prop" to "wikitext"
+                if(section != null) query += "section" to section
+                val response = GukhanWikiApi.actionApiService.parse(page = title, query = query)
                 val content = response.parse?.wikiText
                 if(content?.wikiText == null) {
                     _content.postValue(Result.Loaded(""))
