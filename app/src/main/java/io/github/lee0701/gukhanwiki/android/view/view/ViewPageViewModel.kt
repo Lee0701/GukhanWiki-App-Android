@@ -52,9 +52,9 @@ class ViewPageViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _content.postValue(Result.Loading())
             try {
-                if(isSpecialPage(path)) {
+                if(isNonDocumentPage(path)) {
                     _refresh.postValue {
-                        specialPage(path, action, query)
+                        nonDocumentPage(path, action, query)
                     }
                 } else if(action == "history") {
                     _refresh.postValue {
@@ -93,7 +93,7 @@ class ViewPageViewModel: ViewModel() {
         _hideFab.postValue(true)
     }
 
-    private suspend fun specialPage(path: String, action: String?, query: Map<String, String>) {
+    private suspend fun nonDocumentPage(path: String, action: String?, query: Map<String, String>) {
         val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
         val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
 
@@ -194,9 +194,10 @@ class ViewPageViewModel: ViewModel() {
         "stop" to "Vertical",
     )
 
-    private fun isSpecialPage(path: String): Boolean {
+    private fun isNonDocumentPage(path: String): Boolean {
         val namespace = getNamespace(path)
         return namespace in GukhanWikiApi.SPECIAL_PAGE_NAMESPACE
+                || namespace in GukhanWikiApi.FILE_NAMESPACE
     }
 
     private fun getNamespace(path: String): String? {
