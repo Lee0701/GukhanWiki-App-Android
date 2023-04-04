@@ -51,9 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:orientation="vertical"
-        android:layout_marginEnd="@dimen/margin_fab"
-        android:layout_marginRight="@dimen/margin_fab"
-        android:layout_marginBottom="@dimen/margin_fab"
+        android:paddingHorizontal="@dimen/margin_fab"
+        android:paddingBottom="@dimen/margin_fab"
         android:clipToPadding="false">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
