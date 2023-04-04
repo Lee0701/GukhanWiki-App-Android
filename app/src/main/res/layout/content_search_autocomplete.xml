@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:contentDescription="@string/label_search_autocomplete_list"
         tools:listitem="@layout/listitem_search_autocomplete"
         tools:itemCount="10" />
 </androidx.appcompat.widget.LinearLayoutCompat>
