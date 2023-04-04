@@ -6,10 +6,20 @@ body {
 
 a {
     text-decoration: none;
+    color: #337ab7;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 a.new {
     color: red;
+    color: #b73333;
+}
+
+a.external {
+    color: #2ca02c;
 }
 
 img {
