@@ -65,7 +65,8 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             val query = arguments?.keySet().orEmpty()
                 .filter { k -> k !in setOf("title", "action") }
                 .mapNotNull { k -> arguments?.getString(k)?.let { v -> k to v } }
-                .toMap()
+                .toMap().toMutableMap()
+            query += "redirects" to "true"
 
             if(argTitle != null) viewModel.loadPage(argTitle, argAction, query)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
