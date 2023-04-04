@@ -30,6 +30,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
+import java.net.URL
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -65,6 +66,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
                 .filter { k -> k !in setOf("title", "action") }
                 .mapNotNull { k -> arguments?.getString(k)?.let { v -> k to v } }
                 .toMap()
+
             if(argTitle != null) viewModel.loadPage(argTitle, argAction, query)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
         }
@@ -110,6 +112,10 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
         viewModel.hideFab.observe(viewLifecycleOwner) { hide ->
             binding.fabGroup.visibility = if(!hide) View.VISIBLE else View.GONE
+        }
+
+        viewModel.url.observe(viewLifecycleOwner) { url ->
+            activityViewModel.updateUrl(url)
         }
 
         viewModel.title.observe(viewLifecycleOwner) { title ->

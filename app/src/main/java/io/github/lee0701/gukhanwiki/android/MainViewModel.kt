@@ -12,6 +12,9 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
+    private val _url = MutableLiveData<String>()
+    val url: LiveData<String> = _url
+
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
@@ -34,6 +37,10 @@ class MainViewModel: ViewModel() {
 
     fun setStartpageClosed() {
         _startpageClosed.postValue(true)
+    }
+
+    fun updateUrl(url: String) {
+        _url.postValue(url)
     }
 
     fun updateTitle(title: String) {

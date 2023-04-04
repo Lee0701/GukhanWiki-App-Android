@@ -193,6 +193,19 @@ class MainActivity : AppCompatActivity() {
                 bottomSheet.show(supportFragmentManager, SwitchAccountBottomSheet.TAG)
                 true
             }
+            R.id.action_share -> {
+                val url = viewModel.url.value
+                if(url != null) {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, url)
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(shareIntent)
+                }
+                true
+            }
             R.id.action_recent_changes -> {
                 val args = Bundle().apply {
                     putString("title", "Special:RecentChanges")
