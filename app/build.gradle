@@ -15,7 +15,7 @@ android {
         applicationId "io.github.lee0701.gukhanwiki.android"
         minSdk 16
         targetSdk 33
-        versionCode 19
+        versionCode 20
         versionName "0.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
