@@ -33,6 +33,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="@dimen/margin_medium"
+            android:theme="@style/Theme.GukhanWikiAppAndroid.TextView"
             tools:text="Account" />
 
         <androidx.appcompat.widget.AppCompatImageView
