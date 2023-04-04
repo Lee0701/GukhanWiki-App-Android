@@ -119,6 +119,11 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             activityViewModel.updateUrl(url)
         }
 
+        activityViewModel.title.observe(viewLifecycleOwner) { title ->
+            if(viewModel.title.value == title) return@observe
+            viewModel.loadPage(title)
+        }
+
         viewModel.title.observe(viewLifecycleOwner) { title ->
             activityViewModel.setTempTitle(null)
             activityViewModel.updateTitle(title)

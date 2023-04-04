@@ -51,6 +51,14 @@ class MainViewModel: ViewModel() {
         _tempTitle.postValue(title)
     }
 
+    fun randomPage() {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val response = GukhanWikiApi.actionApiService.random(rnNamespaces = "0")
+            val title = response.result?.random?.firstOrNull()?.title
+            if(title != null) _title.postValue(title)
+        }
+    }
+
     fun signIn(username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val result = AccountHelper.signIn(username, password)

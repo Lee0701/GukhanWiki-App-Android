@@ -206,6 +206,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+            R.id.action_random_page -> {
+                viewModel.randomPage()
+                true
+            }
             R.id.action_recent_changes -> {
                 val args = Bundle().apply {
                     putString("title", "Special:RecentChanges")

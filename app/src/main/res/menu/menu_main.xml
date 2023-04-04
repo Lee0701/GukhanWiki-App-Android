@@ -20,6 +20,11 @@
         android:icon="@drawable/baseline_ios_share_24"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_random_page"
+        android:title="@string/action_random_page"
+        android:icon="@drawable/baseline_shuffle_24"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_recent_changes"
         android:title="@string/action_recent_changes"
         android:icon="@drawable/baseline_sync_24"

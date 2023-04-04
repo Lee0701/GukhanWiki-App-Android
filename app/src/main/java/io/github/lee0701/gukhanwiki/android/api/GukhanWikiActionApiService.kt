@@ -64,6 +64,16 @@ interface GukhanWikiActionApiService {
     ): EditResponse
 
     @GET("/api.php")
+    suspend fun random(
+        @Query("action") action: String = "query",
+        @Query("format") format: String = "json",
+        @Query("list") list: String = "random",
+        @Query("rnnamespace") rnNamespaces: String?,
+        @Query("rnfilterredir") rnFilteredDir: String? = null,
+        @Query("rnlimit") rnLimit: Int? = null,
+    ): RandomResponse
+
+    @GET("/api.php")
     suspend fun categoryMembers(
         @Query("action") action: String = "query",
         @Query("format") format: String = "json",

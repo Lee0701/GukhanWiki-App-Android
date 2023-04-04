@@ -3,6 +3,7 @@
 
     <string name="action_settings">설정</string>
     <string name="action_recent_changes">최근 바뀜</string>
+    <string name="action_random_page">임의 문서</string>
     <string name="action_accounts">계정</string>
     <string name="action_share">공유</string>
     <string name="action_search_wiki">위키 문서 검색</string>
