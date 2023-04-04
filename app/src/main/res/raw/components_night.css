@@ -9,8 +9,16 @@ a {
     color: #2196F3;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 a.new {
     color: #FF9800;
+}
+
+a.external {
+    color: #2ca02c;
 }
 
 img {
