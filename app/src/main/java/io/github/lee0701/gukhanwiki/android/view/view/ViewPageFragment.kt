@@ -119,9 +119,13 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             activityViewModel.updateUrl(url)
         }
 
-        activityViewModel.title.observe(viewLifecycleOwner) { title ->
-            if(viewModel.title.value == title) return@observe
-            viewModel.loadPage(title)
+        activityViewModel.navigationDirection.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { title ->
+                val args = Bundle().apply {
+                    putString("title", title)
+                }
+                onNavigate(R.id.action_ViewPageFragment_self, args)
+            }
         }
 
         viewModel.title.observe(viewLifecycleOwner) { title ->

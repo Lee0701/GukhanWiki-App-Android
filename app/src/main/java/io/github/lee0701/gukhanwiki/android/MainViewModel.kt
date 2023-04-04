@@ -12,6 +12,9 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
+    private val _navigationDirection = MutableLiveData<Event<String>>()
+    val navigationDirection: LiveData<Event<String>> = _navigationDirection
+
     private val _url = MutableLiveData<String>()
     val url: LiveData<String> = _url
 
@@ -55,7 +58,9 @@ class MainViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val response = GukhanWikiApi.actionApiService.random(rnNamespaces = "0")
             val title = response.result?.random?.firstOrNull()?.title
-            if(title != null) _title.postValue(title)
+            if(title != null) {
+                _navigationDirection.postValue(Event(title))
+            }
         }
     }
 
@@ -80,7 +85,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun showSnackbar(msg: String) {
-        _snackbarMessage.value = Event(msg)
+        _snackbarMessage.postValue(Event(msg))
     }
 
 }
