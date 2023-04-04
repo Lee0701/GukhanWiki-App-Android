@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone"
+            android:contentDescription="@string/label_search_result_list"
             tools:listitem="@layout/listitem_search_result"
             tools:itemCount="10"
             tools:visibility="visible" />

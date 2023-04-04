@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="io.github.lee0701.gukhanwiki.android.MainActivity">
+
     <item
         android:id="@+id/action_search"
-        android:title="@string/action_search"
+        android:title="@string/action_search_wiki"
         android:icon="@drawable/baseline_search_24"
         app:showAsAction="ifRoom" />
     <item
@@ -13,6 +14,11 @@
         android:title="@string/action_accounts"
         android:icon="@drawable/baseline_account_circle_24"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/action_share"
+        android:icon="@drawable/baseline_ios_share_24"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_recent_changes"
         android:title="@string/action_recent_changes"

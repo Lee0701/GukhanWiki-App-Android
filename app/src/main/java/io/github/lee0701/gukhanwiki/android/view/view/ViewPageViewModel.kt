@@ -21,6 +21,9 @@ class ViewPageViewModel: ViewModel() {
 
     private val renderer: WebViewRenderer by lazy { SimplePageRenderer() }
 
+    private val _url = MutableLiveData<String>()
+    val url: LiveData<String> = _url
+
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
@@ -51,6 +54,7 @@ class ViewPageViewModel: ViewModel() {
     fun loadPage(path: String, action: String? = null, query: Map<String, String> = mapOf()) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _content.postValue(Result.Loading())
+            updateTitleAndUrl(path, action, query)
             try {
                 if(isNonDocumentPage(path)) {
                     _refresh.postValue {
@@ -83,23 +87,15 @@ class ViewPageViewModel: ViewModel() {
     }
 
     private suspend fun diffPage(path: String, action: String?, query: Map<String, String>) {
-        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
-        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
-
         val response = GukhanWikiApi.clientService.index(action = action, query = query)
         val content = renderer.render(response).html()
-        _title.postValue(title ?: path)
         _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
 
     private suspend fun nonDocumentPage(path: String, action: String?, query: Map<String, String>) {
-        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
-        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
-
         val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
         val content = renderer.render(response).html()
-        _title.postValue(title ?: path)
         _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
@@ -157,6 +153,24 @@ class ViewPageViewModel: ViewModel() {
             _title.postValue(title ?: path)
             _content.postValue(Result.Error(RuntimeException(code)))
         }
+    }
+
+    private fun isSpecialPage(path: String): Boolean {
+        val namespace = getNamespace(path)
+        return namespace in GukhanWikiApi.SPECIAL_PAGE_NAMESPACE
+    }
+
+    private suspend fun updateTitleAndUrl(path: String, action: String?, query: Map<String, String>) {
+        val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "displaytitle")
+        val title = infoResponse.query?.pages?.values?.firstOrNull()?.title
+        _title.postValue(title ?: path)
+
+        val queryString = query + listOfNotNull(action?.let { "action" to it }).toMap()
+        val url = GukhanWikiApi.DOC_URL.toString() + title +
+                queryString.mapNotNull { (k, v) -> "$k=" + GukhanWikiApi.encodeUriComponent(v) }
+                    .joinToString("&")
+                    .let { if(it.isBlank()) "" else "?$it" }
+        _url.postValue(url)
     }
 
     fun updateScroll(scrollY: Int) {

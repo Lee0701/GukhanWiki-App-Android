@@ -81,7 +81,7 @@
 
     <style name="Theme.GukhanWikiAppAndroid.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="buttonTint">@color/gray_700</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Light.Dialog.Alert">
@@ -127,6 +127,7 @@
     </style>
 
     <style name="Theme.GukhanWikiAppAndroid.Search.Text" parent="Theme.GukhanWikiAppAndroid.EditText">
+        <item name="android:textSize">22sp</item>
         <item name="background">@color/white</item>
         <item name="android:textColor">@color/black</item>
     </style>

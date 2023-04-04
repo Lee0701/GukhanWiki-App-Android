@@ -4,6 +4,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_recent_changes">Recent changes</string>
     <string name="action_accounts">Accounts</string>
+    <string name="action_share">Share</string>
+    <string name="action_search_wiki">Search the wiki</string>
     <string name="action_search">Search</string>
     <string name="action_open_menu">Open Menu</string>
     <string name="action_edit">Edit</string>
@@ -58,6 +60,8 @@
     <string name="label_loading">Loading…</string>
     <string name="label_error">Error</string>
     <string name="label_search">Search for…</string>
+    <string name="label_search_autocomplete_list">Search autocomplete list</string>
+    <string name="label_search_result_list">Search result list</string>
 
     <string name="switch_account_label">Switch Account</string>
     <string name="authenticator_label">國漢大百科</string>
