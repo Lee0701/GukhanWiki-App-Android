@@ -33,6 +33,7 @@ object GukhanWikiApi {
     val DOC_URL = URL(PROTOCOL, HOST, DOC_PATH)
 
     const val MAIN_PAGE_TITLE = "國漢大百科:大門"
+    val FILE_NAMESPACE = setOf("File", "파일")
     val SPECIAL_PAGE_NAMESPACE = setOf("Special", "특수", "特殊")
 
     private const val CONNECT_TIMEOUT: Long = 10
