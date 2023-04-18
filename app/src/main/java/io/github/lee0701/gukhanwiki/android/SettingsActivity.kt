@@ -1,13 +1,11 @@
 package io.github.lee0701.gukhanwiki.android
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 
@@ -48,16 +46,8 @@ class SettingsActivity: AppCompatActivity(), OnSharedPreferenceChangeListener {
                 val value = sharedPreferences.getString(key, "ko-Kore-KR")
                 sharedPreferences.edit().putString(displayLocaleKey, value).commit()
             }
-            restartApp()
+            GukhanWikiApplication.restart(this)
         }
-    }
-
-    private fun restartApp() {
-        val intent = applicationContext.packageManager.getLaunchIntentForPackage(applicationContext.packageName)
-        val mainIntent = Intent.makeRestartActivityTask(intent?.component)
-        applicationContext.startActivity(mainIntent)
-        finishAffinity()
-        Runtime.getRuntime().exit(0)
     }
 
     override fun onDestroy() {
