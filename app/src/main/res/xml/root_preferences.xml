@@ -14,6 +14,15 @@
             app:title="@string/pref_display_text_size_title"
             app:useSimpleSummaryProvider="true"
             app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:key="display_locale"
+            app:defaultValue="ko-Kore-KR"
+            app:entries="@array/pref_display_locale_entries"
+            app:entryValues="@array/pref_display_locale_values"
+            app:title="@string/pref_display_locale_title"
+            app:useSimpleSummaryProvider="true"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

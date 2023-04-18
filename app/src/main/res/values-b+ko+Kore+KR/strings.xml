@@ -1,0 +1,128 @@
+<resources>
+    <string name="app_name">國漢大百科</string>
+
+    <string name="action_settings">設定</string>
+    <string name="action_recent_changes">最近變更</string>
+    <string name="action_random_page">任意文書</string>
+    <string name="action_accounts">計定</string>
+    <string name="action_share">共有</string>
+    <string name="action_search_wiki">위키 文書 檢索</string>
+    <string name="action_search">檢索</string>
+    <string name="action_open_menu">메뉴 열기</string>
+    <string name="action_edit">編輯</string>
+    <string name="action_history">文書 歷史</string>
+    <string name="action_create_page">文書 生成</string>
+    <string name="action_talk">討論</string>
+    <string name="action_submit">傳送</string>
+    <string name="action_start">始作하기</string>
+    <string name="action_hide_afterwards">다시 表示하지 않기</string>
+    <string name="action_save">貯藏</string>
+    <string name="action_signin">로그인</string>
+    <string name="action_join">加入하기</string>
+    <string name="action_goto">移動</string>
+    <string name="action_new_doc">만들기…</string>
+    <string name="action_discard_edit">編輯 取消</string>
+    <string name="action_keep_editing">繼續 編輯하기</string>
+    <string name="action_clear">入力內容 지우기</string>
+    <string name="action_add_account">새 計定 追加</string>
+    <string name="action_signout">로그아웃</string>
+    <string name="action_delete">削除</string>
+    <string name="action_cancel">取消</string>
+
+    <string name="input_username">使用者 이름</string>
+    <string name="input_password">秘密番號</string>
+    <string name="input_content">文書 內容</string>
+    <string name="input_summary">編輯 要約</string>
+    <string name="input_minor">些少한 編輯입니다</string>
+
+    <string name="msg_welcome">歡迎합니다!</string>
+    <string name="msg_signin_error">로그인 中에 誤謬가 發生했습니다: %s</string>
+    <string name="msg_edit_error">編輯을 貯藏하는 中에 誤謬가 發生했습니다: %s</string>
+    <string name="msg_signin_success">%s 計定으로 로그인했습니다.</string>
+    <string name="msg_signout_success">로그아웃했습니다.</string>
+    <string name="msg_signin_failed">로그인에 失敗했습니다: %s</string>
+    <string name="msg_edit_saved">編輯이 貯藏되었습니다.</string>
+    <string name="msg_edit_failed">編輯을 貯藏할 수 없습니다. 이메일 認證 狀態를 確認해 주세요.</string>
+    <string name="msg_confirm_edit">自動登錄防止 問題를 풀고 提出해 주세요.</string>
+    <string name="msg_confirm_discard_edit">現在 編輯을 取消하시겠습니까?</string>
+    <string name="msg_page_not_found">페이지를 찾을 수 없습니다.</string>
+    <string name="msg_preview_alert"><b>이 畵面은 미리보기입니다.</b> 變更事項은 아직 貯藏되지 않았습니다!</string>
+    <string name="msg_confirm_clear_search_history">檢索記錄을 削除하시겠습니까?</string>
+    <string name="msg_launch_failed">始作하는 途中 誤謬가 發生했습니다.</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="start_fragment_label">國漢大百科</string>
+    <string name="search_fragment_label">檢索</string>
+    <string name="search_result_fragment_label">檢索結果</string>
+    <string name="edit_fragment_label">編輯</string>
+    <string name="review_edit_fragment_label">編輯 檢討</string>
+    <string name="title_authentication_activity">로그인</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="label_loading">불러오는 中…</string>
+    <string name="label_error">誤謬</string>
+    <string name="label_search">檢索…</string>
+    <string name="label_search_autocomplete_list">檢索 自動完成 目錄</string>
+    <string name="label_search_result_list">檢索結果 目錄</string>
+
+    <string name="switch_account_label">計定 轉換</string>
+    <string name="authenticator_label">國漢大百科</string>
+
+    <string name="anonymous">匿名</string>
+    <string name="select_account">計定 選擇</string>
+    <string name="footnote">脚註 #%d</string>
+
+
+    <string name="pref_display_header">畵面 表示</string>
+    <string name="pref_display_text_size_title">글字 크기</string>
+    <string name="pref_display_text_size_smaller">더 작게</string>
+    <string name="pref_display_text_size_small">작게</string>
+    <string name="pref_display_text_size_medium">普通</string>
+    <string name="pref_display_text_size_large">크게</string>
+    <string name="pref_display_text_size_larger">더 크게</string>
+
+    <string name="pref_display_locale_title">言語 및 表記</string>
+    <string name="pref_display_locale_ko">韓國語 한글專用</string>
+    <string name="pref_display_locale_ko_Kore_KR">韓國語 漢字混用</string>
+    <string name="pref_display_locale_en">英語</string>
+
+    <string name="pref_history_header">記錄</string>
+    <string name="pref_history_disable_search_history_title">檢索記錄 中止</string>
+    <string name="pref_history_disable_search_history_summary">檢索內譯을 記錄하지 않습니다</string>
+    <string name="pref_history_clear_search_history_title">檢索記錄 비우기</string>
+    <string name="pref_history_reload_last_page_title">終了時 보던 文書 記憶하기</string>
+
+    <string name="pref_ruby_header">漢字 讀音</string>
+    <string name="pref_ruby_enabled_title">漢字 讀音 表示</string>
+    <string name="pref_ruby_grade_title">讀音을 表示할 最少 級數</string>
+    <string name="pref_ruby_position_title">讀音 表示 位置</string>
+
+    <string name="pref_ruby_grade_80">8級</string>
+    <string name="pref_ruby_grade_72">7級II</string>
+    <string name="pref_ruby_grade_70">7級</string>
+    <string name="pref_ruby_grade_62">6級II</string>
+    <string name="pref_ruby_grade_60">6級</string>
+    <string name="pref_ruby_grade_52">5級II</string>
+    <string name="pref_ruby_grade_50">5級</string>
+    <string name="pref_ruby_grade_42">4級II</string>
+    <string name="pref_ruby_grade_40">4級</string>
+    <string name="pref_ruby_grade_32">3級II</string>
+    <string name="pref_ruby_grade_30">3級</string>
+    <string name="pref_ruby_grade_20">2級</string>
+    <string name="pref_ruby_grade_10">1級</string>
+    <string name="pref_ruby_grade_0">特級</string>
+    <string name="pref_ruby_grade_none">非表示</string>
+
+    <string name="pref_ruby_position_side">側面</string>
+    <string name="pref_ruby_position_top">上端</string>
+
+    <string name="pref_about_header">情報</string>
+    <string name="pref_about_app_info_title">國漢大百科 公式 앱</string>
+    <string name="pref_about_app_info_summary">@string/app_version_name</string>
+    <string name="pref_about_developer_info_title">開發者 聯絡處</string>
+    <string name="pref_about_developer_info_summary">hgl1002@naver.com</string>
+    <string name="pref_about_privacy_policy_title">個人情報處理方針</string>
+    <string name="pref_about_more_apps_title">앱 더보기</string>
+    <string name="pref_about_more_apps_summary">開發者의 다른 앱을 確認해 보세요</string>
+    <string name="pref_about_oss_licenses_title">오픈소스 라이선스</string>
+
+</resources>
