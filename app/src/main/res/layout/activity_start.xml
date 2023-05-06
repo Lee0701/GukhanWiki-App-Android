@@ -43,11 +43,20 @@
             android:paddingHorizontal="64dp"
             android:paddingVertical="@dimen/margin_medium" />
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_locale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_small"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="@dimen/margin_small" />
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkbox_hide"
             android:text="@string/action_hide_afterwards"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_small" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

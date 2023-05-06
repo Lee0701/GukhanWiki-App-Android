@@ -80,6 +80,11 @@
     <string name="pref_display_text_size_large">크게</string>
     <string name="pref_display_text_size_larger">더 크게</string>
 
+    <string name="pref_display_locale_title">언어 및 표기</string>
+    <string name="pref_display_locale_ko">한국어 한글전용</string>
+    <string name="pref_display_locale_ko_Kore_KR">한국어 한자혼용</string>
+    <string name="pref_display_locale_en">영어</string>
+
     <string name="pref_history_header">기록</string>
     <string name="pref_history_disable_search_history_title">검색 기록 중지</string>
     <string name="pref_history_disable_search_history_summary">검색 내역을 기록하지 않습니다</string>
