@@ -1,5 +1,6 @@
 package io.github.lee0701.gukhanwiki.android.api
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -16,6 +17,6 @@ interface GukhanWikiClientService {
         @Query("action") action: String? = "",
         @Query("title") title: String? = "",
         @QueryMap query: Map<String, String> = mapOf(),
-    ): String
+    ): Response<String>
 
 }

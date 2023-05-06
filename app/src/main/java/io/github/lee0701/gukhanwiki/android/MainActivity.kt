@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity() {
             R.id.action_recent_changes -> {
                 val args = Bundle().apply {
                     putString("title", "Special:RecentChanges")
+                    putBoolean("ignoreErrors", true)
                 }
                 navController.navigate(R.id.action_global_ViewPageFragment, args)
                 true

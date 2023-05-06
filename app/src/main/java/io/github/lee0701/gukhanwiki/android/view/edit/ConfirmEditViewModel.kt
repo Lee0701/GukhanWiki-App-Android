@@ -31,7 +31,7 @@ class ConfirmEditViewModel: ViewModel() {
                 query = mapOf("section" to page.section.orEmpty()),
             )
 
-            val doc = Jsoup.parse(response)
+            val doc = Jsoup.parse(response.body().orEmpty())
             val editForm = doc.select("#editform").first()
 
             val textBox = editForm?.select("#editform #wpTextbox1")?.first()
