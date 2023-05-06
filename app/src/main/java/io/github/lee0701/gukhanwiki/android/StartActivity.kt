@@ -31,10 +31,10 @@ class StartActivity : AppCompatActivity() {
         }
 
         val locale = preference.getString("display_locale", "ko-Kore-KR")
-        val values = resources.getStringArray(R.array.pref_display_locale_values)
+        val values = resources.getStringArray(R.array.start_locale_values)
         ArrayAdapter.createFromResource(
             this,
-            R.array.pref_display_locale_entries,
+            R.array.start_locale_entries,
             android.R.layout.simple_spinner_item
         ).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
