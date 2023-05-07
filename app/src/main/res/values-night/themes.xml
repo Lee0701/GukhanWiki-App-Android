@@ -70,7 +70,7 @@
         <item name="android:textSize">@dimen/text_size</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.MaterialComponents.Dialog.Alert">
+    <style name="Theme.GukhanWikiAppAndroid.Dialog.Alert" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="android:windowBackground">@color/gray_850</item>
         <item name="android:textColor">?colorOnPrimary</item>
         <item name="textColorAlertDialogListItem">?colorOnPrimary</item>
@@ -79,7 +79,7 @@
         <item name="buttonBarButtonStyle">@style/Theme.GukhanWikiAppAndroid.Button.Dialog</item>
     </style>
 
-    <style name="Theme.GukhanWikiAppAndroid.Button.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <style name="Theme.GukhanWikiAppAndroid.Button.Dialog" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/white</item>
         <item name="rippleColor">@color/white_transparent</item>
     </style>
