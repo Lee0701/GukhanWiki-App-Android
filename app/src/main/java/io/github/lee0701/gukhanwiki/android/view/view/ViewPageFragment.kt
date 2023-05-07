@@ -61,6 +61,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
         if(viewModel.content.value == null) {
             val argTitle = arguments?.getString("title")?.let { GukhanWikiApi.decodeUriComponent(it) }
+            val argIgnoreErrors = arguments?.getBoolean("ignoreErrors") == true
             val argAction = arguments?.getString("action")
             val query = arguments?.keySet().orEmpty()
                 .filter { k -> k !in setOf("title", "action") }
@@ -68,7 +69,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
                 .toMap().toMutableMap()
             query += "redirects" to "true"
 
-            if(argTitle != null) viewModel.loadPage(argTitle, argAction, query)
+            if(argTitle != null) viewModel.loadPage(argTitle, argAction, query, argIgnoreErrors)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
         }
         val scrollY = savedInstanceState?.getInt("scrollY")
