@@ -18,6 +18,7 @@ class GukhanWikiApplication: MultiDexApplication() {
         val preference = PreferenceManager.getDefaultSharedPreferences(this)
         AccountHelper.initAccountManager(this)
 
+        // Needed because setApplicationLocales must be called after activity creation.
         handler.postDelayed({
             val localeCode = preference.getString("display_locale", "ko-Kore-KR")
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(localeCode)
