@@ -50,6 +50,10 @@
     <string name="msg_confirm_clear_search_history">Do you want to clear the search history?</string>
     <string name="msg_launch_failed">Failed to launch.</string>
 
+    <string name="start_locale_ko" translatable="false">한국어 한글전용</string>
+    <string name="start_locale_ko_Kore_KR" translatable="false">韓國語 漢字混用</string>
+    <string name="start_locale_en" translatable="false">English</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="start_fragment_label">國漢大百科</string>
     <string name="search_fragment_label">Search</string>
@@ -74,6 +78,7 @@
     <string name="account_type" translatable="false">io.github.lee0701.gukhanwiki.android</string>
 
 
+<!--    Preference strings-->
     <string name="pref_display_header">Display</string>
     <string name="pref_display_text_size_title">Text size</string>
     <string name="pref_display_text_size_smaller">Smaller</string>
@@ -81,6 +86,11 @@
     <string name="pref_display_text_size_medium">Medium</string>
     <string name="pref_display_text_size_large">Large</string>
     <string name="pref_display_text_size_larger">Larger</string>
+
+    <string name="pref_display_locale_title">Language and Script</string>
+    <string name="pref_display_locale_ko">Korean Hangul-only Script</string>
+    <string name="pref_display_locale_ko_Kore_KR">Korean Mixed Script</string>
+    <string name="pref_display_locale_en">English</string>
 
     <string name="pref_history_header">History</string>
     <string name="pref_history_disable_search_history_title">Disable search history</string>

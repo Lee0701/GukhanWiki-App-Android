@@ -51,14 +51,15 @@ class ViewPageViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) { refresh.value?.invoke() }
     }
 
-    fun loadPage(path: String, action: String? = null, query: Map<String, String> = mapOf()) {
+    fun loadPage(path: String, action: String? = null,
+                 query: Map<String, String> = mapOf(), ignoreErrors: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _content.postValue(Result.Loading())
             updateTitleAndUrl(path, action, query)
             try {
                 if(isNonDocumentPage(path)) {
                     _refresh.postValue {
-                        nonDocumentPage(path, action, query)
+                        nonDocumentPage(path, action, query, ignoreErrors)
                     }
                 } else if(action == "history") {
                     _refresh.postValue {
@@ -88,23 +89,32 @@ class ViewPageViewModel: ViewModel() {
 
     private suspend fun diffPage(path: String, action: String?, query: Map<String, String>) {
         val response = GukhanWikiApi.clientService.index(action = action, query = query)
-        val content = renderer.render(response).html()
+        val content = renderer.render(response.body().orEmpty()).html()
         _content.postValue(Result.Loaded(content))
         _hideFab.postValue(true)
     }
 
-    private suspend fun nonDocumentPage(path: String, action: String?, query: Map<String, String>) {
-        val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
-        val content = renderer.render(response).html()
-        _content.postValue(Result.Loaded(content))
-        _hideFab.postValue(true)
+    private suspend fun nonDocumentPage(path: String, action: String?,
+                                        query: Map<String, String>, ignoreErrors: Boolean = false) {
+        val result = kotlin.runCatching {
+            val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
+            val content = if(!response.isSuccessful) {
+                if(!ignoreErrors) throw RuntimeException(response.message())
+                else renderer.render(response.errorBody()?.string().orEmpty()).html()
+            } else {
+                renderer.render(response.body().orEmpty()).html()
+            }
+            _content.postValue(Result.Loaded(content))
+            _hideFab.postValue(true)
+        }
+        if(result.isFailure) result.getOrThrow()
     }
 
     private suspend fun historyPage(path: String, action: String?, query: Map<String, String>) {
         val response = GukhanWikiApi.clientService.index(action = action, title = path, query = query)
         val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(
-            body = SeonbiApiService.Config(response)
-        ).resultHtml ?: response
+            body = SeonbiApiService.Config(response.body().orEmpty())
+        ).resultHtml ?: response.body().orEmpty()
         val content = renderer.render(seonbiResultContent).html()
         _title.postValue(path)
         _content.postValue(Result.Loaded(content))
