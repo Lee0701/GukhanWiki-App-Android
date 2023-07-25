@@ -26,8 +26,6 @@ class GukhanWikiApplication: MultiDexApplication() {
         }, 500)
     }
 
-
-
     companion object {
         fun restart(activity: Activity) {
             val applicationContext = activity.applicationContext
