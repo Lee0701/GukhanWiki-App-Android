@@ -71,14 +71,17 @@ class ViewPageViewModel: ViewModel() {
                     }
                 } else {
                     _refresh.postValue {
-                        val response = if(oldId != null) GukhanWikiApi.actionApiService.parse(oldid = oldId, query = query)
-                        else GukhanWikiApi.actionApiService.parse(page = path, query = query)
+                        val response = if(oldId != null)
+                            GukhanWikiApi.actionApiService.parse(oldid = oldId, query = query)
+                        else
+                            GukhanWikiApi.actionApiService.parse(page = path, query = query)
                         if(response.error != null) {
                             errorPage(path, action, response)
                         } else {
                             contentPage(path, action, response)
                         }
                     }
+                    if(oldId != null) _hideFab.postValue(true)
                 }
             } catch(ex: IOException) {
                 _content.postValue(Result.Error(ex))
@@ -89,15 +92,16 @@ class ViewPageViewModel: ViewModel() {
     }
 
     private suspend fun diffPage(path: String, action: String?, query: Map<String, String>) {
+        _hideFab.postValue(true)
         val response = GukhanWikiApi.clientService.index(action = action, query = query)
         val content = renderer.render(response.body().orEmpty()).html()
         _content.postValue(Result.Loaded(content))
-        _hideFab.postValue(true)
     }
 
     private suspend fun nonDocumentPage(path: String, action: String?,
                                         query: Map<String, String>, ignoreErrors: Boolean = false) {
         val result = kotlin.runCatching {
+            _hideFab.postValue(true)
             val response = GukhanWikiApi.clientService.index(title = path, action = action, query = query)
             val content = if(!response.isSuccessful) {
                 if(!ignoreErrors) throw RuntimeException(response.message())
@@ -106,12 +110,12 @@ class ViewPageViewModel: ViewModel() {
                 renderer.render(response.body().orEmpty()).html()
             }
             _content.postValue(Result.Loaded(content))
-            _hideFab.postValue(true)
         }
         if(result.isFailure) result.getOrThrow()
     }
 
     private suspend fun historyPage(path: String, action: String?, query: Map<String, String>) {
+        _hideFab.postValue(true)
         val response = GukhanWikiApi.clientService.index(action = action, title = path, query = query)
         val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(
             body = SeonbiApiService.Config(response.body().orEmpty())
@@ -119,7 +123,6 @@ class ViewPageViewModel: ViewModel() {
         val content = renderer.render(seonbiResultContent).html()
         _title.postValue(path)
         _content.postValue(Result.Loaded(content))
-        _hideFab.postValue(true)
     }
 
     private suspend fun contentPage(path: String, action: String?, response: ParseResponse) {
@@ -144,7 +147,6 @@ class ViewPageViewModel: ViewModel() {
             val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
             _title.postValue(title ?: path)
             _content.postValue(Result.Loaded(seonbiResultContent + categoryMembersContent + categories))
-            _hideFab.postValue(false)
         }
     }
 
@@ -154,12 +156,12 @@ class ViewPageViewModel: ViewModel() {
 
         val code = response.error?.get("code")
         if(code == "pagecannotexist" || action == "history") {
+            _hideFab.postValue(true)
             val content = GukhanWikiApi.clientService.index(title = path, action = action)
             val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
             val renderedContent = renderer.render(seonbiResultContent).html()
             _title.postValue(title ?: path)
             _content.postValue(Result.Loaded(renderedContent))
-            _hideFab.postValue(true)
         } else {
             _title.postValue(title ?: path)
             _content.postValue(Result.Error(RuntimeException(code)))
