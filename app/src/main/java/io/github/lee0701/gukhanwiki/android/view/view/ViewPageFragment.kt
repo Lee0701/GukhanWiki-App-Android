@@ -30,7 +30,6 @@ import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewClient
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
-import java.net.URL
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -63,13 +62,15 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             val argTitle = arguments?.getString("title")?.let { GukhanWikiApi.decodeUriComponent(it) }
             val argIgnoreErrors = arguments?.getBoolean("ignoreErrors") == true
             val argAction = arguments?.getString("action")
+            val argOldId = arguments?.getString("oldid")
             val query = arguments?.keySet().orEmpty()
-                .filter { k -> k !in setOf("title", "action") }
+                .filter { k -> k !in setOf("title", "action", "oldid") }
                 .mapNotNull { k -> arguments?.getString(k)?.let { v -> k to v } }
                 .toMap().toMutableMap()
             query += "redirects" to "true"
 
-            if(argTitle != null) viewModel.loadPage(argTitle, argAction, query, argIgnoreErrors)
+            if(argOldId != null) viewModel.loadPage("", argOldId, argAction, query, argIgnoreErrors)
+            else if(argTitle != null) viewModel.loadPage(argTitle, null, argAction, query, argIgnoreErrors)
             else viewModel.loadPage(GukhanWikiApi.MAIN_PAGE_TITLE)
         }
         val scrollY = savedInstanceState?.getInt("scrollY")
@@ -155,7 +156,6 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
                 }
                 onNavigate(R.id.action_ViewPageFragment_to_editPageFragment, args)
             }
-
         }
 
         viewModel.content.observe(viewLifecycleOwner) { content ->

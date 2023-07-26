@@ -20,6 +20,7 @@ interface GukhanWikiActionApiService {
         @Query("action") action: String = "parse",
         @Query("format") format: String = "json",
         @Query("page") page: String? = null,
+        @Query("oldid") oldid: String? = null,
         @QueryMap query: Map<String, String> = mapOf(),
     ): ParseResponse
 

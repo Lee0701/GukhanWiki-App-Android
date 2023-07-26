@@ -51,7 +51,7 @@ class ViewPageViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) { refresh.value?.invoke() }
     }
 
-    fun loadPage(path: String, action: String? = null,
+    fun loadPage(path: String, oldId: String? = null, action: String? = null,
                  query: Map<String, String> = mapOf(), ignoreErrors: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             _content.postValue(Result.Loading())
@@ -71,7 +71,8 @@ class ViewPageViewModel: ViewModel() {
                     }
                 } else {
                     _refresh.postValue {
-                        val response = GukhanWikiApi.actionApiService.parse(page = path, query = query)
+                        val response = if(oldId != null) GukhanWikiApi.actionApiService.parse(oldid = oldId, query = query)
+                        else GukhanWikiApi.actionApiService.parse(page = path, query = query)
                         if(response.error != null) {
                             errorPage(path, action, response)
                         } else {
