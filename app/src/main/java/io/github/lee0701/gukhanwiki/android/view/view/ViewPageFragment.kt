@@ -271,7 +271,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
     private fun initialFabAnimation(): Animator {
         val animatorSet = AnimatorSet()
-        val animations = listOfNotNull(fabAnimation(true), fabAnimation(false))
+        val animations = listOfNotNull(fabAnimation(false, 0))
         animatorSet.playSequentially(animations)
         return animatorSet
     }
