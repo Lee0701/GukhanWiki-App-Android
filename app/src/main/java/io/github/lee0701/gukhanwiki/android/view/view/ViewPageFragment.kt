@@ -44,7 +44,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
     private lateinit var webViewRendererWithoutFabMargin: WebViewRenderer
     private val references: MutableMap<Int, String> = mutableMapOf()
 
-    private var fabExpanded: Boolean = true
+    private var fabExpanded: Boolean = false
     private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabTalk, binding?.fabHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,11 +102,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
 
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
-
+        fixInitialFabExpandedState()
         binding.fabExpand.setOnClickListener {
             fabAnimation(fabExpanded)?.start()
             fabExpanded = !fabExpanded
@@ -238,6 +234,14 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
     override fun onStartActivity(intent: Intent) {
         startActivity(intent)
+    }
+
+    private fun fixInitialFabExpandedState() {
+        fabExpanded = true
+        fabAnimation(fabExpanded, 0)?.start()
+        fabExpanded = !fabExpanded
+        fabAnimation(fabExpanded, 0)?.start()
+        fabExpanded = !fabExpanded
     }
 
     private fun saveScrollY() {
