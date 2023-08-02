@@ -44,7 +44,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
     private lateinit var webViewRendererWithoutFabMargin: WebViewRenderer
     private val references: MutableMap<Int, String> = mutableMapOf()
 
-    private var fabExpanded: Boolean = false
+    private var fabExpanded: Boolean = true
     private val fabMenus: List<View> get() = listOfNotNull(binding?.fabEdit, binding?.fabTalk, binding?.fabHistory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,10 +102,11 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
 
-        fabExpanded = true
-        Handler(Looper.getMainLooper()).postDelayed({
-            initialFabAnimation().start()
-        }, 200)
+        fabAnimation(fabExpanded, 0)?.start()
+        fabExpanded = !fabExpanded
+        fabAnimation(fabExpanded, 0)?.start()
+        fabExpanded = !fabExpanded
+
         binding.fabExpand.setOnClickListener {
             fabAnimation(fabExpanded)?.start()
             fabExpanded = !fabExpanded
@@ -247,8 +248,8 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         val binding = binding ?: return null
         val context = context ?: return null
         val animations = fabMenus.flatMap { fab ->
-            val translationYValue = if(!expanded) binding.fabExpand.y - fab.y else 0f
-            val scaleValue = if(!expanded) 0f else 1f
+            val translationYValue = if(expanded) 0f else binding.fabExpand.y - fab.y
+            val scaleValue = if(expanded) 1f else 0f
             val translationY = ObjectAnimator.ofFloat(fab, "translationY", translationYValue)
             val scaleX = ObjectAnimator.ofFloat(fab, "scaleX", scaleValue)
             val scaleY = ObjectAnimator.ofFloat(fab, "scaleY", scaleValue)
@@ -264,15 +265,8 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             binding.fabExpand.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
         }
         animatorSet.doOnEnd {
-            fabMenus.forEach { if(!expanded) it.visibility = View.GONE }
+            if(!expanded) fabMenus.forEach { it.visibility = View.GONE }
         }
-        return animatorSet
-    }
-
-    private fun initialFabAnimation(): Animator {
-        val animatorSet = AnimatorSet()
-        val animations = listOfNotNull(fabAnimation(false, 0))
-        animatorSet.playSequentially(animations)
         return animatorSet
     }
 
