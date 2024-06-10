@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
-import io.github.lee0701.gukhanwiki.android.api.SeonbiApiService
 import io.github.lee0701.gukhanwiki.android.api.action.CategoryMembersItem
 import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
 import io.github.lee0701.gukhanwiki.android.view.SimplePageRenderer
@@ -117,10 +116,7 @@ class ViewPageViewModel: ViewModel() {
     private suspend fun historyPage(path: String, action: String?, query: Map<String, String>) {
         _hideFab.postValue(true)
         val response = GukhanWikiApi.clientService.index(action = action, title = path, query = query)
-        val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(
-            body = SeonbiApiService.Config(response.body().orEmpty())
-        ).resultHtml ?: response.body().orEmpty()
-        val content = renderer.render(seonbiResultContent).html()
+        val content = renderer.render(response.body().orEmpty()).html()
         _title.postValue(path)
         _content.postValue(Result.Loaded(content))
     }
@@ -129,7 +125,7 @@ class ViewPageViewModel: ViewModel() {
         // Retrieve a link for the talk page
         val infoResponse = GukhanWikiApi.actionApiService.info(titles = path, inprop = "associatedpage")
         val associatedPage = infoResponse.query?.pages?.values?.firstOrNull()?.associatedPage
-        if(associatedPage != null) _associatedPage.postValue(associatedPage!!)
+        if(associatedPage != null) _associatedPage.postValue(associatedPage)
 
         val categoryResponse = GukhanWikiApi.actionApiService.parse(page = path, query = mapOf("prop" to "categorieshtml"))
         val categories = categoryResponse.parse?.categoriesHtml?.html.orEmpty()
@@ -144,9 +140,7 @@ class ViewPageViewModel: ViewModel() {
         if(content == null) {
             _content.postValue(Result.Error(RuntimeException("Result text is null")))
         } else {
-            val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
-            _title.postValue(title ?: path)
-            _content.postValue(Result.Loaded(seonbiResultContent + categoryMembersContent + categories))
+            _content.postValue(Result.Loaded(content + categoryMembersContent + categories))
         }
     }
 
@@ -158,8 +152,7 @@ class ViewPageViewModel: ViewModel() {
         if(code == "pagecannotexist" || action == "history") {
             _hideFab.postValue(true)
             val content = GukhanWikiApi.clientService.index(title = path, action = action)
-            val seonbiResultContent = GukhanWikiApi.seonbiService.seonbi(body = SeonbiApiService.Config(content)).resultHtml ?: content
-            val renderedContent = renderer.render(seonbiResultContent).html()
+            val renderedContent = renderer.render(content).html()
             _title.postValue(title ?: path)
             _content.postValue(Result.Loaded(renderedContent))
         } else {
@@ -207,19 +200,6 @@ class ViewPageViewModel: ViewModel() {
         val url = GukhanWikiApi.DOC_URL.toString() + GukhanWikiApi.encodeUriComponent(title)
         return "<li><a href=\"$url\">$title</a></li>"
     }
-
-    private fun getSeonbiConfig(): Map<String, Any> = mapOf(
-        "contentType" to "text/html",
-        "quote" to "CurvedQuotes",
-        "cite" to "AngleQuotes",
-        "arrow" to mapOf<String, Any>(
-            "bidirArrow" to true,
-            "doubleArrow" to true,
-        ),
-        "ellipsis" to true,
-        "emDash" to true,
-        "stop" to "Vertical",
-    )
 
     private fun isNonDocumentPage(path: String): Boolean {
         val namespace = getNamespace(path)
