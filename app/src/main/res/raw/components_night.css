@@ -27,6 +27,10 @@ img {
     margin: 0;
 }
 
+.icon img {
+    filter: invert();
+}
+
 blockquote {
     border: 2px dashed #262626;
     border-inline-start: 5px solid #ddd;
