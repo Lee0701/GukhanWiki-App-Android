@@ -35,7 +35,6 @@ android {
             buildConfigField("String", "API_HOST", "\"${properties.getProperty("api.host")}\"")
             buildConfigField("String", "REST_BASE_PATH", "\"${properties.getProperty("api.rest-base-path")}\"")
             buildConfigField("String", "ACTION_BASE_PATH", "\"${properties.getProperty("api.action-base-path")}\"")
-            buildConfigField("String", "SEONBI_BASE_PATH", "\"${properties.getProperty("api.seonbi-base-path")}\"")
             buildConfigField("String", "DOC_PATH", "\"${properties.getProperty("api.doc-path")}\"")
             manifestPlaceholders += mapOf(
                 "hostName" to "\"${properties.getProperty("api.host")}",
@@ -49,7 +48,6 @@ android {
             buildConfigField("String", "API_HOST", "\"wiki.xn--9cs231j0ji.xn--p8s937b.net\"")
             buildConfigField("String", "REST_BASE_PATH", "\"/rest.php/v1/\"")
             buildConfigField("String", "ACTION_BASE_PATH", "\"/api.php/\"")
-            buildConfigField("String", "SEONBI_BASE_PATH", "\"/seonbi/\"")
             buildConfigField("String", "DOC_PATH", "\"/wiki/\"")
             manifestPlaceholders += mapOf(
                 "hostName" to "\"wiki.xn--9cs231j0ji.xn--p8s937b.net\"",
