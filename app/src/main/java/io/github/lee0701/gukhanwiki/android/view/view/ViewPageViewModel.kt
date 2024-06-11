@@ -32,8 +32,8 @@ class ViewPageViewModel: ViewModel() {
     private val _content = MutableLiveData<Result<String?>>()
     val content: LiveData<Result<String?>> = _content
 
-    private val _associatedPage = MutableLiveData<String>()
-    val associatedPage: LiveData<String> = _associatedPage
+    private val _associatedPage = MutableLiveData<String?>()
+    val associatedPage: LiveData<String?> = _associatedPage
 
     private val _hideFab = MutableLiveData<Boolean>()
     val hideFab: LiveData<Boolean> = _hideFab
