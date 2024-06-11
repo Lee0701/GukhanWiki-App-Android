@@ -53,14 +53,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="${hostName}"
-                    android:pathPrefix="/wiki"
-                    android:scheme="https" />
-                <data
-                    android:host="${altHostName}"
-                    android:pathPrefix="/wiki"
-                    android:scheme="https" />
+                <data android:scheme="https"/>
+                <data android:host="${hostName}"/>
+                <data android:host="${altHostName}"/>
+                <data android:pathPrefix="/wiki"/>
             </intent-filter>
         </activity>
 

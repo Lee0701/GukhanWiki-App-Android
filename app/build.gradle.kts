@@ -37,8 +37,8 @@ android {
             buildConfigField("String", "ACTION_BASE_PATH", "\"${properties.getProperty("api.action-base-path")}\"")
             buildConfigField("String", "DOC_PATH", "\"${properties.getProperty("api.doc-path")}\"")
             manifestPlaceholders += mapOf(
-                "hostName" to "\"${properties.getProperty("api.host")}",
-                "altHostName" to "\"${properties.getProperty("api.host")}",
+                "hostName" to properties.getProperty("api.host"),
+                "altHostName" to properties.getProperty("api.host"),
             )
             resValue("bool", "altHostEnabled", "false")
         }
@@ -50,8 +50,8 @@ android {
             buildConfigField("String", "ACTION_BASE_PATH", "\"/api.php/\"")
             buildConfigField("String", "DOC_PATH", "\"/wiki/\"")
             manifestPlaceholders += mapOf(
-                "hostName" to "\"wiki.xn--9cs231j0ji.xn--p8s937b.net\"",
-                "altHostName" to "\"wiki.韓國語.漢字.net\"",
+                "hostName" to "wiki.xn--9cs231j0ji.xn--p8s937b.net",
+                "altHostName" to "wiki.韓國語.漢字.net",
             )
             resValue("bool", "altHostEnabled", "true")
         }
