@@ -63,11 +63,18 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Upload AAB
-        id: uploadArtifact
+        id: uploadAAB
         uses: actions/upload-artifact@v3
         with:
           name: app
           path: app/build/outputs/bundle/productionRelease/app-production-release.aab
+
+      - name: Upload mapping
+        id: uploadMapping
+        uses: actions/upload-artifact@v3
+        with:
+          name: app
+          path: app/build/outputs/mapping/productionRelease/mapping.txt
 
       - name: Create temp file for storing service_account.json
         id: createTempFile
@@ -87,7 +94,6 @@ jobs:
           mappingFile: app/build/outputs/mapping/productionRelease/mapping.txt
           track: internal
           status: completed
-          changesNotSentForReview: true
 
       - name: Restore base version name
         uses: chkfung/android-version-actions@v1.2.1
