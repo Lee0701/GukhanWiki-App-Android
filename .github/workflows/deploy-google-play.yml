@@ -76,6 +76,21 @@ jobs:
           name: app
           path: app/build/outputs/mapping/productionRelease/mapping.txt
 
+      - name: Restore base version name
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle.kts
+          versionCode: ${{ env.VERSION_CODE }}
+          versionName: ${{ env.BASE_VERSION_NAME }}
+
+      - name: Push new version information
+        uses: ko-Kore/publish@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TASK_NAME: 'Bump version'
+          TIMEZONE: 'Asia/Seoul'
+          BRANCH_NAME: 'main'
+
       - name: Create temp file for storing service_account.json
         id: createTempFile
         run: echo "TMP_SERVICE_ACCOUNT_JSON=$(mktemp)" >> $GITHUB_ENV
@@ -93,18 +108,3 @@ jobs:
           releaseFiles: app/build/outputs/bundle/productionRelease/app-production-release.aab
           track: internal
           status: completed
-
-      - name: Restore base version name
-        uses: chkfung/android-version-actions@v1.2.1
-        with:
-          gradlePath: app/build.gradle.kts
-          versionCode: ${{ env.VERSION_CODE }}
-          versionName: ${{ env.BASE_VERSION_NAME }}
-
-      - name: Push new version information
-        uses: ko-Kore/publish@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TASK_NAME: 'Bump version'
-          TIMEZONE: 'Asia/Seoul'
-          BRANCH_NAME: 'main'
