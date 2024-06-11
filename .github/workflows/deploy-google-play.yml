@@ -87,6 +87,7 @@ jobs:
           mappingFile: app/build/outputs/mapping/productionRelease/mapping.txt
           track: internal
           status: completed
+          changesNotSentForReview: true
 
       - name: Restore base version name
         uses: chkfung/android-version-actions@v1.2.1
