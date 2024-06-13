@@ -30,29 +30,29 @@ android {
     flavorDimensions += listOf("server")
     productFlavors {
         create("development") {
+            manifestPlaceholders += mapOf(
+                "hostName" to properties.getProperty("api.host"),
+                "altHostName" to properties.getProperty("api.host")
+            )
             dimension = "server"
             buildConfigField("String", "API_PROTOCOL", "\"https\"")
             buildConfigField("String", "API_HOST", "\"${properties.getProperty("api.host")}\"")
             buildConfigField("String", "REST_BASE_PATH", "\"${properties.getProperty("api.rest-base-path")}\"")
             buildConfigField("String", "ACTION_BASE_PATH", "\"${properties.getProperty("api.action-base-path")}\"")
             buildConfigField("String", "DOC_PATH", "\"${properties.getProperty("api.doc-path")}\"")
-            manifestPlaceholders += mapOf(
-                "hostName" to properties.getProperty("api.host"),
-                "altHostName" to properties.getProperty("api.host"),
-            )
             resValue("bool", "altHostEnabled", "false")
         }
         create("production") {
+            manifestPlaceholders += mapOf(
+                "hostName" to "wiki.xn--9cs231j0ji.xn--p8s937b.net",
+                "altHostName" to "wiki.韓國語.漢字.net"
+            )
             dimension = "server"
             buildConfigField("String", "API_PROTOCOL", "\"https\"")
             buildConfigField("String", "API_HOST", "\"wiki.xn--9cs231j0ji.xn--p8s937b.net\"")
             buildConfigField("String", "REST_BASE_PATH", "\"/rest.php/v1/\"")
             buildConfigField("String", "ACTION_BASE_PATH", "\"/api.php/\"")
             buildConfigField("String", "DOC_PATH", "\"/wiki/\"")
-            manifestPlaceholders += mapOf(
-                "hostName" to "wiki.xn--9cs231j0ji.xn--p8s937b.net",
-                "altHostName" to "wiki.韓國語.漢字.net",
-            )
             resValue("bool", "altHostEnabled", "true")
         }
     }
