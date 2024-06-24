@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentSwitchAccountBinding
 
 class SwitchAccountBottomSheet(
-    private val onClick: (Int, Account?, type: Int) -> Unit,
+    private val onClick: (Int, Account?, type: SwitchAccountAdapter.Type) -> Unit,
 ): BottomSheetDialogFragment() {
 
     val adapter = SwitchAccountAdapter { i, account, type ->
@@ -29,7 +29,7 @@ class SwitchAccountBottomSheet(
         val binding = FragmentSwitchAccountBinding.inflate(inflater, container, false)
         val context = context ?: return View(context)
         binding.signOut.setOnClickListener {
-            this.onClick(-1, null, 0)
+            this.onClick(-1, null, SwitchAccountAdapter.Type.Login)
             this.dismiss()
         }
         binding.recyclerView.apply {
