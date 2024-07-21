@@ -30,10 +30,8 @@ android {
     flavorDimensions += listOf("server")
     productFlavors {
         create("production") {
-            manifestPlaceholders += mapOf(
-                "hostName" to "wiki.xn--9cs231j0ji.xn--p8s937b.net",
-                "altHostName" to "wiki.韓國語.漢字.net"
-            )
+            manifestPlaceholders["hostName"] = "wiki.xn--9cs231j0ji.xn--p8s937b.net"
+            manifestPlaceholders["altHostName"] = "wiki.韓國語.漢字.net"
             dimension = "server"
             buildConfigField("String", "API_PROTOCOL", "\"https\"")
             buildConfigField("String", "API_HOST", "\"wiki.xn--9cs231j0ji.xn--p8s937b.net\"")
