@@ -11,6 +11,7 @@ import io.github.lee0701.gukhanwiki.android.api.action.ParseResponse
 import io.github.lee0701.gukhanwiki.android.view.SimplePageRenderer
 import io.github.lee0701.gukhanwiki.android.view.WebViewRenderer
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -46,30 +47,26 @@ class ViewPageViewModel: ViewModel() {
         throwable.printStackTrace()
     }
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler)
+
     fun refresh() {
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) { refresh.value?.invoke() }
+        coroutineScope.launch { refresh.value?.invoke() }
     }
 
     fun loadPage(path: String, oldId: String? = null, action: String? = null,
                  query: Map<String, String> = mapOf(), ignoreErrors: Boolean = false) {
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+        coroutineScope.launch {
             _content.postValue(Result.Loading())
             updateTitleAndUrl(path, action, query)
             try {
-                if(isNonDocumentPage(path)) {
-                    _refresh.postValue {
+                val result = suspend {
+                    if(isNonDocumentPage(path)) {
                         nonDocumentPage(path, action, query, ignoreErrors)
-                    }
-                } else if(action == "history") {
-                    _refresh.postValue {
+                    } else if(action == "history") {
                         historyPage(path, action, query)
-                    }
-                } else if("diff" in query) {
-                    _refresh.postValue {
+                    } else if("diff" in query) {
                         diffPage(path, action, query)
-                    }
-                } else {
-                    _refresh.postValue {
+                    } else {
                         val response = if(oldId != null)
                             GukhanWikiApi.actionApiService.parse(oldid = oldId, query = query)
                         else
@@ -80,11 +77,12 @@ class ViewPageViewModel: ViewModel() {
                             contentPage(path, action, response)
                         }
                     }
-                    if(oldId != null) _hideFab.postValue(true)
                 }
-            } catch(ex: IOException) {
+                _refresh.postValue(result)
+                if(oldId != null) _hideFab.postValue(true)
+            } catch (ex: IOException) {
                 _content.postValue(Result.Error(ex))
-            } catch(ex: HttpException) {
+            } catch (ex: HttpException) {
                 _content.postValue(Result.Error(ex))
             }
         }
