@@ -16,6 +16,9 @@ import android.widget.Toast
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -102,10 +105,16 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
 
-        fixInitialFabExpandedState()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            binding.fabGroup.updatePadding(bottom = resources.getDimension(R.dimen.margin_fab).toInt() + statusBarHeight)
+            insets
+        }
+
+        fabAnimation(false, 0)?.start()
         binding.fabExpand.setOnClickListener {
-            fabAnimation(fabExpanded)?.start()
             fabExpanded = !fabExpanded
+            fabAnimation(fabExpanded)?.start()
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener(this)
@@ -234,14 +243,6 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
 
     override fun onStartActivity(intent: Intent) {
         startActivity(intent)
-    }
-
-    private fun fixInitialFabExpandedState() {
-        fabExpanded = true
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
     }
 
     private fun saveScrollY() {
