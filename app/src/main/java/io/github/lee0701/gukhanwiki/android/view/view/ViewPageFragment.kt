@@ -5,8 +5,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
@@ -25,9 +23,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
@@ -108,9 +106,11 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             binding.fabGroup.updatePadding(bottom = resources.getDimension(R.dimen.margin_fab).toInt() + statusBarHeight)
+            (binding.webView.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = statusBarHeight
             insets
         }
 
+        fabExpanded = false
         fabAnimation(false, 0)?.start()
         binding.fabExpand.setOnClickListener {
             fabExpanded = !fabExpanded

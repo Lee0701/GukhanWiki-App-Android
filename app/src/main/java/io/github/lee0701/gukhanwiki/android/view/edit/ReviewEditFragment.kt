@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -77,6 +80,14 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            val bottom = resources.getDimension(R.dimen.margin_fab).toInt() + statusBarHeight
+            (binding.fab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = bottom
+            (binding.webView.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = statusBarHeight
+            insets
+        }
 
         viewModel.html.observe(viewLifecycleOwner) { response ->
             binding.loadingIndicator.root.visibility = View.GONE

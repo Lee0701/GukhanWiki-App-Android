@@ -68,7 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/margin_fab"
-        android:layout_marginRight="@dimen/margin_fab"
         android:layout_marginBottom="@dimen/margin_fab"
         app:srcCompat="@drawable/baseline_save_as_24"
         app:tint="@color/white"
