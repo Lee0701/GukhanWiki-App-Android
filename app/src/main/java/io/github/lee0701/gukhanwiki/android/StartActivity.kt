@@ -1,12 +1,15 @@
 package io.github.lee0701.gukhanwiki.android
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityStartBinding
 
@@ -18,6 +21,7 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val preference = PreferenceManager.getDefaultSharedPreferences(this)
 
+        enableEdgeToEdge()
         val binding = ActivityStartBinding.inflate(layoutInflater)
         this.binding = binding
         supportActionBar?.title = ""
