@@ -6,8 +6,12 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import io.github.lee0701.gukhanwiki.android.databinding.ActivitySettingsBinding
 
 class SettingsActivity: AppCompatActivity(), OnSharedPreferenceChangeListener {
 
@@ -15,7 +19,13 @@ class SettingsActivity: AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        val binding = ActivitySettingsBinding.inflate(layoutInflater)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            binding.root.updatePadding(top = top)
+            insets
+        }
+        setContentView(binding.root)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
