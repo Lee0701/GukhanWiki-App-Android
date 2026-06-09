@@ -5,8 +5,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.InflateException
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +14,19 @@ import android.widget.Toast
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.MainViewModel
 import io.github.lee0701.gukhanwiki.android.R
+import io.github.lee0701.gukhanwiki.android.Result
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.databinding.FragmentViewPageBinding
 import io.github.lee0701.gukhanwiki.android.view.PageWebViewRenderer
@@ -102,10 +104,18 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
 
-        fixInitialFabExpandedState()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            binding.fabGroup.updatePadding(bottom = resources.getDimension(R.dimen.margin_fab).toInt() + statusBarHeight)
+            (binding.webView.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = statusBarHeight
+            insets
+        }
+
+        fabExpanded = false
+        fabAnimation(false, 0)?.start()
         binding.fabExpand.setOnClickListener {
-            fabAnimation(fabExpanded)?.start()
             fabExpanded = !fabExpanded
+            fabAnimation(fabExpanded)?.start()
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener(this)
@@ -206,13 +216,18 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             }
         }
 
-        viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
-            binding.webView.scrollY = scrollY
-        }
-
         viewModel.refresh.observe(viewLifecycleOwner) { refresh ->
             val content = viewModel.content.value
             if(content !is Result.Loaded) viewModel.refresh()
+        }
+    }
+
+    override fun onLoadFinished() {
+        val binding = binding ?: return
+        viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
+            binding.webView.doOnNextLayout {
+                binding.scrollView.scrollY = scrollY
+            }
         }
     }
 
@@ -236,16 +251,8 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
         startActivity(intent)
     }
 
-    private fun fixInitialFabExpandedState() {
-        fabExpanded = true
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
-        fabAnimation(fabExpanded, 0)?.start()
-        fabExpanded = !fabExpanded
-    }
-
     private fun saveScrollY() {
-        viewModel.updateScroll(binding?.webView?.scrollY ?: 0)
+        viewModel.updateScroll(binding?.scrollView?.scrollY ?: 0)
     }
 
     private fun fabAnimation(expanded: Boolean, duration: Int = 200): Animator? {

@@ -1,16 +1,16 @@
+import com.android.build.api.dsl.ApplicationExtension
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 val properties = Properties()
 properties.load(project.rootProject.file("local.properties").reader())
 
-android {
+configure<ApplicationExtension> {
     namespace = "io.github.lee0701.gukhanwiki.android"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.lee0701.gukhanwiki.android"
@@ -23,8 +23,6 @@ android {
 
         multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
-
-        defaultConfig.resValue("string", "app_version_name", "${versionName}")
     }
 
     flavorDimensions += listOf("server")
@@ -38,13 +36,12 @@ android {
             buildConfigField("String", "REST_BASE_PATH", "\"/rest.php/v1/\"")
             buildConfigField("String", "ACTION_BASE_PATH", "\"/api.php/\"")
             buildConfigField("String", "DOC_PATH", "\"/wiki/\"")
-            resValue("bool", "altHostEnabled", "true")
         }
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -52,11 +49,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+
+    tasks.register("printVersionCode") {
+        println(defaultConfig.versionCode)
+    }
+
+    tasks.register("printVersionName") {
+        println(defaultConfig.versionName)
     }
 
 }
@@ -83,12 +86,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-}
-
-tasks.register("printVersionCode") {
-    println(android.defaultConfig.versionCode)
-}
-
-tasks.register("printVersionName") {
-    println(android.defaultConfig.versionName)
 }

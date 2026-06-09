@@ -17,11 +17,7 @@ class PageWebViewRenderer(
 ): WebViewRenderer {
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private val nightMode = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK).let { when(it) {
-        Configuration.UI_MODE_NIGHT_NO -> false
-        Configuration.UI_MODE_NIGHT_YES -> true
-        else -> false
-    } }
+    private val nightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
     override fun render(content: String): Document {
         val body = Jsoup.parse(content).body()

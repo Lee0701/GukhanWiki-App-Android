@@ -3,11 +3,21 @@ package io.github.lee0701.gukhanwiki.android
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.ViewGroup
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import io.github.lee0701.gukhanwiki.android.databinding.ActivitySettingsBinding
 
 class SettingsActivity: AppCompatActivity(), OnSharedPreferenceChangeListener {
 
@@ -15,7 +25,18 @@ class SettingsActivity: AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
+        val binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = statusBarHeight }
+            insets
+        }
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())

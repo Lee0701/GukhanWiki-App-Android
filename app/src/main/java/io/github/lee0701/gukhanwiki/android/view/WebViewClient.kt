@@ -15,6 +15,10 @@ import java.net.URL
 class WebViewClient(
     private val listener: Listener,
 ): android.webkit.WebViewClient() {
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        listener.onLoadFinished()
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun shouldOverrideUrlLoading(
@@ -23,7 +27,7 @@ class WebViewClient(
     ): Boolean {
         val uri = request?.url?.toString()
         if(uri != null) {
-            val url = URL(uri.toString())
+            val url = URL(uri)
             return shouldOverrideUrlLoading(url)
         }
         return super.shouldOverrideUrlLoading(view, request)
@@ -126,6 +130,7 @@ class WebViewClient(
         fun onNavigate(@IdRes resId: Int, args: Bundle)
         fun onCiteClicked(id: Int)
         fun onStartActivity(intent: Intent)
+        fun onLoadFinished()
     }
 
 }

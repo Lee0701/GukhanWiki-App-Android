@@ -2,11 +2,15 @@ package io.github.lee0701.gukhanwiki.android.view.edit
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -58,6 +62,16 @@ class EditPageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = binding ?: return
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            val bottom = resources.getDimension(R.dimen.margin_fab).toInt() + statusBarHeight
+            (binding.fab.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = bottom
+            val rect = Rect()
+            binding.fab.getLocalVisibleRect(rect)
+            (binding.editContent.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = bottom + rect.height()
+            insets
+        }
 
         viewModel.page.observe(viewLifecycleOwner) { page ->
             when(page) {
