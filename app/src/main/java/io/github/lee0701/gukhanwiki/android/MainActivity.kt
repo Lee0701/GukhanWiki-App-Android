@@ -21,6 +21,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import io.github.lee0701.gukhanwiki.android.api.GukhanWikiApi
 import io.github.lee0701.gukhanwiki.android.auth.AccountHelper
+import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountAdapter
 import io.github.lee0701.gukhanwiki.android.auth.SwitchAccountBottomSheet
 import io.github.lee0701.gukhanwiki.android.databinding.ActivityMainBinding
 import io.github.lee0701.gukhanwiki.android.history.LastViewedPage
@@ -171,21 +172,24 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_accounts -> {
                 val bottomSheet = SwitchAccountBottomSheet { index, account, type ->
-                    if(type == 0) {
-                        if(index == -1) {
-                            viewModel.signOut()
-                        } else if(account != null) {
-                            val password = AccountHelper.getPassword(account)
-                            if(password != null) viewModel.signIn(account.name, password)
+                    when(type) {
+                        SwitchAccountAdapter.Type.Login -> {
+                            if(index == -1) {
+                                viewModel.signOut()
+                            } else if(account != null) {
+                                val password = AccountHelper.getPassword(account)
+                                if(password != null) viewModel.signIn(account.name, password)
+                            }
+                            selectedAccountIndex = index
+                            preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
                         }
-                        selectedAccountIndex = index
-                        preference.edit().putInt("account_last_used", selectedAccountIndex).apply()
-                    } else if(type == 1) {
-                        val navController = findNavController(R.id.nav_host_fragment_content_main)
-                        val args = Bundle().apply {
-                            putString("title", "User:${account?.name}")
+                        SwitchAccountAdapter.Type.UserPage -> {
+                            val args = Bundle().apply {
+                                putString("title", "User:${account?.name}")
+                            }
+                            navController.navigate(R.id.action_global_ViewPageFragment, args)
+
                         }
-                        navController.navigate(R.id.action_global_ViewPageFragment, args)
                     }
                 }
                 bottomSheet.adapter.submitList(AccountHelper.getAccounts())

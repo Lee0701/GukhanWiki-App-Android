@@ -11,7 +11,7 @@ import io.github.lee0701.gukhanwiki.android.databinding.ListitemAccountBinding
 
 class SwitchAccountAdapter(
     var selectedIndex: Int = -1,
-    private val onClick: (position: Int, item: Account, type: Int) -> Unit,
+    private val onClick: (position: Int, item: Account, type: Type) -> Unit,
 ): ListAdapter<Account, SwitchAccountAdapter.ItemViewHolder>(ItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,16 +33,16 @@ class SwitchAccountAdapter(
     inner class ItemViewHolder(
         itemView: View,
     ): ViewHolder(itemView) {
-        fun bind(position: Int, item: Account, onClick: (type: Int) -> Unit) {
+        fun bind(position: Int, item: Account, onClick: (type: Type) -> Unit) {
             val binding = ListitemAccountBinding.bind(itemView)
             if(position == selectedIndex) binding.checkIcon.visibility = VISIBLE
             else binding.checkIcon.visibility = INVISIBLE
             binding.title.text = item.name
             binding.root.setOnClickListener {
-                onClick(0)
+                onClick(Type.Login)
             }
             binding.userPage.setOnClickListener {
-                onClick(1)
+                onClick(Type.UserPage)
             }
         }
     }
@@ -61,5 +61,9 @@ class SwitchAccountAdapter(
         ): Boolean {
             return oldItem.name == newItem.name && oldItem.type == newItem.type
         }
+    }
+
+    enum class Type {
+        Login, UserPage
     }
 }
