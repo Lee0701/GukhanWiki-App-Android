@@ -1,7 +1,6 @@
 
-span.mw-editsection {
-    float: right;
-    font-size: 1rem;
+h1, h2, h3, h4, h5, h6 {
+    display: inline;
 }
 
 @media screen and (max-width:520px) {
