@@ -161,6 +161,9 @@ class ReviewEditFragment: Fragment(), WebViewClient.Listener {
 
     }
 
+    override fun onLoadFinished() {
+    }
+
     override fun onCiteClicked(id: Int) {
     }
 

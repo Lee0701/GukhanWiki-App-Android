@@ -16,6 +16,7 @@ import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -215,13 +216,18 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
             }
         }
 
-        viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
-            binding.webView.scrollY = scrollY
-        }
-
         viewModel.refresh.observe(viewLifecycleOwner) { refresh ->
             val content = viewModel.content.value
             if(content !is Result.Loaded) viewModel.refresh()
+        }
+    }
+
+    override fun onLoadFinished() {
+        val binding = binding ?: return
+        viewModel.scrollY.observe(viewLifecycleOwner) { scrollY ->
+            binding.webView.doOnNextLayout {
+                binding.scrollView.scrollY = scrollY
+            }
         }
     }
 
@@ -246,7 +252,7 @@ class ViewPageFragment: Fragment(), WebViewClient.Listener, SwipeRefreshLayout.O
     }
 
     private fun saveScrollY() {
-        viewModel.updateScroll(binding?.webView?.scrollY ?: 0)
+        viewModel.updateScroll(binding?.scrollView?.scrollY ?: 0)
     }
 
     private fun fabAnimation(expanded: Boolean, duration: Int = 200): Animator? {
